@@ -7,13 +7,20 @@ introduce a defined lifecycle and eventing model
 for modules / devices for convenient handling
 of loose coupled modules/ device
 
+# Related project
+
+`mpymodcore` is the successor of [mpyconfigbase](https://github.com/kr-g/mpyconfigbase)
+
+for configuration of automatic startup of WLAN, SoftAP, and WebRepl refer to the 
+source/ sample code also there
+
 
 # Platform
 
 Tested ESP32 with PSRam and ESP8266 (for latter, see limitations below)
 
 
-# limitations
+# Limitations
 
 - no asyncio integration as of now
 - with all mod's enabled as shown here in the sample
@@ -33,7 +40,7 @@ Tested ESP32 with PSRam and ESP8266 (for latter, see limitations below)
     `python3 -m pygitgrab -f mpymodcore.pygg`
  
  
-# sample code
+# Sample Code
 
 some sample code can be found in boot.py here in githiub repo
 
