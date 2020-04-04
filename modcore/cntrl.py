@@ -54,6 +54,7 @@ class ModuleController(LogSupport):
         mod.on_remove()
     
     def fire_event( self, event, data=None, src=None ):
+        event = event.strip().lower()
         if event not in self.events:
             self.warn( "unknown", event, src )
             return

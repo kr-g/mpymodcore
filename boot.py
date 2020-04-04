@@ -33,6 +33,11 @@ from moddev import wlan
 from moddev import ntp
 from moddev.ntp import ntp_serv, set_log_time
 
+# ntp can change timezone dynamically
+# press cntrl+c during loop and fire an event, then call loop() again
+# modc.fire_event("tz", 3600*2 ) # 2 hours offset
+# modc.fire_event("tz" ) # utc
+
 from moddev import softap
 
 from moddev import webrepl
