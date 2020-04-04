@@ -3,7 +3,8 @@
 
 url='https://github.com/kr-g/mpymodcore'
 
-src="mpymodcore/*.py"
+core="modcore/*.py"
+mods="moddev/*.py"
 
 license="LICENSE","license/MPyModCore.MD"
 
