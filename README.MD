@@ -24,13 +24,13 @@ Tested ESP32 with PSRam and ESP8266 (for latter, see limitations below)
 
 - with pip
 
-    python3 -m pip install mpymodcore
+    `python3 -m pip install mpymodcore`
  
 - with [pygitgrab](https://github.com/kr-g/pygitgrab)
  download the `mpymodcore.pygg` file from the repo to your local project folder
  and download the sources then with:
 
-    python3 -m pygitgrab -f mpymodcore.pygg
+    `python3 -m pygitgrab -f mpymodcore.pygg`
  
  
 # sample code
