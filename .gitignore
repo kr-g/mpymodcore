@@ -1,0 +1,17 @@
+
+bin/
+dist/
+build/
+include/
+lib/
+lib64
+share/
+**/__pycache__/
+**/*.pyc
+*.egg-info
+pyvenv.cfg
+
+softap.cfg
+wlan.cfg
+
+

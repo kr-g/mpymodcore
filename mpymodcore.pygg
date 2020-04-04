@@ -1,0 +1,10 @@
+
+[MPyModCore]
+
+url='https://github.com/kr-g/mpymodcore'
+
+src="mpymodcore/*.py"
+
+license="LICENSE","license/MPyModCore.MD"
+
+
