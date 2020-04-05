@@ -19,6 +19,11 @@ source/ sample code also there
 
 Tested ESP32 with PSRam and ESP8266 (for latter, see limitations below)
 
+## Development status
+
+Alpha state.
+The API or logical call flow might change without prior notice.
+
 
 # Limitations
 
