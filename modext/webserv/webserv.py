@@ -56,6 +56,8 @@ def get_http_request(client_file,client_addr):
         line = client_file.readline()
         if not line  or line == b'\r\n':
             break
+        # no support for multiple line spawning/ folding headers
+        # with leading space, or tab
         header, value = parse_header( line.decode() )
         request_header[header.upper()]=value
 
