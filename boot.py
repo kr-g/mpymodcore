@@ -25,6 +25,10 @@ def mem_info(verbose=True,auto_free=True):
         micropython.mem_info()
     return gc.mem_free()
 
+def hardreset():
+    machine.reset()
+    
+
 from modcore import modc, Module, LifeCycle
 from modcore import DEBUG, INFO, NOTSET, logger
 
@@ -134,12 +138,16 @@ modc.startup(config=cfg)
 
 debug_mode = True
 
-def loop():    
+def loop(run_until=None):    
 
     # turn debug level on for more detailed log info
     #modc.change_log_level( DEBUG if debug_mode else None )
 
-    while True:
+    while run_until==None:
+        if run_until!=None:
+            run_until -= 1
+            if run_until<0:
+                run_until=None
         try:
             modc.run_loop( cfg )
             time.sleep(0.25)
@@ -160,4 +168,5 @@ print( "current time ->", ntp_serv.localtime() )
 print()
 print( "call loop() to start :-)" )
 print()
+
 

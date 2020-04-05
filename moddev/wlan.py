@@ -86,7 +86,10 @@ class WLAN(Module):
         if self.wlan:
             self.wlan_start(active=False)
 
-
+    def ifconfig(self):
+        return self.wlan.ifconfig()
+    
+    
 wlan_ap = WLAN("wlan")
 modc.add( wlan_ap )
     

@@ -83,6 +83,9 @@ class SoftAP(Module):
         """disabled softap, no reconfiguration of prior configuration"""
         self.softap_start(active=False)
     
+    def ifconfig(self):
+        return self.ap.ifconfig()
+    
     
 soft_ap = SoftAP("soft_ap")
 modc.add( soft_ap )

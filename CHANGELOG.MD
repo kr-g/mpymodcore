@@ -6,4 +6,7 @@
 - fixed event name to lower case during fire_event
 - added timeout class
 - changed event model
+- added ifconfig() to softap and wlan
+- added minimalistic webserver under modext
+
 

@@ -1,0 +1,9 @@
+
+[picoweb]
+
+url='https://github.com/pfalcon/picoweb'
+
+src="picoweb/*.py", "mod3rd/picoweb"
+
+license="LICENSE","license/picoweb.MD"
+
