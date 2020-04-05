@@ -17,6 +17,8 @@ curl http://your-ip/index.html -X POST -d "test-data"
 
 from modcore.log import logger
 from .webserv import WebServer, BadRequestException
+from .filter import PathSplitFilter, ParameterSplitFilter, \
+     ParameterValueFilter, ParameterPackFilter
 
 
 html = """<!DOCTYPE html>
@@ -42,6 +44,13 @@ def serve():
     ws.start()
     logger.info( 'listening on', ws.addr )
     
+    webfilter = [
+                    PathSplitFilter(),
+                    ParameterSplitFilter(),
+                    ParameterValueFilter(),
+                    ParameterPackFilter(),
+                 ]
+    
     try:
         calls = 0
         while True:
@@ -56,6 +65,16 @@ def serve():
                         logger.info( "request" , req.request )
                         logger.info( "request content len", len( req ) )
                         req.load_content()
+                        
+                        request = req.request
+                        for f in webfilter:
+                            f.filterRequest( request )
+                        
+                        logger.info( request.xpath, request.xquery )
+                        logger.info( request.xparam )
+                        logger.info( request.xkeyval )
+                        logger.info( request.xpar )                      
+                        
                         body = req.get_body()
                         if body!=None:
                             logger.info( "request content", body.decode() )

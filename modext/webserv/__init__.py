@@ -1,4 +1,6 @@
 
+from .webserv import WebServer
+
 HTTP_CRLF = "\r\n"
 
 HTTP_OK = 200
