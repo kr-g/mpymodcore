@@ -44,7 +44,6 @@ class ParameterSplitFilter(Filter):
         if request.xquery==None:
             return
         param = self.split(request.xquery)
-        self.info("->",param)
         request.xparam = param
         
         if self.cleanup:

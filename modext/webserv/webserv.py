@@ -45,6 +45,9 @@ class HTTPRequest():
 class BadRequestException(Exception):
     pass
 
+class InternalErrorException(Exception):
+    pass
+
 
 def parse_header(line):
     pos = line.index(":")
@@ -58,8 +61,11 @@ def get_http_request(client_file,client_addr, allowed=None):
         allowed = ALLOWED_DEFAULT
     
     request_header = {}    
-    line = client_file.readline()    
-    method, path, proto = line.decode().strip().split(" ")
+    line = client_file.readline()
+    try:
+        method, path, proto = line.decode().strip().split(" ")
+    except:
+        raise BadRequestException(line)
     
     method = method.upper()
     if method not in allowed:
