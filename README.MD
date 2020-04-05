@@ -47,7 +47,8 @@ The API or logical call flow might change without prior notice.
  
 # Sample Code
 
-some sample code can be found in boot.py here in githiub repo
+some sample code can be found in `boot.py` 
+
 
 
     # This file is executed on every boot (including wake-boot from deepsleep)
