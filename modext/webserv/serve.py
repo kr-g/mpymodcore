@@ -16,7 +16,7 @@ curl http://your-ip/index.html -X POST -d "test-data"
 """
 
 from modcore.log import logger
-from .webserv import WebServer
+from .webserv import WebServer, BadRequestException
 
 
 html = """<!DOCTYPE html>
@@ -45,20 +45,26 @@ def serve():
     try:
         calls = 0
         while True:
-            if ws.can_accept():
-                with ws.accept() as req:
-                    
-                    calls += 1
-                    data = html % str(calls)
-                    logger.info( "request" , req.request )
-                    logger.info( "request content len", len( req ) )
-                    req.load_content()
-                    body = req.get_body()
-                    if body!=None:
-                        logger.info( "request content", body.decode() )
+            try:
+                if ws.can_accept():
+                    with ws.accept() as req:
                         
-                    req.send_response( response=data )
+                        calls += 1
+                        data = html % str(calls)
+                        
+                        req.load_request(allowed=["GET","POST","PUT"])
+                        logger.info( "request" , req.request )
+                        logger.info( "request content len", len( req ) )
+                        req.load_content()
+                        body = req.get_body()
+                        if body!=None:
+                            logger.info( "request content", body.decode() )
+                            
+                        req.send_response( response=data )
                     
+            except BadRequestException as ex:
+                logger.excep( ex )
+                
     except KeyboardInterrupt:
         logger.info("cntrl+c")        
     finally:

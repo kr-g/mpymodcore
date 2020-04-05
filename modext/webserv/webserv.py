@@ -4,6 +4,8 @@ import uselect
 
 from modcore.log import LogSupport, logger
 
+ALLOWED_DEFAULT = ["GET","POST"]
+
 
 ##
 ## todo timeout handling here
@@ -38,7 +40,11 @@ class HTTPRequest():
             return int(contlen)
  
  
-# primitives 
+# primitives
+
+class BadRequestException(Exception):
+    pass
+
 
 def parse_header(line):
     pos = line.index(":")
@@ -46,11 +52,18 @@ def parse_header(line):
         return line.strip(), None
     return line[0:pos].strip(), line[pos+1:].strip()
 
-def get_http_request(client_file,client_addr):
+def get_http_request(client_file,client_addr, allowed=None):
+    
+    if allowed==None:
+        allowed = ALLOWED_DEFAULT
     
     request_header = {}    
     line = client_file.readline()    
     method, path, proto = line.decode().strip().split(" ")
+    
+    method = method.upper()
+    if method not in allowed:
+        raise BadRequestException(line)
     
     while True:
         line = client_file.readline()
@@ -107,16 +120,20 @@ def send_http_response( client_file, status=200, header=None, response=None, typ
   
 class RequestHandler(LogSupport):
     
-    def __init__(self,webserver,request,client,client_file):
+    def __init__(self,webserver,addr,client,client_file):
         LogSupport.__init__(self)
         self.webserver = webserver
-        self.request = request
+        self.addr = addr
         self.client = client
         self.client_file = client_file
+        self.request = None
         
     def __len__(self):
         # this can return None
         return self.request.content_len()
+    
+    def load_request(self,allowed=None):
+        self.request = get_http_request( self.client_file, self.addr, allowed )
     
     def load_content( self, max_size=4096 ):
         self.request = get_http_content( self.client_file, self.request, max_size=max_size )
@@ -138,6 +155,8 @@ class RequestHandler(LogSupport):
         return self
     
     def __exit__(self, exc_type, exc_value, traceback):
+        if exc_type != None:
+            self.error( "closing socket on error" )
         self.close()
     
   
@@ -162,24 +181,12 @@ class WebServer(LogSupport):
         res = self.poll.poll(timeout)
         return res != None and len(res)>0           
             
-    def accept(self):
-        
+    def accept(self):        
         client, addr = self.socket.accept()
-        self.debug( 'client connected from', addr )
-        
+        self.debug( 'client connected from', addr )        
         client_file = client.makefile( 'rwb', 0 )
-
-        try:
-            req = get_http_request( client_file, addr )  
-            
-            return RequestHandler( self, req, client, client_file )
-            
-        ## todo timeouts           
-        except Exception as ex:
-            self.excep(ex,"accept")
-            client_file.close()
-            client.close()
-    
+        return RequestHandler( self, addr, client, client_file )
+              
     def stop(self):
         self.poll.unregister( self.socket )
         self.socket.close()
