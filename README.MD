@@ -153,20 +153,20 @@ some sample code can be found in boot.py here in githiub repo
     # configuration data
 
     cfg = {
-        "TZ" : 60*60*2,
-        "SD_SLOT" : 3, # default for esp32 with psram / TTGO
-        "SD_PATH" : "/sd",
-        "int1" : 5, # timeout in sec, default timebase 1000
-        "int2" : 130,
-        "int2_timebase" : 100, # 1/100 sec timebase
-        "int3" : 1,
-        "int3_timebase" : 1000*60, # 1 min timebase
+            "TZ" : 60*60*2,
+            "SD_SLOT" : 3, # default for esp32 with psram / TTGO
+            "SD_PATH" : "/sd",
+            "int1" : 5, # timeout in sec, default timebase 1000
+            "int2" : 130,
+            "int2:timebase" : 100, # 1/100 sec timebase
+            "int3" : 1,
+            "int3:timebase" : 1000*60, # 1 min timebase
         }
 
 
-    fancy_i_have_a_sd_card = True
+    fancy_stuff_i_have_a_sd_card = True
 
-    if fancy_i_have_a_sd_card:
+    if fancy_stuff_i_have_a_sd_card:
         from moddev.sdcard import SDCard
         sdc = SDCard("sdc")
         modc.add( sdc )
@@ -212,14 +212,4 @@ some sample code can be found in boot.py here in githiub repo
     print( "call loop() to start :-)" )
     print()
 
-
-
-### do you like it ?
-    
-then just :star: this repo at github, fork, and contribute your new modules :sunglasses:
-
-
-### :heart: credits
-
-developed with [Thonny](https://github.com/thonny/thonny) :+1:
 
