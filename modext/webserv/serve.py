@@ -19,7 +19,7 @@ from modcore.log import logger
 from .webserv import WebServer, BadRequestException
 from .filter import PathSplitFilter, ParameterSplitFilter, \
      ParameterValueFilter, ParameterPackFilter
-
+from .content import StaticFiles
 
 html = """<!DOCTYPE html>
 <html>
@@ -79,6 +79,11 @@ def serve():
                         if body!=None:
                             logger.info( "request content", body.decode() )
                             
+                        statf = StaticFiles(["/www"])
+                        if statf.handle( req ):
+                            continue                        
+                        
+                        # dummy page
                         req.send_response( response=data )
                     
             except BadRequestException as ex:

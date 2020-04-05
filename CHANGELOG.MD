@@ -9,5 +9,6 @@
 - added ifconfig() to softap and wlan
 - added minimalistic webserver under modext
 - added url filtering for path, query, and parameter
+- added simple static content generator
 
 

@@ -71,6 +71,9 @@ def get_http_request(client_file,client_addr, allowed=None):
     if method not in allowed:
         raise BadRequestException(line)
     
+    if path[0]!="/":
+        raise BadRequestException(line)
+    
     while True:
         line = client_file.readline()
         if not line  or line == b'\r\n':
@@ -94,9 +97,11 @@ def get_http_content(client_file,req,max_size=4096):
    
 HTTP_CRLF = "\r\n"
 
-def send_http_status( client_file, st=200 ):
+def send_http_status( client_file, st=200, ststr=None ):
     client_file.send( "HTTP/1.0 " )
     client_file.send( str( st ) )
+    if ststr!=None:
+        client_file.send( str(ststr) )
     client_file.send( HTTP_CRLF )  
 
 def send_http_header( client_file, header, value ):
@@ -163,6 +168,15 @@ class RequestHandler(LogSupport):
     def __exit__(self, exc_type, exc_value, traceback):
         if exc_type != None:
             self.error( "closing socket on error" )
+            try:
+                if exc_type == type(BadRequestException):
+                    send_http_status( self.client_file, 400 )
+                else:
+                    send_http_status( self.client_file, 500 )
+                # send ending info
+                send_http_data( self.client_file )
+            except Exception as ex:
+                self.excep( ex, "send status failed" )
         self.close()
     
   
