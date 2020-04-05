@@ -102,14 +102,14 @@ modc.add( int3 )
 # configuration data
 
 cfg = {
-    "TZ" : 60*60*2,
-    "SD_SLOT" : 3, # default for esp32 with psram / TTGO
-    "SD_PATH" : "/sd",
-    "int1" : 5, # timeout in sec, default timebase 1000
-    "int2" : 130,
-    "int2_timebase" : 100, # 1/100 sec timebase
-    "int3" : 1,
-    "int3_timebase" : 1000*60, # 1 min timebase
+        "TZ" : 60*60*2,
+        "SD_SLOT" : 3, # default for esp32 with psram / TTGO
+        "SD_PATH" : "/sd",
+        "int1" : 5, # timeout in sec, default timebase 1000
+        "int2" : 130,
+        "int2:timebase" : 100, # 1/100 sec timebase
+        "int3" : 1,
+        "int3:timebase" : 1000*60, # 1 min timebase
     }
 
 

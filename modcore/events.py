@@ -32,7 +32,14 @@ class EventData():
             self.data = dict(data)
         else:
             self.data = { EVENTDATA_DEFAULT : data }
-                
+
+    def get_data(self,key=EVENTDATA_DEFAULT):
+        return EventData.get_dict_val( self.data, key )        
+
+    @staticmethod
+    def get_dict_val(dict,key=EVENTDATA_DEFAULT):
+        return dict.get( key )        
+
     def __repr__(self):
         return self.__class__.__name__ + " id: " + str( self.id ) \
             + " name: " + str( self.name ) \

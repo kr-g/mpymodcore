@@ -1,6 +1,6 @@
 
 from .lifecycle import LifeCycle
-from .events import EventQueue, EVENTDATA_DEFAULT
+from .events import EventData, EventQueue, EVENTDATA_DEFAULT
 from .log import LogSupport
 
 
@@ -41,10 +41,10 @@ class Module(LifeCycle,LogSupport):
         return event.name.lower() == name.lower()
     
     def event_value(self,event,key=EVENTDATA_DEFAULT):
-        return self.event_data_value( event.data, key )
+        return event.get_data( key )
     
     def event_data_value(self,data,key=EVENTDATA_DEFAULT):
-        return data.get( key )
+        return EventData.get_dict_val( data, key )
     
     def run(self,config=None):
         ev = self._pop_event()
