@@ -10,5 +10,6 @@
 - added minimalistic webserver under modext
 - added url filtering for path, query, and parameter
 - added simple static content generator
-
+- added cookie filter
+- changed package structure
 

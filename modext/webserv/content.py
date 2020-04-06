@@ -16,9 +16,10 @@ class ContentGenerator(LogSupport):
     
 class StaticFiles(ContentGenerator):
 
-    def __init__(self,static_paths=None):
+    def __init__(self,static_paths=None, suppress_id=False ):
         LogSupport.__init__(self)
         self.static_paths = static_paths
+        self.suppress_id = suppress_id
 
     def handle(self,req):
         
@@ -56,7 +57,7 @@ class StaticFiles(ContentGenerator):
         
         with open(path) as f:
             c = f.read()
-            request.send_response( response=c )
+            request.send_response( response=c, suppress_id=self.suppress_id )
     
     
     

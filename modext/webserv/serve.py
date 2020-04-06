@@ -14,11 +14,12 @@ curl http://your-ip/index.html -X POST -d "test-data"
 
 
 """
+import time
 
 from modcore.log import logger
-from .webserv import WebServer, BadRequestException
+from .webserv import WebServer, BadRequestException, COOKIE_HEADER, SET_COOKIE_HEADER
 from .filter import PathSplitFilter, ParameterSplitFilter, \
-     ParameterValueFilter, ParameterPackFilter
+     ParameterValueFilter, ParameterPackFilter, CookieFilter
 from .content import StaticFiles
 
 html = """<!DOCTYPE html>
@@ -38,13 +39,17 @@ html = """<!DOCTYPE html>
 </html>
 """
 
+known_clients = {}
+
 def serve():
     
     ws = WebServer()
     ws.start()
     logger.info( 'listening on', ws.addr )
     
+    # depending on app needs filter are added, or left out
     webfilter = [
+                    CookieFilter(),
                     PathSplitFilter(),
                     ParameterSplitFilter(),
                     ParameterValueFilter(),
@@ -59,7 +64,6 @@ def serve():
                     with ws.accept() as req:
                         
                         calls += 1
-                        data = html % str(calls)
                         
                         req.load_request(allowed=["GET","POST","PUT"])
                         logger.info( "request" , req.request )
@@ -70,6 +74,7 @@ def serve():
                         for f in webfilter:
                             f.filterRequest( request )
                         
+                        logger.info( request.xcookies )
                         logger.info( request.xpath, request.xquery )
                         logger.info( request.xparam )
                         logger.info( request.xkeyval )
@@ -78,15 +83,34 @@ def serve():
                         body = req.get_body()
                         if body!=None:
                             logger.info( "request content", body.decode() )
+                          
+                        # show board unique id in http server header
+                        suppress_info=False    
                             
-                        statf = StaticFiles(["/www"])
+                        statf = StaticFiles(["/www"], suppress_id=suppress_info )
                         if statf.handle( req ):
                             continue                        
                         
+                        header = None
+                        
+                        COKY="my-cookie"
+                        
+                        if request.xcookies==None or COKY not in request.xcookies:
+                            # send cookie if none coming from the browser
+                            header = []
+                            header.append( (SET_COOKIE_HEADER, \
+                                            COKY + "=" + str( time.time() )) )
+                            logger.info( header )
+                            
                         # dummy page
-                        req.send_response( response=data )
+                        data = html % str(calls)
+                        req.send_response( response=data, header=header, \
+                                           suppress_id=suppress_info )
                     
             except BadRequestException as ex:
+                logger.excep( ex )
+                
+            except Exception as ex:
                 logger.excep( ex )
                 
     except KeyboardInterrupt:

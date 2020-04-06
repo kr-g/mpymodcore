@@ -1,5 +1,7 @@
 
 from modcore.log import LogSupport
+from .http_func import BadRequestException
+from .webserv import COOKIE_HEADER
 
 
 class Filter(LogSupport):
@@ -86,4 +88,31 @@ class ParameterPackFilter(Filter):
         if self.cleanup:
             request.xkeyval = None
      
-     
+ 
+class CookieFilter(Filter):
+        
+    def filterRequest( self, request ):
+        request.xcookies = None
+        cookie = request.header.get(COOKIE_HEADER,None)
+        if cookie==None:
+            return
+        cookies = {}
+        try:
+            for c in cookie.split(";"):
+                c = c.strip()
+                if len(c)==0:
+                    continue
+                try:
+                    k,v = c.split("=")
+                    k = k.strip()
+                except:
+                    self.error( "client with strange cookie", c )
+                    continue
+                cookies[k] = v.strip()
+        except Exception as ex:
+            self.excep(ex,cookie)
+        request.xcookies = cookies
+ 
+        if self.cleanup:
+            del request.header[COOKIE_HEADER]
+ 
