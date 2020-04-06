@@ -13,4 +13,6 @@
 - added cookie filter
 - changed package structure
 - added index file handling
+- added set_cookie()
+
 

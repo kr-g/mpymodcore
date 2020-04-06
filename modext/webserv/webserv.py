@@ -84,6 +84,15 @@ class RequestHandler(LogSupport):
                            + " (" + sys.platform + _id  + ")" ) )
         return header
     
+    def set_cookie(self,header,cookie,value=None):
+        if header==None:
+            header = []
+        if value == None:
+            value = "\'\'" + EXPIRE_COOKIE
+        header.append( (SET_COOKIE_HEADER, \
+                        cookie + "=" + str(value) ) )
+        return header
+        
   
 class WebServer(LogSupport):
     

@@ -95,15 +95,15 @@ def serve():
                         
                         header = None
                         
-                        COKY="my-cookie"
-                        
+                        COKY="my-cookie"                        
                         if request.xcookies==None or COKY not in request.xcookies:
                             # send cookie if none coming from the browser
-                            header = []
-                            header.append( (SET_COOKIE_HEADER, \
-                                            COKY + "=" + str( time.time() )) )
+                            header = req.set_cookie( header, COKY, time.time() )
                             logger.info( header )
                             
+                        # always delete this cookie
+                        header = req.set_cookie( header, "dmy-cookie", None )
+                        
                         # dummy page
                         data = html % str(calls)
                         req.send_response( response=data, header=header, \
