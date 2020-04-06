@@ -1,13 +1,19 @@
 
+import json
+
 from modcore.log import LogSupport
 from .http_func import BadRequestException
 from .webserv import COOKIE_HEADER
 
 
+auto_cleanup = False
+
 class Filter(LogSupport):
     
-    def __init__(self,cleanup=False):
+    def __init__(self,cleanup=None):
         LogSupport.__init__(self)
+        if cleanup==None:
+            cleanup = auto_cleanup
         self.cleanup = cleanup
     
     def filterRequest( self, request ):
@@ -88,6 +94,16 @@ class ParameterPackFilter(Filter):
         if self.cleanup:
             request.xkeyval = None
      
+     
+class ParameterDenseFilter(Filter):
+    
+    def filterRequest( self, request ):
+        if request.xpar==None:
+            return
+        for k,v in request.xpar.items():
+            if len(v)==1:
+                request.xpar[k]=v[0]
+            
  
 class CookieFilter(Filter):
         
@@ -115,4 +131,73 @@ class CookieFilter(Filter):
  
         if self.cleanup:
             del request.header[COOKIE_HEADER]
- 
+
+
+class BodyTextDecodeFilter(Filter):
+        
+    def __init__(self,cleanup=False,mime=None):
+        Filter.__init__(self,cleanup)
+        self.mime = [None, 'text/plain', \
+                         'application/x-www-form-urlencoded', \
+                         'application/json','application/ld+json']
+        if mime!=None:
+            self.mime.extend( mime )
+        
+    def filterRequest( self, request ):
+        
+        if request.body == None:
+            return
+        
+        if request.get_mime() in self.mime:
+            try:
+                request.body = request.body.decode()
+                self.info("decoded body data")
+            except Exception as ex:
+                self.excep(ex)
+            
+
+class JsonParserFilter(Filter):
+        
+    def filterRequest( self, request ):
+        
+        request.xjson = None
+        
+        if request.body == None:
+            return
+        
+        if request.get_mime() in ['application/json','application/ld+json']:
+            try:
+                request.xjson = json.loads( request.body )
+                self.info("decoded body data")
+            except Exception as ex:
+                self.excep(ex)
+            
+        if self.cleanup:
+            request.body = None
+
+        
+class FormDataFilter(Filter):
+    
+    def filterRequest( self, request ):
+        
+        request.xform = None
+        
+        if request.body == None:
+            return
+        
+        if request.get_mime() in ['application/x-www-form-urlencoded']:
+            
+            request.xform = {}
+            
+            try:
+                for kv in request.body.split("&"):
+                    k, v = kv.split("=")
+                    request.xform[k.strip()]=v.strip()
+                        
+                self.info("decoded body data")
+            except Exception as ex:
+                self.excep(ex)
+            
+        if self.cleanup:
+            request.body = None
+    

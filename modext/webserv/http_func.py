@@ -36,6 +36,10 @@ class HTTPRequest():
         if contlen!=None:
             return int(contlen)
 
+    def get_mime(self):
+        mime = self.header.get("Content-Type".upper(),None)
+        return mime.lower() if mime!=None else mime
+
 
 def parse_header(line):
     pos = line.index(":")

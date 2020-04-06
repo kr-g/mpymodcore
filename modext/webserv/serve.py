@@ -9,8 +9,20 @@ serve()
 
 with curl
 
-curl http://your-ip
-curl http://your-ip/index.html -X POST -d "test-data"
+curl http://yourip
+curl http://yourip/index.html 
+
+curl http://yourip/special 
+curl http://yourip/special -X POST -d "test-data"
+
+more then one 'a' parameter here
+curl 'http://yourip/special/app?a=5&b=6&a=7' 
+
+json needs doule-quotes !
+curl http://yourip/json -X POST -d '{"hello":"world"}' -H "Content-Type: application/json"
+
+form data
+curl http://yourip/form -X POST -d 'field1=value1&field2=value2' -H "Content-Type: application/x-www-form-urlencoded"
 
 
 """
@@ -18,8 +30,7 @@ import time
 
 from modcore.log import logger
 from .webserv import WebServer, BadRequestException, COOKIE_HEADER, SET_COOKIE_HEADER
-from .filter import PathSplitFilter, ParameterSplitFilter, \
-     ParameterValueFilter, ParameterPackFilter, CookieFilter
+from .filter import *
 from .content import StaticFiles
 from .router import Router
 
@@ -54,6 +65,7 @@ def my_app( req, args ):
             <h1>from the router </h1>
             <div> query parameter = %s </div>
             """ % repr( args )
+    logger.info(data)
     req.send_response( response=data, suppress_id=suppress_info )
 
 @router.get("/special")
@@ -62,6 +74,7 @@ def my_get( req, args ):
             <h1>get from the router </h1>
             <div> query parameter = %s </div>
             """ % repr( args )
+    logger.info(data)
     req.send_response( response=data, suppress_id=suppress_info )
 
 # same path as above
@@ -69,13 +82,42 @@ def my_get( req, args ):
 def my_post( req, args ):
     
     body = req.get_body()
-    #body = "<do data>" if body==None else body.decode()
     
     data = """
             <h1>post from the router </h1>
             <div> query parameter = %s </div>
             <div> post data = %s </div>
-            """ % ( repr( args ), body )
+            <div> post type = %s </div>
+            """ % ( repr( args ), repr( body ), type( body ) )
+    logger.info(data)
+    req.send_response( response=data, suppress_id=suppress_info )
+
+@router.post("/json")
+def my_json( req, args ):
+    
+    body = req.request.xjson
+    
+    data = """
+            <h1>json from the router </h1>
+            <div> query parameter = %s </div>
+            <div> post data = %s </div>
+            <div> post type = %s </div>
+            """ % ( repr( args ), repr( body ), type( body ) )
+    logger.info(data)
+    req.send_response( response=data, suppress_id=suppress_info )
+
+@router.post("/form")
+def my_form( req, args ):
+    
+    body = req.request.xform
+    
+    data = """
+            <h1>form data from the router </h1>
+            <div> query parameter = %s </div>
+            <div> post data = %s </div>
+            <div> post type = %s </div>
+            """ % ( repr( args ), repr( body ), type( body ) )
+    logger.info(data)
     req.send_response( response=data, suppress_id=suppress_info )
 
 
@@ -93,12 +135,20 @@ def serve():
                     ParameterSplitFilter(),
                     ParameterValueFilter(),
                     ParameterPackFilter(),
+                    # optional dense len(list)==1 to single element 
+                    ParameterDenseFilter(),
                     #
                  ]
     
+    contentfilter = [
+                BodyTextDecodeFilter(),
+                JsonParserFilter(),
+                FormDataFilter(),
+        ]
+    
     webcontent = [
             StaticFiles(["/www"], suppress_id=suppress_info ),
-            router
+            router,
         ]
     
     try:
@@ -113,7 +163,7 @@ def serve():
                         req.load_request(allowed=["GET","POST","PUT"])
                         logger.info( "request" , req.request )
                         logger.info( "request content len", len( req ) )
-                        req.load_content()
+                        #req.load_content()
                         
                         request = req.request
                         for f in webfilter:
@@ -127,17 +177,25 @@ def serve():
                             logger.info( "xkeyval", request.xkeyval )
                             logger.info( "xpar", request.xpar )                      
                         
-                        body = req.get_body()
+                        req.load_content()
+                        for f in contentfilter:
+                            f.filterRequest( request )
+                        
+                        # after auto cleanup with filter this can be None
+                        body = req.request.body 
                         if body!=None:
-                            logger.info( "request content", body.decode() )
+                            logger.info( "request content", body )
                           
                         req_done = False
                         for gen in webcontent:
                             req_done = gen.handle( req )
                             if req_done:
                                 break
+                        logger.info( "req_done", req_done )
                         if req_done:
                             continue
+                        
+                        # not really important from here on...
                         
                         header = None
                         

@@ -35,6 +35,7 @@ class StaticFiles(ContentGenerator):
         
         if not self._handle_index( req, path ):                
             return self._handle_file( req, path )
+        return True
 
     def _handle_index(self,req,path):
         if path.endswith("/"):
@@ -52,7 +53,9 @@ class StaticFiles(ContentGenerator):
                 ## todo checking valid path
                 self.info( "check path", "'"+fp+"'" )
                 if StaticFiles.is_file(fp):
+                    self.info( "found", fp )
                     self.send_file( req, fp )
+                    self.info( "send", fp )
                     return True
             except Exception as ex:
                 self.excep( ex )

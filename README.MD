@@ -44,7 +44,16 @@ The API or logical call flow might change without prior notice.
 
     `python3 -m pygitgrab -f mpymodcore.pygg`
  
- 
+
+# Simple Web Server included
+
+In package `modext.webserv` there are some functions for request handling.
+
+In package `modext.webserv.serve` there is an example web server included.
+
+Support for body data decoding e.g. form data, json
+
+
 # Sample Code
 
 some sample code can be found in `boot.py` 

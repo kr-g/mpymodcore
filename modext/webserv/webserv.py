@@ -41,8 +41,14 @@ class RequestHandler(LogSupport):
     
     def load_content( self, max_size=4096 ):
         self.request = get_http_content( self.client_file, self.request, max_size=max_size )
-    
-    def get_body(self):
+
+    def get_body(self, max_size=4096 ):
+        if self.request.body==None:
+            _len = len(self)
+            if _len==None or _len==0:
+                return
+            self.info("load body data")
+            self.load_content( max_size )
         return self.request.body
     
     def overflow(self):

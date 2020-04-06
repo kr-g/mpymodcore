@@ -7,10 +7,11 @@ import machine
 import time
 #uos.dupterm(None, 1) # disable REPL on UART(0)
 
+import micropython
+
 interrupts_enabled = False
 
 if interrupts_enabled:
-    import micropython
     micropython.alloc_emergency_exception_buf(128)
 
 import gc

@@ -16,4 +16,7 @@
 - added set_cookie()
 - added simple router
 - changed logging, support check of log level
-- 
+- addded body content filter for decode
+- added json parser filter
+- added form data filter
+
