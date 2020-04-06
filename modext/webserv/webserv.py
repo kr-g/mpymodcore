@@ -16,7 +16,7 @@ ALLOWED_DEFAULT = ["GET","POST"]
 
 COOKIE_HEADER = "COOKIE"
 SET_COOKIE_HEADER = "SET-COOKIE"
-EXPIRE_COOKE = ";expires=Thu, Jan 01 1970 00:00:00 UTC;"
+EXPIRE_COOKIE = ";expires=Thu, Jan 01 1970 00:00:00 UTC;"
 
 ##
 ## todo timeout handling here
