@@ -29,7 +29,7 @@ html = """<!DOCTYPE html>
     </head>
     <body>
         <h1>welcome</h1>
-        <h2>mod core is up and running :-)</h2>
+        <h2>modcore is up and running :-)</h2>
         
         <div>hello world</div>
         <div>&nbsp;</div>
@@ -50,10 +50,12 @@ def serve():
     # depending on app needs filter are added, or left out
     webfilter = [
                     CookieFilter(),
+                    # keep them together
                     PathSplitFilter(),
                     ParameterSplitFilter(),
                     ParameterValueFilter(),
                     ParameterPackFilter(),
+                    #
                  ]
     
     try:

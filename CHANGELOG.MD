@@ -12,4 +12,5 @@
 - added simple static content generator
 - added cookie filter
 - changed package structure
+- added index file handling
 
