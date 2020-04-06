@@ -53,6 +53,8 @@ class LogSupport(object):
         return level >= self._log_level
 
     def _log( self, level, *args ):
+        if len( args ) == 0:
+            return self._loglevel( level )
         if self._loglevel( level ):
             self._log2( _logstr[level], *args )
             
@@ -67,15 +69,15 @@ class LogSupport(object):
         print( *args )
 
     def debug( self, *args ):
-        self._log( DEBUG, *args )
+        return self._log( DEBUG, *args )
     def info( self, *args ):
-        self._log( INFO, *args )
+        return self._log( INFO, *args )
     def warn( self, *args ):
-        self._log( WARNING, *args )
+        return self._log( WARNING, *args )
     def error( self, *args ):
-        self._log( ERROR, *args )
+        return self._log( ERROR, *args )
     def critical( self, *args ):
-        self._log( CRITICAL, *args )
+        return self._log( CRITICAL, *args )
     
     def excep( self, ex, *args ):
         self.critical( *args )

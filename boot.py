@@ -169,4 +169,6 @@ print()
 print( "call loop() to start :-)" )
 print()
 
+from modext.webserv.serve import serve
+
 

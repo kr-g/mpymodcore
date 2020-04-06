@@ -14,5 +14,6 @@
 - changed package structure
 - added index file handling
 - added set_cookie()
-
-
+- added simple router
+- changed logging, support check of log level
+- 

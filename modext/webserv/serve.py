@@ -21,6 +21,8 @@ from .webserv import WebServer, BadRequestException, COOKIE_HEADER, SET_COOKIE_H
 from .filter import PathSplitFilter, ParameterSplitFilter, \
      ParameterValueFilter, ParameterPackFilter, CookieFilter
 from .content import StaticFiles
+from .router import Router
+
 
 html = """<!DOCTYPE html>
 <html>
@@ -32,14 +34,50 @@ html = """<!DOCTYPE html>
         <h2>modcore is up and running :-)</h2>
         
         <div>hello world</div>
-        <div>&nbsp;</div>
-        
+        <div>&nbsp;</div>        
         <div>number of visits: %s</div>
+        <div>&nbsp;</div>        
+        <div>this is a dummy page since your request was not processed</div>        
     </body>
 </html>
 """
 
-known_clients = {}
+# show board unique id in http server header
+suppress_info=False    
+
+router = Router( suppress_id=suppress_info )
+
+# accepts get and post 
+@router("/app")
+def my_app( req, args ):
+    data = """
+            <h1>from the router </h1>
+            <div> query parameter = %s </div>
+            """ % repr( args )
+    req.send_response( response=data, suppress_id=suppress_info )
+
+@router.get("/special")
+def my_get( req, args ):
+    data = """
+            <h1>get from the router </h1>
+            <div> query parameter = %s </div>
+            """ % repr( args )
+    req.send_response( response=data, suppress_id=suppress_info )
+
+# same path as above
+@router.post("/special")
+def my_post( req, args ):
+    
+    body = req.get_body()
+    #body = "<do data>" if body==None else body.decode()
+    
+    data = """
+            <h1>post from the router </h1>
+            <div> query parameter = %s </div>
+            <div> post data = %s </div>
+            """ % ( repr( args ), body )
+    req.send_response( response=data, suppress_id=suppress_info )
+
 
 def serve():
     
@@ -57,6 +95,11 @@ def serve():
                     ParameterPackFilter(),
                     #
                  ]
+    
+    webcontent = [
+            StaticFiles(["/www"], suppress_id=suppress_info ),
+            router
+        ]
     
     try:
         calls = 0
@@ -76,22 +119,25 @@ def serve():
                         for f in webfilter:
                             f.filterRequest( request )
                         
-                        logger.info( request.xcookies )
-                        logger.info( request.xpath, request.xquery )
-                        logger.info( request.xparam )
-                        logger.info( request.xkeyval )
-                        logger.info( request.xpar )                      
+                        # check logging level...
+                        if logger.info():
+                            logger.info( "cookies",request.xcookies )
+                            logger.info( "xpath, xquery", request.xpath, request.xquery )
+                            logger.info( "xparam", request.xparam )
+                            logger.info( "xkeyval", request.xkeyval )
+                            logger.info( "xpar", request.xpar )                      
                         
                         body = req.get_body()
                         if body!=None:
                             logger.info( "request content", body.decode() )
                           
-                        # show board unique id in http server header
-                        suppress_info=False    
-                            
-                        statf = StaticFiles(["/www"], suppress_id=suppress_info )
-                        if statf.handle( req ):
-                            continue                        
+                        req_done = False
+                        for gen in webcontent:
+                            req_done = gen.handle( req )
+                            if req_done:
+                                break
+                        if req_done:
+                            continue
                         
                         header = None
                         
