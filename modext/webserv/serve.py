@@ -39,6 +39,7 @@ from .webserv import WebServer, BadRequestException, COOKIE_HEADER, SET_COOKIE_H
 from .filter import *
 from .content import StaticFiles
 from .router import Router
+from .session import SessionStore
 
 
 html = """<!DOCTYPE html>
@@ -200,6 +201,7 @@ def my_gen( req, args ):
     req.send_response( response_i=_chunk, suppress_id=suppress_info )
 
 
+store = SessionStore( )
 
 def serve():
     
@@ -210,6 +212,7 @@ def serve():
     # depending on app needs filter are added, or left out
     headerfilter = [
                     CookieFilter(),
+                    store.pre_filter(),
                     # keep them together
                     PathSplitFilter(),
                     ParameterSplitFilter(),
@@ -235,6 +238,10 @@ def serve():
             StaticFiles(["/www"], suppress_id=suppress_info ),
             router,
             abc_router,
+        ]
+    
+    post_proc = [
+            store.post_filter(),
         ]
     
     try:
@@ -277,6 +284,10 @@ def serve():
                             req_done = gen.handle( req )
                             if req_done:
                                 break
+                            
+                        for f in post_proc:
+                             f.filterRequest( request )
+                            
                         logger.info( "req_done", req_done )
                         if req_done:
                             continue
@@ -285,9 +296,6 @@ def serve():
                         logger.warn("not found 404", request.xpath )
                         req.send_response( status=404, suppress_id=suppress_info )
                     
-            except BadRequestException as ex:
-                logger.excep( ex )
-                
             except Exception as ex:
                 logger.excep( ex )
                 

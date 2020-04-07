@@ -15,7 +15,7 @@ class Router(ContentGenerator):
         
         self.debug("searching route")
         request = req.request
-        path = request.xpath
+
         for to, method, func, xtract in self.route:
             
             rc = self._root_match(request.xpath)
@@ -23,8 +23,8 @@ class Router(ContentGenerator):
                 if rc==False:
                     return
                             
-            path = path[self.xlen:]
-            cond = to==path 
+            path = request.xpath[self.xlen:]
+            cond = to==path
             
             if xtract:
                 xurl = xurl_params( to, path )

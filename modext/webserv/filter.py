@@ -57,9 +57,9 @@ class XPathSlashDenseFilter(Filter):
             request.xpath = request.xpath[0:pos]+request.xpath[pos+1:]
             found = True
             
-        if request.xpath[-1]=="/":
-            request.xpath = request.xpath[0:-1]
-            found = True
+#        if len(request.xpath)>1 and request.xpath[-1]=="/":
+#            request.xpath = request.xpath[0:-1]
+#            found = True
             
         self.info("dense",found)
 

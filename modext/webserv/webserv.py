@@ -57,6 +57,15 @@ class RequestHandler(LogSupport):
     def send_response(self, status=200, header=None, response=None, \
                       type="text/html", suppress_id = False, response_i=None ):
         header = self._add_server_header(header,suppress_id)
+        
+        try:
+            if self.request.xsession_is_new:
+                self.info("send session cookie")
+                self.set_cookie( header, self.request.xsession_cookie, \
+                                 self.request.xsession_id )
+        except:
+            pass
+        
         send_http_response( self.client_file, status, header, response, type, response_i )
       
     def close(self):
