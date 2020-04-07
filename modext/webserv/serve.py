@@ -110,6 +110,34 @@ def my_json( req, args ):
     logger.info(data)
     req.send_response( response=data, suppress_id=suppress_info )
 
+@router.get("/form")
+def my_form( req, args ):
+    
+    body = req.request.xform
+    
+    data = """
+            <!DOCTYPE html>
+            <html>
+            <body>
+
+            <h2>HTML Form</h2>
+
+            <form action="/form" method="POST">
+              <label for="fname">First name:</label><br>
+              <input type="text" id="fname" name="fname" value="John"><br>
+              <label for="lname">Last name:</label><br>
+              <input type="text" id="lname" name="lname" value="Doe"><br><br>
+              <input type="submit" value="Submit">
+            </form> 
+
+            <p>If you click the "Submit" button, the form-data will be sent.</p>
+
+            </body>
+            </html>            
+            """ 
+    logger.info(data)
+    req.send_response( response=data, suppress_id=suppress_info )
+
 @router.post("/form")
 def my_form( req, args ):
     
