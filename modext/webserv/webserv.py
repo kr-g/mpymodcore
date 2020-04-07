@@ -55,9 +55,9 @@ class RequestHandler(LogSupport):
         return self.request.overflow
     
     def send_response(self, status=200, header=None, response=None, \
-                      type="text/html", suppress_id = False ):
+                      type="text/html", suppress_id = False, response_i=None ):
         header = self._add_server_header(header,suppress_id)
-        send_http_response( self.client_file, status, header, response, type )
+        send_http_response( self.client_file, status, header, response, type, response_i )
       
     def close(self):
         self.client_file.close()

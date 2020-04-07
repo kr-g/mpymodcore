@@ -8,20 +8,30 @@ from .http_func import BadRequestException
 
 class ContentGenerator(LogSupport):
     
-    def __init__(self):
+    def __init__(self, root=None, suppress_id=False ):
         LogSupport.__init__(self)
+        self.suppress_id = suppress_id
+        self.root = root if root != None else ""
+        self.xroot = self.root + "/"
+        self.xlen = len( self.root )
         
+    def _root_match(self,path):        
+        if self.xlen>0:
+            return path.startswith(self.xroot)
+        # continue
+        return None
+
     def handle(self,request):
         pass
     
 
 class StaticFiles(ContentGenerator):
 
-    def __init__( self, static_paths=None, suppress_id=False ):
-        LogSupport.__init__(self)
+    def __init__( self, static_paths, root=None, suppress_id=False, send_buffer=64 ):
+        ContentGenerator.__init__(self,root,suppress_id)
         self.static_paths = static_paths
-        self.suppress_id = suppress_id
-
+        self.send_buffer = send_buffer
+        
     def handle(self,req):
         
         if self.static_paths==None or len(self.static_paths)==0:
@@ -29,6 +39,12 @@ class StaticFiles(ContentGenerator):
         
         request = req.request
         path = request.xpath
+        
+        rc = self._root_match(path)
+        if rc != None:
+            if rc==False:
+                return
+            path = path[self.xlen:]
         
         if path[0]!="/":
             raise BadRequestException("malformed path", path )
@@ -51,7 +67,7 @@ class StaticFiles(ContentGenerator):
             fp = p + path
             try:
                 ## todo checking valid path
-                self.info( "check path", "'"+fp+"'" )
+                self.info( "check root", self.root, "path", fp )
                 if StaticFiles.is_file(fp):
                     self.info( "found", fp )
                     self.send_file( req, fp )
@@ -71,10 +87,17 @@ class StaticFiles(ContentGenerator):
         return False
     
     def send_file( self, request, path ):
+
+        def _send_chunk():
+            with open(path) as f:
+                while True:
+                    c = f.read(self.send_buffer)
+                    self.info("send bytes", len(c))
+                    if len(c)==0:
+                        break
+                    yield c
+
+        request.send_response( response_i=_send_chunk, suppress_id=self.suppress_id )
+          
         
-        with open(path) as f:
-            c = f.read()
-            request.send_response( response=c, suppress_id=self.suppress_id )
-    
-    
-    
+

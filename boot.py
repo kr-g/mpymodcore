@@ -34,6 +34,7 @@ from modcore import modc, Module, LifeCycle
 from modcore import DEBUG, INFO, NOTSET, logger
 
 from moddev import wlan
+from moddev.wlan import wlan_ap
 
 from moddev import ntp
 from moddev.ntp import ntp_serv, set_log_time
@@ -165,6 +166,9 @@ def loop(run_until=None):
             logger.excep( ex )
 
 
+print()
+print( "ip ->", wlan_ap.ifconfig() )
+print()
 print( "current time ->", ntp_serv.localtime() )
 print()
 print( "call loop() to start :-)" )

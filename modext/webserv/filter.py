@@ -44,6 +44,21 @@ class PathSplitFilter(Filter):
             pass
         return path, query, fragment
 
+
+class XPathSlashDenseFilter(Filter):
+    
+    def filterRequest( self, request ):
+          
+        found = False
+        while True:
+            pos = request.xpath.find("//")
+            if pos<0:
+                break
+            request.xpath = request.xpath[0:pos]+request.xpath[pos+1:]
+            found = True
+            
+        self.info("dense",found)
+
         
 class ParameterSplitFilter(Filter):
     

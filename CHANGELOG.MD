@@ -3,6 +3,10 @@
 
 ## next version v0.0.3
 
+- router with url root parameter
+- extra slashes dense for path
+- send chunks buffer for static file
+- content generator support py-generator funczions
 
 
 ## version v0.0.2

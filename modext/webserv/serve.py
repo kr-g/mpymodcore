@@ -11,6 +11,7 @@ with curl
 
 curl http://yourip
 curl http://yourip/index.html 
+curl http://yourip/app
 
 curl http://yourip/special 
 curl http://yourip/special -X POST -d "test-data"
@@ -23,6 +24,9 @@ curl http://yourip/json -X POST -d '{"hello":"world"}' -H "Content-Type: applica
 
 form data
 curl http://yourip/form -X POST -d 'field1=value1&field2=value2' -H "Content-Type: application/x-www-form-urlencoded"
+
+
+curl http://yourip/abc/app
 
 
 """
@@ -120,6 +124,34 @@ def my_form( req, args ):
     logger.info(data)
     req.send_response( response=data, suppress_id=suppress_info )
 
+abc_router = Router( root="/abc", suppress_id=suppress_info )
+# accepts get and post 
+@abc_router("/app")
+def my_app( req, args ):
+    data = """
+            <h1> new router available under /abc/app </h1>
+            <div> query parameter = %s </div>
+            """ % repr( args )
+    logger.info(data)
+    req.send_response( response=data, suppress_id=suppress_info )
+
+@abc_router("/appgen")
+def my_gen( req, args ):
+    data = """
+            <h1> new router available under /abc/appgen </h1>
+            <div> query parameter = %s </div>
+            """ % repr( args )
+    logger.info(data)
+    
+    def _chunk():
+        lines = data.splitlines()
+        for l in lines:
+            yield l
+
+    # generate content with generator func
+    req.send_response( response_i=_chunk, suppress_id=suppress_info )
+
+
 
 def serve():
     
@@ -128,27 +160,33 @@ def serve():
     logger.info( 'listening on', ws.addr )
     
     # depending on app needs filter are added, or left out
-    webfilter = [
+    headerfilter = [
                     CookieFilter(),
                     # keep them together
                     PathSplitFilter(),
                     ParameterSplitFilter(),
                     ParameterValueFilter(),
                     ParameterPackFilter(),
+                    # optional
+                    XPathSlashDenseFilter(),
                     # optional dense len(list)==1 to single element 
                     ParameterDenseFilter(),
                     #
                  ]
     
-    contentfilter = [
+    bodyfilter = [
                 BodyTextDecodeFilter(),
                 JsonParserFilter(),
                 FormDataFilter(),
         ]
     
-    webcontent = [
+    generators = [
+            # serve same static file also under /stat prefixed root
+            StaticFiles(["/www"], root="/stat", suppress_id=suppress_info ),
+            # place none-root at end -> performance
             StaticFiles(["/www"], suppress_id=suppress_info ),
             router,
+            abc_router,
         ]
     
     try:
@@ -166,7 +204,7 @@ def serve():
                         #req.load_content()
                         
                         request = req.request
-                        for f in webfilter:
+                        for f in headerfilter:
                             f.filterRequest( request )
                         
                         # check logging level...
@@ -178,7 +216,7 @@ def serve():
                             logger.info( "xpar", request.xpar )                      
                         
                         req.load_content()
-                        for f in contentfilter:
+                        for f in bodyfilter:
                             f.filterRequest( request )
                         
                         # after auto cleanup with filter this can be None
@@ -187,7 +225,7 @@ def serve():
                             logger.info( "request content", body )
                           
                         req_done = False
-                        for gen in webcontent:
+                        for gen in generators:
                             req_done = gen.handle( req )
                             if req_done:
                                 break
@@ -195,23 +233,9 @@ def serve():
                         if req_done:
                             continue
                         
-                        # not really important from here on...
-                        
-                        header = None
-                        
-                        COKY="my-cookie"                        
-                        if request.xcookies==None or COKY not in request.xcookies:
-                            # send cookie if none coming from the browser
-                            header = req.set_cookie( header, COKY, time.time() )
-                            logger.info( header )
-                            
-                        # always delete this cookie
-                        header = req.set_cookie( header, "dmy-cookie", None )
-                        
-                        # dummy page
-                        data = html % str(calls)
-                        req.send_response( response=data, header=header, \
-                                           suppress_id=suppress_info )
+                        # not found send 404
+                        logger.warn("not found 404", request.xpath )
+                        req.send_response( status=404, suppress_id=suppress_info )
                     
             except BadRequestException as ex:
                 logger.excep( ex )

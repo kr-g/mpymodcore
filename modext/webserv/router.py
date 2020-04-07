@@ -4,17 +4,24 @@ from .content import ContentGenerator, LogSupport
 
 class Router(ContentGenerator):
 
-    def __init__( self, suppress_id=False ):
-        LogSupport.__init__(self)
-        self.suppress_id = suppress_id
+    def __init__( self, root=None, suppress_id=False ):
+        ContentGenerator.__init__(self,root,suppress_id)
         self.route = []
 
     def handle(self,req):
         self.debug("searching route")
         request = req.request
+        path = request.xpath
         for to, method, func in self.route:
-            if to==request.xpath and ( method==None or method==request.method ):
-                self.info( "found route", to, method, func )
+            
+            rc = self._root_match(request.xpath)
+            if rc != None:
+                if rc==False:
+                    return
+                
+            url = self.root + to
+            if url==path and ( method==None or method==request.method ):
+                self.info( "found route", self.root, to, method, func )
                 para = request.xpar
                 if para==None:
                     para = {}
@@ -29,11 +36,11 @@ class Router(ContentGenerator):
     def _decor(self,to,method):
         self.info("route", to, method )
         if to[0]!="/":
-            raise Exception( "malformed route" )
+            raise Exception( "malformed route", to )
         def dector(f):
             #@functools.wraps(f)
             def inner(*argv,**kwargs):
-                self.info( "call route ", to )
+                self.info( "call route ", self.root, to )
                 res = f(*argv,**kwargs)
                 return res
             self._append( to, method, inner ) 
