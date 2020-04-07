@@ -265,11 +265,13 @@ def serve():
                         # check logging level...
                         if logger.info():
                             logger.info( "cookies",request.xcookies )
+                            logger.info( "xsession_is_new", request.xsession_is_new )
                             logger.info( "xpath, xquery", request.xpath, request.xquery )
                             logger.info( "xparam", request.xparam )
                             logger.info( "xkeyval", request.xkeyval )
                             logger.info( "xpar", request.xpar )                      
-                        
+
+
                         req.load_content()
                         for f in bodyfilter:
                             f.filterRequest( request )

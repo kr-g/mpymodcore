@@ -8,7 +8,7 @@ from .filter import Filter
 SID = "xsession_id"
 EXPIRES = "xsession_expires"
 CREATED = "xsession_created"
-TIMEOUT = 60*60*30
+TIMEOUT = 60*30
     
         
 class SessionLoad(Filter):
@@ -83,7 +83,9 @@ class SessionStore(LogSupport):
         return sessionid
     
     def renew(self,session):
-        session.update( { EXPIRES : time.time() + self.expires_after } )
+        self.info("renew")
+        exp = time.ticks_add( time.ticks_ms(), self.expires_after * 1000 )
+        session.update( { EXPIRES : exp } )
     
     def create(self):
         while True:
@@ -91,38 +93,40 @@ class SessionStore(LogSupport):
             if sid not in self.sessions:
                 break
             self.warn("ups...")
-            
+
+        self.info("create", sid )
+
         session = { SID : sid, CREATED : time.time() }
         self.renew(session)
         self.sessions[sid] = session
+        
         return sid
     
     def load(self,sid):
+        self.info("load", sid )
         session = self.sessions.get(sid,None)
+        self.info("session", session )
         if session==None:
             return
-        exp = session.get(EXPIRES, time.time()-153 ) 
-        now = time.time()
-        if now>exp:
+        exp = session.get(EXPIRES, 0 ) 
+        now = time.ticks_ms()
+        self.info( now, exp )
+        diff = time.ticks_diff( exp, now )
+        if diff<0:
             self.destroy(sid)
             return        
         self.renew(session)
         return session
-    
-    def cleanup_expired(self):
-        now = time.time()
-        for sid,session in self.sessions.items():
-            exp = session.get(EXPIRES, time.time()-153 )             
-            if now>exp:
-                self.destroy(sid)                  
-    
+        
     def store(self,sid,session):
+        self.info("store", sid )
         session = self.sessions.get(sid,None)
         if session==None:
             return        
         self.sessions[sid] = session
         
     def destroy(self,sid):
+        self.info("destroy", sid )
         session = self.sessions.get(sid,None)
         if session==None:
             return        
