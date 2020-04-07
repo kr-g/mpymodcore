@@ -6,7 +6,9 @@
 - router with url root parameter
 - extra slashes dense for path
 - send chunks buffer for static file
-- content generator support py-generator funczions
+- content generator support py-generator functions
+- some more code samples
+
 
 
 ## version v0.0.2
