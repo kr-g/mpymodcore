@@ -2,10 +2,31 @@
 Copyright (c) 2020 k.r. goger
 email: k.r.goger@gmail.com
 
-Product: 
+---
 
-MPyModCore
-https://github.com/kr-g/mpymodcore
+this software is dual-licensed. read properly.
+
+- private license: `mpymodcore` is free for "non-commercial" individuals, 
+ except when its installed as part of an business service 
+ (read commercial license below).
+ 
+- commercial license: all business related usage is not free of charge.
+ also selling derived parts, or ports (to other Platform) of this 
+ software falls under this section.
+ installing this software on private systems as part of a business service 
+ falls under this section.
+ using in-house, or as part of a ASP service falls under this section.
+ individual users like freelancers, or doing other kind of business 
+ falls under this section.
+ NGOs, Universities, and other organizations falls under this section.
+ for evaluation purposes a free 30 days period is granted.
+ 
+please send me an email (k.r.goger+mpymodcore.license@gmail.com) to get an offer,
+or clarify license related questions. 
+ 
+free software is _not_ free beer. 
+i m self-employed as freelancer and need to live from that money. 
+ 
 
 ---
 
