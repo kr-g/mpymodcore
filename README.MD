@@ -24,6 +24,10 @@ Tested ESP32 with PSRam and ESP8266 (for latter, see limitations below)
 Alpha state.
 The API or logical call flow might change without prior notice.
 
+In case your code breaks between two versions check
+[`CHANGELOG`](https://github.com/kr-g/mpymodcore/blob/master/CHANGELOG.MD)
+information first before creating a ticket / issue on github. thanks.
+
 
 # Limitations
 
@@ -50,13 +54,15 @@ The API or logical call flow might change without prior notice.
 In package `modext.webserv` there are some functions for request handling.
 
 In package `modext.webserv.serve` there is an example web server included.
+Sample code in
+[`serve.py`](https://github.com/kr-g/mpymodcore/blob/master/modext/webserv/serve.py)
 
 Support for body data decoding e.g. form data, json
 
 
 # Sample Code
 
-some sample code can be found in `boot.py` 
+some sample code can be found in [`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py)
 
 
 
@@ -69,9 +75,9 @@ some sample code can be found in `boot.py`
     #uos.dupterm(None, 1) # disable REPL on UART(0)
 
     interrupts_enabled = False
-
+    import micropython
+    
     if interrupts_enabled:
-        import micropython
         micropython.alloc_emergency_exception_buf(128)
 
     import gc
