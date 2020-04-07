@@ -6,10 +6,10 @@
 - router with url root parameter
 - extra slashes dense for path
 - send chunks buffer for static file
-- content generator support py-generator functions
+- content generator supports py-generator functions
 - some more code samples
 - changed license to dual licensed
-- rest style urls with url base variables with @xget and @xpost decorators
+- rest style urls with url variables with @xget and @xpost decorators
 -
 
 
