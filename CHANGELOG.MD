@@ -8,7 +8,9 @@
 - send chunks buffer for static file
 - content generator support py-generator functions
 - some more code samples
-
+- changed license to dual licensed
+- rest style urls with url base variables with @xget and @xpost decorators
+-
 
 
 ## version v0.0.2

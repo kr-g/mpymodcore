@@ -28,6 +28,8 @@ curl http://yourip/form -X POST -d 'field1=value1&field2=value2' -H "Content-Typ
 
 curl http://yourip/abc/app
 
+curl 'http://yourip/user/your-name/id/your-date/ending'
+
 
 """
 import time
@@ -151,6 +153,24 @@ def my_form( req, args ):
             """ % ( repr( args ), repr( body ), type( body ) )
     logger.info(data)
     req.send_response( response=data, suppress_id=suppress_info )
+
+
+# rest style url 
+@router.xget("/user/:user/id/:userid/ending")
+def my_form( req, args ):
+    
+    body = req.request.xurl
+    
+    data = """
+            <h1>rest url data from the router </h1>
+            <div> query parameter = %s </div>
+            <div> post data = %s </div>
+            <div> post type = %s </div>
+            """ % ( repr( args ), repr( body ), type( body ) )
+    logger.info(data)
+    req.send_response( response=data, suppress_id=suppress_info )
+
+
 
 abc_router = Router( root="/abc", suppress_id=suppress_info )
 # accepts get and post 
