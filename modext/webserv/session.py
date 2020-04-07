@@ -109,6 +109,13 @@ class SessionStore(LogSupport):
         self.renew(session)
         return session
     
+    def cleanup_expired(self):
+        now = time.time()
+        for sid,session in self.sessions.items()
+            exp = session.get(EXPIRES, time.time()-153 )             
+            if now>exp:
+                self.destroy(sid)                  
+    
     def store(self,sid,session):
         session = self.sessions.get(sid,None)
         if session==None:

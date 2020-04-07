@@ -10,7 +10,8 @@
 - some more code samples
 - changed license to dual licensed
 - rest style urls with url variables with @xget and @xpost decorators
--
+- simple session manager (in-memory)
+- 
 
 
 ## version v0.0.2
