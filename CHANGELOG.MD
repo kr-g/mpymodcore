@@ -3,8 +3,8 @@
 
 ## next version v0.0.4 - beta
 
-- support for long running tasks (without asyncio code complexity) 
- with [`fibers`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
+- support for long running tasks (without asyncio) with
+ [`fibers`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
  (wrapper around performance optimized generator functions)
 - code review 
 - package structure
