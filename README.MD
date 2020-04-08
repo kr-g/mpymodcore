@@ -40,7 +40,7 @@ information first before creating a ticket / issue on github. thanks.
 
 - with pip
 
-    # install to the current (project) folder
+    `# install to the current (project) folder`
     `python3 -m pip install mpymodcore --target .` 
     
  
