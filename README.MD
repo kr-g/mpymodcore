@@ -40,7 +40,9 @@ information first before creating a ticket / issue on github. thanks.
 
 - with pip
 
-    `python3 -m pip install mpymodcore`
+    # install to the current (project) folder
+    `python3 -m pip install mpymodcore --target .` 
+    
  
 - with [pygitgrab](https://github.com/kr-g/pygitgrab)
  download the `mpymodcore.pygg` file from the repo to your local project folder
