@@ -1,7 +1,13 @@
 
 # Changelog
 
+## next version v0.0.4 - beta
 
+- code review 
+- package structure
+- testing
+- release as beta version
+-
 
 ## version v0.0.3
 
