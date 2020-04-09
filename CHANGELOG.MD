@@ -1,16 +1,21 @@
 
 # Changelog
 
-## next version v0.0.4 - beta
+## next version v0.0.4 - beta 1
 
 - support for long running tasks (without asyncio) with
  [`fibers`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
  (wrapper around performance optimized generator functions)
+
+### backlog
+
+- integrate fiberloop in modext.webserv and modcore
+- finalize modext.webserv as own class
 - code review 
 - package structure
 - testing
-- release as beta version
--
+- documentation
+
 
 ## version v0.0.3
 
