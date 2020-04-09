@@ -158,7 +158,7 @@ class FiberWatchdog(Fiber):
 
 def sample(path):
     
-    #fibers only accept generator functions, so an yield is required
+    #fibers only accept generator functions, so a yield is required
     def _print_final_message(a):
         print(a)
         # return code for fbr.rc
