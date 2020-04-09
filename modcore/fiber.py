@@ -97,6 +97,16 @@ class Fiber(LogSupport):
         self.rc = None
         self.err = None
         
+        # some more housekeeping
+        self.cpu_time = 0
+        self.lastcall_start = 0
+        self.lastcall_time = 0
+        
+        # trace performance younter accordigly to the log level
+        ## todo
+        # change later to debug
+        self._perf_counter = self.info()
+        
     def run_time(self):
         return time.ticks_diff(self.stop_time,self.start_time)
 
@@ -113,7 +123,16 @@ class Fiber(LogSupport):
 
     def __next__(self):
         try:
+            if self._perf_counter:
+                self.lastcall_start = time.ticks_ms()
+            
             self.rc = next(self.func)
+            
+            if self._perf_counter:
+                now = time.ticks_ms()
+                self.lastcall_time = time.ticks_diff(now,self.lastcall_start)
+                self.cpu_time += self.lastcall_time
+            
             return self.rc
         except StopIteration as ex:
             # here we are done
@@ -129,11 +148,14 @@ class Fiber(LogSupport):
         return self
     
     def __repr__(self):
-        return "start: " + str(self.start_time) \
-               +", stop: " + str(self.stop_time) \
-               + ", " + str(self.run_time()) \
-               + " rc: " + str(self.rc) \
-               + "" if self.err==None else repr(err)
+        return self.__class__.__name__ \
+                + "(start: " + str(self.start_time) \
+                +", stop: " + str(self.stop_time) \
+                + ", run time: " + str(self.run_time()) \
+                + ", rc: " + str(self.rc) \
+                + ", cpu time: " + str( self.cpu_time ) \
+                + ("" if self.err==None else repr(err) ) \
+                + ")"
 
 
 class FiberTimeoutException(Exception):
@@ -172,10 +194,9 @@ def sample(path):
         with open(path) as f:
             while True:
                 
-                # the basic idea
-                
+                # the basic idea                
                 #
-                # do a portion of work
+                # do a portion of work, and yield
                 #
                 # important:
                 # _never_ use time.sleep() or long blocking func within a fiber
