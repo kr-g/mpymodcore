@@ -5,23 +5,36 @@ class FiberLoop(object):
     
     def __init__(self):
         self.fiber = []
+        self._prep()
+        
+    def _prep(self):
+        self.done=[]
+        self.err=[]
+        
         
     def add(self,fbr):
         self.fiber.append(fbr)
         
     def __next__(self):
+        self._prep()
         for f in self.fiber:
             try:
                 r = next(f)
                 # throw away r, and continue with next fiber
             except StopIteration as ex:
                 # this one is finished, remove it
-                self.fiber.remove(f)                
+                self.fiber.remove(f)
+                self.done.append(f)
             except Exception as ex:
-                self.fiber.remove(f) 
-                print("ouch", ex )                
+                self.fiber.remove(f)
+                self.err.append(f)
         if len(self.fiber)==0:
             raise StopIteration
+        return self.status()
+        
+    def status(self):
+        if len(self.done)>0 or len(self.err):
+           return (self.done,self.err)
             
     def __iter__(self):
         return self
@@ -47,16 +60,18 @@ class Fiber(object):
         
         self.stop = 0
         self.start = time.ticks_ms()
+        self.rc = None
+        self.err = None
 
     def __next__(self):
         try:
-            r = next(self.func)
-            return r
+            self.rc = next(self.func)
+            return self.rc
         except StopIteration as ex:
             # here we are done
             raise ex
         except Exception as ex:
-            print("ouch", ex )
+            self.err = ex
             raise ex
         finally:
             self.stop = time.ticks_ms()
@@ -70,14 +85,12 @@ class Fiber(object):
                + ", " + str(self.run_time())
 
     def run_time(self):
-        return time.diff(self.stop,self.start)
+        return time.ticks_diff(self.stop,self.start)
 
 
 
-def sample():
+def sample(path):
     
-    path = __file__
-
     #fibers only accept generator functions, so an yield is required
     def _print_final_message(a):
         print(a)
@@ -103,8 +116,14 @@ def sample():
 
     fl.add( Fiber(_send_chunk(10,"eins", fl) )) 
     fl.add( Fiber(_send_chunk(15,"zwei", fl) )) 
+    fl.add( Fiber(_send_chunk(150,"drei", fl) )) 
 
-    while fl.loop():
-        pass
+    for status_change in fl:
+        if status_change:
+            print(status_change)
+
+    # try
+    # from modcore.fiber import sample
+    # sample("boot.py")
     
     
