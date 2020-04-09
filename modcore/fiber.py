@@ -33,7 +33,7 @@ class FiberLoop(object):
         return self.status()
         
     def status(self):
-        if len(self.done)>0 or len(self.err):
+        if len(self.done)>0 or len(self.err)>0:
            return (self.done,self.err)
             
     def __iter__(self):
@@ -82,7 +82,9 @@ class Fiber(object):
     def __repr__(self):
         return "start: " + str(self.start) \
                +", stop: " + str(self.stop) \
-               + ", " + str(self.run_time())
+               + ", " + str(self.run_time()) \
+               + " rc: " + str(self.rc) \
+               + "" if self.err==None else repr(err)
 
     def run_time(self):
         return time.ticks_diff(self.stop,self.start)
@@ -94,7 +96,7 @@ def sample(path):
     #fibers only accept generator functions, so an yield is required
     def _print_final_message(a):
         print(a)
-        yield
+        yield 153
 
     # the generator function for the fiber
     def _send_chunk(buffer_size,name,flp):
