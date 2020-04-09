@@ -7,6 +7,24 @@ introduce a defined lifecycle and eventing model
 for modules / devices for convenient handling
 of loose coupled modules/ device
 
+# what's new ?
+
+check the changelog for latest ongoing, or upcoming news
+
+[`CHANGELOG`](https://github.com/kr-g/mpymodcore/blob/master/CHANGELOG.MD)
+
+
+# Simple Web Server included
+
+In package `modext.webserv` there are some functions for request handling.
+
+In package `modext.webserv.serve` there is an example web server included.
+Sample code in
+[`serve.py`](https://github.com/kr-g/mpymodcore/blob/master/modext/webserv/serve.py)
+
+Support for body data decoding e.g. form data, json
+
+
 # Related project
 
 `mpymodcore` is the successor of [mpyconfigbase](https://github.com/kr-g/mpyconfigbase)
@@ -31,7 +49,7 @@ information first before creating a ticket / issue on github. thanks.
 
 # Limitations
 
-- no asyncio integration as of now
+- no asyncio integration as of now 
 - with all mod's enabled as shown here in the sample
  it will not run on ESP8266 due to memory limit.
  but wlan, softap, and ntp should work 
@@ -46,22 +64,12 @@ information first before creating a ticket / issue on github. thanks.
     
  
 - with [pygitgrab](https://github.com/kr-g/pygitgrab)
+ to sync the master branch to your project folder 
  download the `mpymodcore.pygg` file from the repo to your local project folder
  and download the sources then with:
 
     `python3 -m pygitgrab -f mpymodcore.pygg`
  
-
-# Simple Web Server included
-
-In package `modext.webserv` there are some functions for request handling.
-
-In package `modext.webserv.serve` there is an example web server included.
-Sample code in
-[`serve.py`](https://github.com/kr-g/mpymodcore/blob/master/modext/webserv/serve.py)
-
-Support for body data decoding e.g. form data, json
-
 
 # Sample Code
 
