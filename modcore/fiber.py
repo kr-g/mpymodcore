@@ -1,4 +1,14 @@
 
+"""
+    fiber
+    https://en.wikipedia.org/wiki/Fiber_(computer_science)
+    
+    yield
+    https://en.wikipedia.org/wiki/Cooperative_multitasking
+    
+"""
+
+
 import time
 
 class FiberLoop(object):
@@ -28,14 +38,17 @@ class FiberLoop(object):
             except Exception as ex:
                 self.fiber.remove(f)
                 self.err.append(f)
-        if len(self.fiber)==0:
+        if self.all_done():
             raise StopIteration
         return self.status()
         
     def status(self):
         if len(self.done)>0 or len(self.err)>0:
            return (self.done,self.err)
-            
+
+    def all_done(self):
+        return len(self.fiber)==0
+
     def __iter__(self):
         return self
     
