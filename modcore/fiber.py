@@ -151,7 +151,7 @@ class FiberWatchdog(Fiber):
     def __next__(self):
         if self.run_time_diff_ms() >= self.max_time_auto_kill_ms:
             raise FiberTimeoutException()
-        super().__next__()
+        return super().__next__()
         
             
             

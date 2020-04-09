@@ -116,8 +116,6 @@ def my_json( req, args ):
 @router.get("/form")
 def my_form( req, args ):
     
-    body = req.request.xform
-    
     data = """
             <!DOCTYPE html>
             <html>
@@ -271,10 +269,21 @@ def serve():
                             logger.info( "xkeyval", request.xkeyval )
                             logger.info( "xpar", request.xpar )                      
 
-
-                        req.load_content()
-                        for f in bodyfilter:
-                            f.filterRequest( request )
+                        req.load_content( max_size=4096 )
+                        if req.overflow == True:
+                            # if bodydata is too big then no data is loaded automatically
+                            # dont run body filters automatically if max size exceeds
+                            # if a request contains more data the generator
+                            # needs to decide what to do in detail
+                            #
+                            # some req.x-fields are then not available !!!
+                            # because each filter sets them on its own !!!
+                            #
+                            logger.warn("no auto content loading. size=", len(req))
+                            logger.warn("not all req.x-fields area available")
+                        else:
+                            for f in bodyfilter:
+                                f.filterRequest( request )
                         
                         # after auto cleanup with filter this can be None
                         body = req.request.body 

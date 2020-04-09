@@ -1,5 +1,13 @@
 
+from modcore.log import LogSupport
+
+
+logger= LogSupport()
+logger.logname = "http"
+
+
 HTTP_CRLF = "\r\n"
+
 
 class BadRequestException(Exception):
     pass
@@ -88,6 +96,7 @@ def get_http_request(client_file,client_addr, allowed=None):
 def get_http_content(client_file,req,max_size=4096):
     toread = req.content_len()
     if toread != None:
+        logger.info("toread", str(toread) )
         if toread < max_size:            
             content = client_file.read( toread )
             req.body = content
@@ -95,7 +104,10 @@ def get_http_content(client_file,req,max_size=4096):
             req.overflow = True
     return req
 
-
+def get_http_chunk(client_file,req,chunk_size=256):
+    content = client_file.read( toread )
+    return content
+    
 
 def send_http_sequence( client_file, seq ):
     for s in seq:
