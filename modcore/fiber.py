@@ -165,19 +165,32 @@ def sample(path):
         yield 153
 
     # the generator function for the fiber
-    def _send_chunk(buffer_size,name,flp):
+    # since at the end a new fiber is scheduled it is
+    # required to pass here the fiberloop too
+    # in general this is not required
+    def _send_chunk(buffer_size,name,floop):
         with open(path) as f:
             while True:
+                
+                # the basic idea
+                
+                #
+                # do a portion of work
+                #
+                # important:
+                # _never_ use time.sleep() or long blocking func within a fiber
+                # since this will block all others from processing
+                #
                 c = f.read(buffer_size)
                 c = c.replace("\r",".")
                 c = c.replace("\n",".")
                 print(name,c)
                 if len(c)==0:
-                    break
-                # with yield code control is handed back
+                    break                
+                # with yield code control is handed over to the next fiber
                 yield
-        # this is just sort of sugar, and not needed...
-        flp.add( Fiber( _print_final_message("\n***done "+ name +"\n" ) ) )   
+        # this is just sort of sugar, and not needed in general...
+        floop.add( Fiber( _print_final_message("\n***done "+ name +"\n" ) ) )   
 
 
     fl = FiberLoop()
@@ -190,7 +203,10 @@ def sample(path):
     for status_change in fl:
         if status_change:
             print(status_change)
-
+            
+    last_status = fl.status()
+    print(last_status)
+    
     # try
     # from modcore.fiber import sample
     # sample("boot.py")

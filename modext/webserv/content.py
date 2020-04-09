@@ -49,6 +49,10 @@ class StaticFiles(ContentGenerator):
         if path[0]!="/":
             raise BadRequestException("malformed path", path )
         
+        if path.find("..")>=0:
+            ## todo 
+            raise BadRequestException("relative path", path )
+        
         if not self._handle_index( req, path ):                
             return self._handle_file( req, path )
         return True
