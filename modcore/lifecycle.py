@@ -1,4 +1,17 @@
 
+_LIFECYCLE = [
+    "NEW",
+    "CONFIG",
+    "MOUNT",
+    "START",
+    "RUNNING",
+    "STOP",
+    "UMOUNT",
+    "EJECT",
+    "__END",
+    "__ERROR",    
+    ]
+
 class LifeCycle(object):
 
     NEW = 0
@@ -76,7 +89,7 @@ class LifeCycle(object):
                 m[1](config=config)
             else:
                 m[1]() 
-        self.info( "exe level", m[0] )
+        self.info( "exe level", m[0], _LIFECYCLE[m[0]] )
         self._lc_level = m[0]
         
     # high level api
@@ -100,6 +113,9 @@ class LifeCycle(object):
         
     def current_level(self):
         return self._lc_level
+    
+    def current_level_str(self):
+        return _LIFECYCLE[self._lc_level]
 
     def reconfigure(self,config=None):
         if self._lc_level < LifeCycle.CONFIG:
