@@ -220,3 +220,40 @@ class FormDataFilter(Filter):
         if self.cleanup:
             request.body = None
     
+        
+class FormDataDecodeFilter(Filter):
+    
+    def filterRequest( self, request ):
+        
+        if request.xform == None:
+            return
+        
+        if request.get_mime() in ['application/x-www-form-urlencoded']:
+            
+            try:
+                for k,v in request.xform.items():
+                    val = self._conv( v )
+                    request.xform[k]=val
+
+                self.info("decoded url data", request.xform )
+            except Exception as ex:
+                self.excep(ex)
+            
+    def _conv(self, val):
+        
+        ## todo not fully compliant
+        val = val.replace("+", " ")
+    
+        pos=0
+        while True:
+            pos = val.find("%",pos)
+            if pos>=0:
+                hex = val[pos+1:pos+3]
+                b = int(hex, 16)
+                s = chr(b)
+                #print(hex,b,s)
+                val = val[:pos] + str(s) + val[pos+3:]
+                pos += 1        
+            else:
+                break
+        return val

@@ -227,6 +227,7 @@ def serve():
                 BodyTextDecodeFilter(),
                 JsonParserFilter(),
                 FormDataFilter(),
+                FormDataDecodeFilter(),
         ]
     
     generators = [
