@@ -1,9 +1,0 @@
-
-[MicroWebSrv2]
-
-url='https://github.com/jczic/MicroWebSrv2'
-
-src="MicroWebSrv2/*.py", "mod3rd/MicroWebSrv2"
-
-license="LICENSE.md","license/MicroWebSrv2.MD"
-
