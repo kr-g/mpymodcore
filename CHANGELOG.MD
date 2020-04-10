@@ -1,7 +1,9 @@
 
 # Changelog
 
-## next version v0.0.4 
+
+
+## version v0.0.4 
 
 - support for long running tasks (without asyncio) with
  [`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
