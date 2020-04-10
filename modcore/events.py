@@ -1,7 +1,7 @@
 
 try:
     from ucollections import deque
-    print( "modcore running micropython", __name__ )
+    print( "modcore running on micropython" )
 except:
     from collections import deque
 

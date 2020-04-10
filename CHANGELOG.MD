@@ -11,6 +11,7 @@
 
 - integrate fiberloop in modext.webserv and modcore
 - finalize modext.webserv as own class
+- tls/ssl support
 - code review 
 - package structure
 - testing
