@@ -14,7 +14,7 @@ class ContentGenerator(LogSupport):
         self.root = root if root != None else ""
         self.xroot = self.root + "/"
         self.xlen = len( self.root )
-        self.info("serving root='"+self.xroot+"'")
+        self.info("serving", self.xroot )
         
     def _root_match(self,path):        
         if self.xlen>0:

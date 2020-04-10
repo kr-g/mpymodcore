@@ -50,7 +50,7 @@ class Router(ContentGenerator):
         self.route.append( (to,method,func,xtract) )
         
     def _decor(self,to,method,xtract=False):
-        self.info("route", to, method )
+        self.info("route", self.root + to, "for", "all" if method==None else method )
         if to[0]!="/":
             raise Exception( "malformed route", to )
         def dector(f):

@@ -252,6 +252,10 @@ def serve():
                         calls += 1
                         
                         req.load_request(allowed=["GET","POST","PUT"])
+                        
+                        # when logging use argument list rather then
+                        # concatenate strings together -> performace
+                        
                         logger.info( "request" , req.request )
                         logger.info( "request content len", len( req ) )
                         #req.load_content()
