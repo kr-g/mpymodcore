@@ -6,6 +6,8 @@
 - support for long running tasks (without asyncio) with
  [`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
  (wrapper around performance optimized generator functions)
+- FormDataDecodeFilter for decoding "%" chars in form data
+
 
 ### backlog
 
