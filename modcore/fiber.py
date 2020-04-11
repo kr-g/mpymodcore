@@ -128,11 +128,12 @@ class FiberLoop(LogSupport,TimerSupport):
         
 class Fiber(LogSupport,TimerSupport):
     
-    def __init__(self,func,ctx=None):
+    def __init__(self,func,ctx=None,timer=True):
         LogSupport.__init__(self)
         TimerSupport.__init__(self)
         # save the generator object
         self.func = func
+        self.timer = timer
         self.ctx = None if ctx == None else ctx.spin_off()
         if self.func.__class__.__name__!="generator":
             raise Exception("no generator provided, got", type(self.func) )
@@ -166,12 +167,12 @@ class Fiber(LogSupport,TimerSupport):
 
     def __next__(self):
         try:
-            if self._perf_counter:
+            if self.timer and self._perf_counter:
                 self.measure_timer()
             
             self.rc = next(self.func)
             
-            if self._perf_counter:
+            if self.timer and self._perf_counter:
                 self.measure_timer(False)
             
             return self.rc
@@ -185,7 +186,7 @@ class Fiber(LogSupport,TimerSupport):
             self.close()
             raise ex
         finally:
-            self.stop_timer()
+            self.timer and self.stop_timer()
       
     def __iter__(self):
         return self
@@ -323,11 +324,11 @@ def sample(path):
     
     
 
-def sample2(path,sample_no=0):
+def sample2(path,sample_no=0,debug=True,prt=True,timer=True,blksize=64):
     
     #fibers only accept generator functions, so a yield is required
     def _print_final_message(a):
-        print(a)
+        prt and print(a)
         # return code for fbr.rc
         yield 153
         
@@ -337,18 +338,18 @@ def sample2(path,sample_no=0):
         
         while True:
             c = f.read(buffer_size)
-            c = c.replace("\r",".")
-            c = c.replace("\n",".")
-            print(name,c)
             if len(c)==0:
                 break                
+            c = c.replace("\r",".")
+            c = c.replace("\n",".")
+            prt and print(name,c)
             # yield code control 
             yield
         
-        floop.add( Fiber( _print_final_message("\n***done "+ name +"\n" ) ) )
+        floop.add( Fiber( _print_final_message("\n***done "+ name +"\n" ), timer=timer ) )
         
     def _send_chunk(buffer_size,name,fbrctx,floop):
-        print("fbrctx",fbrctx)
+        prt and print("fbrctx",fbrctx)
         #
         # remember fbrctx is a context manager
         # if not used continuously in that way __exit__
@@ -363,15 +364,15 @@ def sample2(path,sample_no=0):
                 # do a portion of work, and yield
 
                 c = f.read(buffer_size)
-                c = c.replace("\r",".")
-                c = c.replace("\n",".")
-                print(name,c)
                 if len(c)==0:
                     break                
+                c = c.replace("\r",".")
+                c = c.replace("\n",".")
+                prt and print(name,c)                
                 # with yield code control 
                 yield
         
-        floop.add( Fiber( _print_final_message("\n***done "+ name +"\n" ) ) )   
+        floop.add( Fiber( _print_final_message("\n***done "+ name +"\n" ), timer=timer ) )   
 
 
     fl = FiberLoop()
@@ -380,18 +381,18 @@ def sample2(path,sample_no=0):
     # use directly as context manager
     
     if sample_no==0:   
-        with FiberContext(open(path),debug=True) as fbrctx:
-            print("fbrctx",fbrctx)
+        with FiberContext(open(path),debug=debug) as fbrctx:
+            prt and print("fbrctx",fbrctx)
             # if the guard is not move out right here it will be closed
-            fl.add( Fiber( _send_chunk(15,"eins", fbrctx.spin_off(), fl ) ) )
+            fl.add( Fiber( _send_chunk(blksize,"eins", fbrctx.spin_off(), fl ), timer=timer ) )
 
     #
     # or ... hand it over and do the with block in the fiber function
     
     if sample_no==1:   
-        fbrctx = FiberContext(open(path),debug=True)
-        print("fbrctx",fbrctx)
-        fl.add( Fiber( _send_chunk(15,"zwei", fbrctx, fl ) ) )        
+        fbrctx = FiberContext(open(path),debug=debug)
+        prt and print("fbrctx",fbrctx)
+        fl.add( Fiber( _send_chunk(blksize,"zwei", fbrctx, fl ), timer=timer ) )        
 
     #
     # or ... let the fiber itself do spin_off, and close 
@@ -400,10 +401,10 @@ def sample2(path,sample_no=0):
     # further downwards
     
     if sample_no==2:   
-        fbrctx = FiberContext(open(path),debug=True)
-        print("fbrctx",fbrctx)
+        fbrctx = FiberContext(open(path),debug=debug)
+        prt and print("fbrctx",fbrctx)
         f = fbrctx()
-        fl.add( Fiber( _send_chunk_file(15,"drei", f, fl ), ctx=fbrctx ) )
+        fl.add( Fiber( _send_chunk_file(blksize,"drei", f, fl ), ctx=fbrctx, timer=timer ) )
     
     # the fiber loop
 
