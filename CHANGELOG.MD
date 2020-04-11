@@ -3,11 +3,12 @@
 
 ## next version v0.0.5
 
-- added Guard, and Detachable in
+- added Guard, Detachable, and FiberContext in
  [`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
  module
 - added fiber samples
-- 
+- added performance counters to fiber loop
+-
 
 
 ### backlog
