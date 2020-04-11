@@ -58,11 +58,12 @@ class TimerSupport(object):
 
 class FiberLoop(LogSupport,TimerSupport):
     
-    def __init__(self):
+    def __init__(self,timer=True):
         LogSupport.__init__(self)
         TimerSupport.__init__(self)
         self.fiber = []
         self._prep()
+        self.timer = timer
         
     def _prep(self):
         self.done=[]
@@ -100,7 +101,7 @@ class FiberLoop(LogSupport,TimerSupport):
     
     def __next__(self):
         self._prep()
-        self.measure_timer()
+        self.timer and self.measure_timer()
         for f in self.fiber:
             try:
                 r = next(f)
@@ -113,9 +114,9 @@ class FiberLoop(LogSupport,TimerSupport):
                 self.fiber.remove(f)
                 self.err.append(f)
                 self.excep(ex, "fiber failed" )
-        self.measure_timer(False)
+        self.timer and self.measure_timer(False)
         if self.all_done():
-            self.stop_timer()
+            self.timer and self.stop_timer()
             raise StopIteration
         return self.status()
         
@@ -375,7 +376,7 @@ def sample2(path,sample_no=0,debug=True,prt=True,timer=True,blksize=64):
         floop.add( Fiber( _print_final_message("\n***done "+ name +"\n" ), timer=timer ) )   
 
 
-    fl = FiberLoop()
+    fl = FiberLoop(timer=timer)
 
     #
     # use directly as context manager
@@ -408,10 +409,14 @@ def sample2(path,sample_no=0,debug=True,prt=True,timer=True,blksize=64):
     
     # the fiber loop
 
+    sta = time.ticks_ms()
+
     for status_change in fl:
         if status_change:
             print(status_change)
             
+    sto = time.ticks_ms()
+    
     last_status = fl.status()
     print(last_status)    
     
@@ -419,7 +424,7 @@ def sample2(path,sample_no=0,debug=True,prt=True,timer=True,blksize=64):
     print()
     print(fl)
     
-    
+    print( time.ticks_diff( sto, sta ) )
     # try
     # from modcore.fiber import sample, sample2
     # sample("boot.py")
