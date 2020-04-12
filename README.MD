@@ -24,6 +24,19 @@ Sample code in
 
 Support for body data decoding e.g. form data, json
 
+Delayed processing base on
+[`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
+
+
+# new to fiber ?
+
+like async coroutines fiber is an approach of cooperative mutlitasking.
+whereas objectives are the same.
+
+pros ans cons? 
+read more on wikipedia about
+[fiber](https://en.wikipedia.org/wiki/Fiber_(computer_science))
+
 
 # Platform
 
