@@ -12,7 +12,9 @@
 - added fiber, and fiberloop processing to
  [`serve.py`](https://github.com/kr-g/mpymodcore/blob/master/modext/webserv/serve.py)
  sample webserver 
-- 
+- added send json response
+-
+
 
 ### backlog
 
