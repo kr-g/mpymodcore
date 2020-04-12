@@ -1,7 +1,7 @@
 
 # Changelog
 
-## next version v0.0.5
+## version v0.0.5
 
 - added Guard, Detachable, and FiberContext in
  [`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
