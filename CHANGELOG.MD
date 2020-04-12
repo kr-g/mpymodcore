@@ -20,7 +20,8 @@
 
 - ~~integrate fiber in modext.webserv~~
 - ~~integrate fiber in modcore~~
-- finalize modext.webserv as own class
+- finalize modext.webserv as own class,
+ working name for included webserver "WindUp"
 - tls/ssl support
 - code review 
 - package structure
