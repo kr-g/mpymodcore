@@ -31,7 +31,7 @@ json processing, cookies, query parameter extraction,
 session handling (in-memory), 
 REST stlye url parameter parser, and extraction, etc
 
-Multi-tasking processing of http requests base on
+Multi-tasking processing support of http requests base on
 [`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
 
 
@@ -43,6 +43,11 @@ whereas objectives are the same.
 pros ans cons? 
 read more on wikipedia about
 [fiber](https://en.wikipedia.org/wiki/Fiber_(computer_science))
+
+
+#### do i need to fiber my code ?
+
+no. serve traditional as you go, or fiber the code.
 
 
 # Platform
