@@ -58,7 +58,7 @@ class TimerSupport(object):
 
 class FiberLoop(LogSupport,TimerSupport):
     
-    def __init__(self,timer=True):
+    def __init__(self,timer=False):
         LogSupport.__init__(self)
         TimerSupport.__init__(self)
         self.fiber = []
@@ -129,7 +129,7 @@ class FiberLoop(LogSupport,TimerSupport):
         
 class Fiber(LogSupport,TimerSupport):
     
-    def __init__(self,func,ctx=None,timer=True):
+    def __init__(self,func,ctx=None,timer=False):
         LogSupport.__init__(self)
         TimerSupport.__init__(self)
         # save the generator object

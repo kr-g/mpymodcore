@@ -25,14 +25,6 @@ Sample code in
 Support for body data decoding e.g. form data, json
 
 
-# Related project
-
-`mpymodcore` is the successor of [mpyconfigbase](https://github.com/kr-g/mpyconfigbase)
-
-for configuration of automatic startup of WLAN, SoftAP, and WebRepl refer to the 
-source/ sample code also there
-
-
 # Platform
 
 Tested ESP32 with PSRam and ESP8266 (for latter, see limitations below)
@@ -53,6 +45,15 @@ information first before creating a ticket / issue on github. thanks.
 - with all mod's enabled as shown here in the sample
  it will not run on ESP8266 due to memory limit.
  but wlan, softap, and ntp should work 
+
+
+# Related project
+
+`mpymodcore` is the successor of [mpyconfigbase](https://github.com/kr-g/mpyconfigbase)
+
+for configuration of automatic startup of WLAN, SoftAP, and WebRepl refer to the 
+source/ sample code also there
+
 
 # Installation
 

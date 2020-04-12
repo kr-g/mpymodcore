@@ -133,9 +133,8 @@ def send_http_data( client_file, data=None, data_i=None, data_len=None ):
             if len(chunk)==0:
                 continue
             client_file.send( chunk )
-  
-def send_http_response( client_file, status=200, header=None, \
-                        response=None, type="text/html", response_i=None ):
+
+def send_http_response_header( client_file, status=200, header=None, type="text/html" ):
     send_http_status( client_file, status )
     if header != None:
         for h,v in header:
@@ -143,6 +142,11 @@ def send_http_response( client_file, status=200, header=None, \
             send_http_header( client_file, h, v )
     if type != None:
         send_http_header( client_file, "Content-Type", type )
+    
+def send_http_response( client_file, status=200, header=None, \
+                        response=None, type="text/html", response_i=None ):
+    send_http_response_header( client_file, status, header, type )
+
     data_len = None
     if response!=None:
         if response_i==None:

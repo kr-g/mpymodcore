@@ -57,21 +57,27 @@ class RequestHandler(LogSupport):
     def overflow(self):
         return self.request.overflow
     
+    # send a complete response
     def send_response(self, status=200, header=None, response=None, \
                       type="text/html", suppress_id = False, response_i=None ):
-        header = self._add_server_header(header,suppress_id)
-        
-        try:
-            if self.request.xsession_is_new:
-                self.info("send session cookie")
-                self.set_cookie( header, self.request.xsession_cookie, \
-                                 self.request.xsession_id )
-        except:
-            pass
+        header = self._add_server_header(header,suppress_id)        
+        self._add_session_cookie(header)
         
         send_http_response( self.client_file, status, header, response, type, response_i )
-      
+
+    # send portions: header part
+    def send_head(self, status=200, header=None, type="text/html", suppress_id = False ):
+        header = self._add_server_header(header,suppress_id)        
+        self._add_session_cookie(header)
+        # send empty response -> just send header
+        send_http_response_header( self.client_file, status, header, type )
+        
+    # send portions: data part
+    def send_data(self, response ):
+        send_http_data( self.client_file, response )
+
     def close(self):
+        self.info("close socket")
         self.client_file.close()
         self.client.close()
         
@@ -101,6 +107,15 @@ class RequestHandler(LogSupport):
         header.append( ("Server", "modcore/" + str(VERSION) \
                            + " (" + sys.platform + _id  + ")" ) )
         return header
+    
+    def _add_session_cookie(self,header):
+        try:
+            if self.request.xsession_is_new:
+                self.info("send session cookie")
+                self.set_cookie( header, self.request.xsession_cookie, \
+                                 self.request.xsession_id )
+        except:
+            pass
     
     def set_cookie(self,header,cookie,value=None):
         if header==None:
