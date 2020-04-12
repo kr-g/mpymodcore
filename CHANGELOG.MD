@@ -16,10 +16,8 @@
 
 ### backlog
 
-~~- integrate fiber in modext.webserv~~
-
-~~- integrate fiber in modcore~~
-
+- ~~integrate fiber in modext.webserv~~
+- ~~integrate fiber in modcore~~
 - finalize modext.webserv as own class
 - tls/ssl support
 - code review 
