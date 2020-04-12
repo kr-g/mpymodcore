@@ -1,19 +1,10 @@
 
 # Changelog
 
-## version v0.0.5
+## next version v0.0.6
 
-- added Guard, Detachable, and FiberContext in
- [`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
- module
-- added fiber samples
-- added performance counters to fiber loop
-- added send_head and send_data to webserver RequestHandler
-- added fiber, and fiberloop processing to
- [`serve.py`](https://github.com/kr-g/mpymodcore/blob/master/modext/webserv/serve.py)
- sample webserver 
-- added send json response
--
+- set_cookie path parameter
+
 
 
 ### backlog
@@ -27,6 +18,21 @@
 - package structure
 - testing
 - documentation
+
+
+## version v0.0.5
+
+- added Guard, Detachable, and FiberContext in
+ [`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
+ module
+- added fiber samples
+- added performance counters to fiber loop
+- added send_head and send_data to webserver RequestHandler
+- added fiber, and fiberloop processing to
+ [`serve.py`](https://github.com/kr-g/mpymodcore/blob/master/modext/webserv/serve.py)
+ sample webserver 
+- added send json response
+-
 
 
 ## version v0.0.4 

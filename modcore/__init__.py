@@ -18,6 +18,7 @@ VERSION = "v0.0.6a"
 
 print( "-"*41 )
 print( "mpy modcore" )
+print( "(c) 2020 K. Goger" )
 print( "version  ", VERSION )
 print( "homepage ", "https://github.com/kr-g/mpymodcore" )
 print( "legal    ", "https://github.com/kr-g/mpymodcore/blob/master/LICENSE" )

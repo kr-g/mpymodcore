@@ -134,13 +134,13 @@ class RequestHandler(LogSupport):
         except:
             pass
     
-    def set_cookie(self,header,cookie,value=None):
+    def set_cookie(self,header,cookie,value=None,path="/"):
         if header==None:
             header = []
         if value == None:
             value = "\'\'" + EXPIRE_COOKIE
         header.append( (SET_COOKIE_HEADER, \
-                        cookie + "=" + str(value) ) )
+                        cookie + "=" + str(value) + "; Path=" + path ) )
         return header
         
   
