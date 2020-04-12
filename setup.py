@@ -34,7 +34,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url = f"https://github.com/kr-g/{projectname}",
-    packages=setuptools.find_packages(),    
+    packages=setuptools.find_packages(exclude=("samples",)),    
     keywords = 'micropython framework micro-framework esp32 esp8266',
     install_requires=[],    
     classifiers=[
