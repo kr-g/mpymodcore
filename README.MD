@@ -24,7 +24,7 @@ Sample code in
 
 Support for body data decoding e.g. form data, json
 
-Delayed processing base on
+Multitasking processing of http requests base on
 [`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
 
 
