@@ -28,9 +28,9 @@ Delayed processing base on
 [`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
 
 
-# new to fiber ?
+### new to fiber ?
 
-like async coroutines fiber is an approach of cooperative mutlitasking.
+like async coroutines is a fiber an approach of cooperative multitasking.
 whereas objectives are the same.
 
 pros ans cons? 
