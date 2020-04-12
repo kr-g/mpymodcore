@@ -22,9 +22,16 @@ In package `modext.webserv.serve` there is an example web server included.
 Sample code in
 [`serve.py`](https://github.com/kr-g/mpymodcore/blob/master/modext/webserv/serve.py)
 
-Support for body data decoding e.g. form data, json
+The example web server is like 
+[Apache](https://en.wikipedia.org/wiki/Apache_HTTP_Server)
+based on the concept of Filter and Content Generator. 
 
-Multitasking processing of http requests base on
+It comes already with a bunch of Filters, e.g. html form data parser, 
+json processing, cookies, query parameter extraction, 
+session handling (in-memory), 
+REST stlye url parameter parser, and extraction, etc
+
+Multi-tasking processing of http requests base on
 [`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
 
 
