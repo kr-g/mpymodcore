@@ -102,12 +102,14 @@ class ParameterPackFilter(Filter):
         if request.xkeyval==None:
             return
         keyval = {}
-        for k,v in request.xkeyval:
-            if k not in keyval:
-                keyval[k]=[v]
-                continue
-            keyval[k].append(v)
-            
+        try:
+            for k,v in request.xkeyval:
+                if k not in keyval:
+                    keyval[k]=[v]
+                    continue
+                keyval[k].append(v)
+        except Exception as ex:
+            self.excep(ex,"invalid parameter")
         request.xpar = keyval
         
         if self.cleanup:

@@ -88,8 +88,19 @@ def my_post( req, args ):
     logger.info(data)
     req.send_response( response=data, suppress_id=suppress_info )
 
+@router.get("/json")
+def my_json_get( req, args ):
+
+    data = {
+        "args" : args
+        }
+    
+    logger.info(data)
+    req.send_json( obj=data, suppress_id=suppress_info )
+
+
 @router.post("/json")
-def my_json( req, args ):
+def my_json_post( req, args ):
     
     body = req.request.xjson
     

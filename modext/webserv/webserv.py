@@ -6,6 +6,8 @@ import binascii
 import socket
 import uselect
 
+import json
+
 from modcore import VERSION
 from modcore.log import LogSupport, logger
 from modcore.fiber import Fiber
@@ -77,6 +79,15 @@ class RequestHandler(LogSupport):
     # send portions: data part
     def send_data(self, response ):
         send_http_data( self.client_file, response )
+
+    # json
+    def send_json( self, obj, header=None, status=200, \
+                   type='application/json', suppress_id = False ):
+        
+        response = json.dumps( obj )
+        
+        self.send_response( status=status, header=header, response=response, type=type )
+        
 
     # fiber
     def send_fiber( self, fbr ):
