@@ -376,12 +376,14 @@ def serve():
                         pending_requests.append( req )
                     else:
                         # not found send 404
+                        done_requests.append(req)
                         logger.warn("not found 404", request.xpath )
                         req.send_response( status=404, suppress_id=suppress_info )
-                        done_requests.append(req)
                         
             except Exception as ex:
                 logger.excep( ex )
+                if req!=None:
+                    done_requests.append(req)
 
             try:
                 if len(pending_requests)>0:
