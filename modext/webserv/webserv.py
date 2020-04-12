@@ -8,6 +8,7 @@ import uselect
 
 from modcore import VERSION
 from modcore.log import LogSupport, logger
+from modcore.fiber import Fiber
 
 from .http_func import *
 
@@ -31,6 +32,7 @@ class RequestHandler(LogSupport):
         self.client = client
         self.client_file = client_file
         self.request = None
+        self.fiberloop = None
         
     def __len__(self):
         # this can return None
@@ -75,6 +77,10 @@ class RequestHandler(LogSupport):
     # send portions: data part
     def send_data(self, response ):
         send_http_data( self.client_file, response )
+
+    # fiber
+    def send_fiber( self, fbr ):
+        self.fiberloop.add( Fiber( fbr ) )
 
     def close(self):
         self.info("close socket")
