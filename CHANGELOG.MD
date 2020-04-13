@@ -9,6 +9,7 @@
 - fix REST xurl
 - WindUp as included web server
 - moved samples to own folder
+- added ssl suppport (ussl.wrap_socket callback after accept in class WebServer)
 - 
 
 
@@ -18,7 +19,8 @@
 - ~~integrate fiber in modcore~~
 - ~~finalize modext.webserv as own class,
  working name for included webserver "WindUp"~~
-- tls/ssl support
+- ~~tls/ssl support~~
+- fiber and fiber call stack, fiber api change
 - code review 
 - package structure
 - testing
