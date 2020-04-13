@@ -20,6 +20,7 @@
 - ~~finalize modext.webserv as own class,
  working name for included webserver "WindUp"~~
 - ~~tls/ssl support~~
+- rework api in @get and @post, so that accessing request parameter, and data needs less complex code
 - fiber and fiber call stack, fiber api change
 - WindUp configuration rework
 - code review 
