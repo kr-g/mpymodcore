@@ -14,15 +14,13 @@ check
 for latest ongoing, or upcoming news
 
 
-# Simple Web Server included
+# Web Server included
 
-In package `modext.webserv` there are some functions for request handling.
+In package `modext.webserv` there are functions for request handling.
 
-In package `modext.webserv.serve` there is an example web server included.
-Sample code in
-[`serve.py`](https://github.com/kr-g/mpymodcore/blob/master/modext/webserv/serve.py)
+In package `modext.webserv.windup` there is the included web server.
 
-The example web server is like 
+The WindUp web server is like 
 [Apache](https://en.wikipedia.org/wiki/Apache_HTTP_Server)
 based on the concept of Filter and Content Generator. 
 
