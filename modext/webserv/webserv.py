@@ -61,6 +61,13 @@ class RequestHandler(LogSupport):
     def overflow(self):
         return self.request.overflow
     
+    # send redirect
+    def send_redirect(self, url, status=302, header=None, suppress_id = False ):
+        if header==None:
+            header=[]
+        header.append( ("Location", url ) )
+        self.send_response( status=status, header=header, suppress_id=suppress_id )
+    
     # send a complete response
     def send_response(self, status=200, header=None, response=None, \
                       type="text/html", suppress_id = False, response_i=None ):

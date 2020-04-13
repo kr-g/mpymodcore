@@ -259,6 +259,11 @@ def my_complex_fiber( req, args ):
         
     req.send_fiber( fibered() )
     
+# accepts get and post 
+@router("/redirect-me")
+def my_app( req, args ):
+    req.send_redirect( url="/", suppress_id=suppress_info )
+
 
 
 store = SessionStore( )
