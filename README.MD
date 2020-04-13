@@ -32,6 +32,8 @@ REST stlye url parameter parser, and extraction, etc
 Multi-tasking processing support of http requests base on
 [`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
 
+WindUp is in Alpha state and not performance optimized. Anyway response times under 1 secs are possible already.
+
 
 ### new to fiber ?
 
