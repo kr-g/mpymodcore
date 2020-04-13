@@ -1,5 +1,7 @@
 
 from .webserv import WebServer
+from .router import Router
+
 
 HTTP_CRLF = "\r\n"
 
