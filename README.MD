@@ -29,7 +29,7 @@ json processing, cookies, query parameter extraction,
 session handling (in-memory), 
 REST stlye url parameter parser, and extraction, etc
 
-Multi-tasking processing support of http requests base on
+Multi-tasking processing support of http requests based on
 [`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
 
 WindUp is in Alpha state and not performance optimized. Anyway response times under 1 secs are possible already.
