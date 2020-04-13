@@ -275,6 +275,7 @@ def serve():
                     store.pre_filter(),
                     # keep them together
                     PathSplitFilter(),
+                    XPathDecodeFilter(),
                     ParameterSplitFilter(),
                     ParameterValueFilter(),
                     ParameterPackFilter(),

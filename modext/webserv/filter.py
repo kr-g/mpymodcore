@@ -63,7 +63,13 @@ class XPathSlashDenseFilter(Filter):
             
         self.info("dense",found)
 
+
+class XPathDecodeFilter(Filter):
+    
+    def filterRequest( self, request ):
+        request.xpath = request.xpath.replace("%20", " ")
         
+
 class ParameterSplitFilter(Filter):
     
     def filterRequest( self, request ):

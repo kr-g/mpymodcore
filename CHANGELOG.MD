@@ -4,7 +4,8 @@
 ## next version v0.0.6
 
 - set_cookie path parameter
-
+- url path filter decode %20 as space
+- 
 
 
 ### backlog
