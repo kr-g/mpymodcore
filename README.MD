@@ -100,6 +100,7 @@ source/ sample code also there
 # Sample Code
 
 some sample code can be found in [`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py)
+and under [samples](https://github.com/kr-g/mpymodcore/tree/master/samples) 
 
 
 ### :heart: credits
