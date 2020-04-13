@@ -21,6 +21,7 @@
  working name for included webserver "WindUp"~~
 - ~~tls/ssl support~~
 - fiber and fiber call stack, fiber api change
+- WindUp configuration rework
 - code review 
 - package structure
 - testing
