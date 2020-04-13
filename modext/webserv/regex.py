@@ -1,7 +1,8 @@
 
 import re
 
-
+## todo
+## 
 def xurl_params( url, xpath ):
 
     def find( s, pos=0 ):
@@ -27,12 +28,19 @@ def xurl_params( url, xpath ):
         sections.append( url[pp:p1] )
         pos=p2+1
         pp=p2
-    sections.append( url[pp:] )
+    if len(url[pp:])>0:
+        sections.append( url[pp:] )
         
+    #print(sections,names)
+    
     regex = "[^/]+"
     xurl = url
     for n in names:
         xurl = xurl.replace( n+"/", regex+"/" )
+    
+    xurl = xurl.replace( names[-1], regex )
+    
+    #print(xurl)
        
     regex = re.compile( xurl )
     m = regex.match( xpath )
@@ -46,14 +54,21 @@ def xurl_params( url, xpath ):
             val = xpath[:pos]
             values.append( val )
             xpath = xpath[len(val):]
+            #print(i,sec,sections[i+1], pos, val, xpath)
             
         if len(sections)>0:
             val = xpath[len(sections[-1]):]
             values.append( val )
+        
+        #print( names, values )
         
         params = dict(zip( map( lambda x : x[1:], names), values ))
         
         return params
 
 
-    
+"""    
+print( xurl_params( "/user/:user/id/:userid/end", "/user/john/id/24325/end" ))
+print( xurl_params( "/user/:user/id/ii/:userid", "/user/john/id/ii/24325" ))
+print( xurl_params( "/:user/id/:userid", "/john/id/24325" ))
+"""

@@ -1,11 +1,13 @@
 
 """
-stand alone sample webserver
 
-to start call from repl:
 
-from modext.webserv.serve import serve
-serve()
+deprecated samples
+
+
+
+
+
 
 with curl
 

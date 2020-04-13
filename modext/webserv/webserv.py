@@ -153,9 +153,9 @@ class RequestHandler(LogSupport):
   
 class WebServer(LogSupport):
     
-    def __init__(self,port=80):
+    def __init__(self,host='0.0.0.0',port=80):
         LogSupport.__init__(self)
-        self.host = '0.0.0.0'
+        self.host = host
         self.port = port
         
     def start(self):

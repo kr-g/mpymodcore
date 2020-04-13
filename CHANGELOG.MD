@@ -6,15 +6,18 @@
 - set_cookie path parameter
 - url path filter decode %20 as space
 - redirect http request
-- 
+- fix REST xurl
+- WindUp as included web server
+- moved samples to own folder
+-
 
 
 ### backlog
 
 - ~~integrate fiber in modext.webserv~~
 - ~~integrate fiber in modcore~~
-- finalize modext.webserv as own class,
- working name for included webserver "WindUp"
+- ~~finalize modext.webserv as own class,
+ working name for included webserver "WindUp"~~
 - tls/ssl support
 - code review 
 - package structure

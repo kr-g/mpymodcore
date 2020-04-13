@@ -10,7 +10,7 @@ from .content import StaticFiles
 from .router import Router
 from .session import SessionStore
 
-
+"""
 store = SessionStore( )
 
 def serve():
@@ -183,4 +183,6 @@ def serve():
     finally:
         ws.stop()
 
+
+"""
 
