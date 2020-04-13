@@ -153,10 +153,11 @@ class RequestHandler(LogSupport):
   
 class WebServer(LogSupport):
     
-    def __init__(self,host='0.0.0.0',port=80):
+    def __init__(self,host='0.0.0.0',port=80,wrap_socket=None):
         LogSupport.__init__(self)
         self.host = host
         self.port = port
+        self.wrap_socket = wrap_socket
         
     def start(self):
         self.addr = socket.getaddrinfo( self.host, self.port)[0][-1]
@@ -174,7 +175,14 @@ class WebServer(LogSupport):
             
     def accept(self):        
         client, addr = self.socket.accept()
-        self.debug( 'client connected from', addr )        
+        self.debug( 'client connected from', addr )
+        
+        try:
+            if self.wrap_socket!=None:
+                client = self.wrap_socket( client )
+        except Exception as ex:
+            self.excep(ex, "SSL failed" )
+        
         client_file = client.makefile( 'rwb', 0 )
         return RequestHandler( self, addr, client, client_file )
               

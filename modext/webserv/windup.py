@@ -13,10 +13,10 @@ store = SessionStore( )
 
 class WindUp(LogSupport):
     
-    def __init__(self, suppress_id=False):
+    def __init__(self, wrap_socket=None, suppress_id=False):
         LogSupport.__init__(self)
         self.suppress_id = suppress_id
-        self.ws = WebServer()
+        self.ws = WebServer(wrap_socket=wrap_socket)
         self._set_default()
         
     def _set_default(self):
