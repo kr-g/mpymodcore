@@ -73,6 +73,16 @@ information first before creating a ticket / issue on github. thanks.
  but wlan, softap, and ntp should work 
 
 
+# Sample Code
+
+Some sample code can be found in
+[`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py)
+and under [`samples`](https://github.com/kr-g/mpymodcore/tree/master/samples).
+
+In order to run the Samples sync the folder `www` from github to the local
+project folder from where running the samples.
+
+
 # Related project
 
 `mpymodcore` is the successor of [mpyconfigbase](https://github.com/kr-g/mpyconfigbase)
@@ -97,16 +107,6 @@ source/ sample code also there
 
     `python3 -m pygitgrab -f mpymodcore.pygg`
  
-
-# Sample Code
-
-Some sample code can be found in
-[`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py)
-and under [`samples`](https://github.com/kr-g/mpymodcore/tree/master/samples).
-
-In order to run the Samples sync the folder `www` from github to the local
-project folder from where running the samples.
-
 
 ### :heart: Credits
 
