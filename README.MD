@@ -23,13 +23,13 @@ In package `modext.webserv.windup` is WindUp as included web server.
 The WindUp web server is like 
 [Apache](https://en.wikipedia.org/wiki/Apache_HTTP_Server)
 based on the concept of Filter and Content Generator. 
-What makes WindUp easy extensible and flexible how requests are processed.
+What makes WindUp easy extensible; and flexible how requests are processed.
 
-WindUp comes already with a bunch of Filters, e.g. html form data parser, 
-json processing, cookies, query parameter extraction, 
-session handling (in-memory), REST stlye url parameter parser, and extraction, etc
+WindUp comes already with a bunch of Filters, e.g. HTML Form data parser, 
+JSON processing, Query parameter extraction, Cookies, 
+Session handling (in-memory), REST stlye URL parameter parser, and extraction, etc.
 
-Multi-tasking processing support of http requests based on
+Multi-tasking processing support of HTTP requests based on
 [`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
 
 WindUp is in Alpha state and not performance optimized. 
@@ -39,11 +39,11 @@ Anyway response times under 1 secs are already possible.
 ### New to fiber ?
 
 Like async coroutines is a fiber an approach of cooperative multitasking.
-whereas objectives are the same.
+Whereas objectives are the same.
 
 Pros and Cons? 
 Read more on wikipedia about
-[fiber](https://en.wikipedia.org/wiki/Fiber_(computer_science))
+[`fiber`](https://en.wikipedia.org/wiki/Fiber_(computer_science))
 
 
 #### Do i need to fiber my code ?
@@ -101,7 +101,7 @@ source/ sample code also there
 # Sample Code
 
 Some sample code can be found in [`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py)
-and under [samples](https://github.com/kr-g/mpymodcore/tree/master/samples) 
+and under [`samples`](https://github.com/kr-g/mpymodcore/tree/master/samples) 
 
 
 ### :heart: Credits
