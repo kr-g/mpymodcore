@@ -29,8 +29,8 @@ WindUp comes already with a bunch of Filters, e.g. HTML Form data parser,
 JSON processing, Query parameter extraction, Cookies, 
 Session handling (in-memory), REST stlye URL parameter parser, and extraction, etc.
 
-Multi-tasking processing support of HTTP requests based on
-[`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
+Multi-tasking processing support of HTTP requests based on fiber 
+([`source`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)).
 
 WindUp is in Alpha state and not performance optimized. 
 Anyway response times under 1 secs are already possible.
@@ -38,7 +38,7 @@ Anyway response times under 1 secs are already possible.
 
 ### New to fiber ?
 
-Like async coroutines is a fiber an approach of cooperative multitasking.
+Like a async coroutines is a fiber an approach of cooperative multitasking.
 Whereas objectives are the same.
 
 Pros and Cons? 
