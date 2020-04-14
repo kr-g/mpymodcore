@@ -1,58 +1,59 @@
 
 # mpymodcore - a micro framework for MicroPython
 
-an approach to modularize MicroPython projects.
+An approach to modularize MicroPython projects.
 
-introduce a defined lifecycle and eventing model
+Introduce a defined lifecycle and eventing model
 for modules / devices for convenient handling
 of loose coupled modules/ device
 
-# what's new ?
+# What's new ?
 
-check
+Check
 [`CHANGELOG`](https://github.com/kr-g/mpymodcore/blob/master/CHANGELOG.MD)
 for latest ongoing, or upcoming news
 
 
 # Web Server included
 
-In package `modext.webserv` there are functions for request handling.
+In package `modext.webserv.http_func` there are functions for basic request handling.
 
-In package `modext.webserv.windup` there is the included web server.
+In package `modext.webserv.windup` is WindUp as included web server.
 
 The WindUp web server is like 
 [Apache](https://en.wikipedia.org/wiki/Apache_HTTP_Server)
 based on the concept of Filter and Content Generator. 
+What makes WindUp easy extensible and flexible how requests are processed.
 
-It comes already with a bunch of Filters, e.g. html form data parser, 
+WindUp comes already with a bunch of Filters, e.g. html form data parser, 
 json processing, cookies, query parameter extraction, 
-session handling (in-memory), 
-REST stlye url parameter parser, and extraction, etc
+session handling (in-memory), REST stlye url parameter parser, and extraction, etc
 
 Multi-tasking processing support of http requests based on
 [`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
 
-WindUp is in Alpha state and not performance optimized. Anyway response times under 1 secs are possible already.
+WindUp is in Alpha state and not performance optimized. 
+Anyway response times under 1 secs are already possible.
 
 
-### new to fiber ?
+### New to fiber ?
 
-like async coroutines is a fiber an approach of cooperative multitasking.
+Like async coroutines is a fiber an approach of cooperative multitasking.
 whereas objectives are the same.
 
-pros ans cons? 
-read more on wikipedia about
+Pros and Cons? 
+Read more on wikipedia about
 [fiber](https://en.wikipedia.org/wiki/Fiber_(computer_science))
 
 
-#### do i need to fiber my code ?
+#### Do i need to fiber my code ?
 
-no. serve traditional as you go, or fiber the code.
+No. Serve traditional as you go, or fiber the code.
 
 
 # Platform
 
-Tested ESP32 with PSRam and ESP8266 (for latter, see limitations below)
+Tested on ESP32 with PSRam and ESP8266 (for latter, see limitations below)
 
 ## Development status
 
@@ -76,13 +77,13 @@ information first before creating a ticket / issue on github. thanks.
 
 `mpymodcore` is the successor of [mpyconfigbase](https://github.com/kr-g/mpyconfigbase)
 
-for configuration of automatic startup of WLAN, SoftAP, and WebRepl refer to the 
+For configuration of automatic startup of WLAN, SoftAP, and WebRepl refer to the 
 source/ sample code also there
 
 
 # Installation
 
-- with pip
+- with pip (recommended)
 
     `# install to the current (project) folder`
     
@@ -99,11 +100,11 @@ source/ sample code also there
 
 # Sample Code
 
-some sample code can be found in [`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py)
+Some sample code can be found in [`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py)
 and under [samples](https://github.com/kr-g/mpymodcore/tree/master/samples) 
 
 
-### :heart: credits
+### :heart: Credits
 
-developed with [Thonny](https://github.com/thonny/thonny) :+1:
+Developed with [Thonny](https://github.com/thonny/thonny) :+1:
     
