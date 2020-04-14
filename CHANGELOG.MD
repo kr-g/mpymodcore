@@ -9,7 +9,7 @@
 - fix REST xurl
 - WindUp as included web server
 - moved samples to own folder
-- added ssl suppport (ussl.wrap_socket callback after accept in class WebServer)
+- added ssl suppport (ussl.wrap_socket callback after accept in class WebServer and WindUp)
 - 
 
 
