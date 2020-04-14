@@ -16,7 +16,7 @@ for latest ongoing, or upcoming news
 
 # Web Server included
 
-In package `modext.webserv.http_func` there are basic request handling functions.
+In package `modext.webserv` there are basic HTTP request handling functions.
 
 In package `modext.webserv.windup` is WindUp as included web server.
 
