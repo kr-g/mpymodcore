@@ -3,7 +3,7 @@ import setuptools
 import os
 import re
 
-with open("README.MD", "r") as fh:
+with open("README.md", "r") as fh:
     long_description = fh.read()
 
 def find_version(fnam,version="VERSION"):
@@ -30,11 +30,13 @@ setuptools.setup(
     version=version,
     author="k.r. goger",
     author_email = f"k.r.goger+{projectname}@gmail.com",
+    license= f"https://github.com/kr-g/{projectname}/blob/master/LICENSE",
     description="mpymodcore",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url = f"https://github.com/kr-g/{projectname}",
-    packages=setuptools.find_packages(exclude=("samples",)),    
+    packages=setuptools.find_packages( exclude=("samples",) ),
+    include_package_data=True,
     keywords = 'micropython framework micro-framework esp32 esp8266',
     install_requires=[],    
     classifiers=[

@@ -10,7 +10,7 @@ of loose coupled modules/ device
 # What's new ?
 
 Check
-[`CHANGELOG`](https://github.com/kr-g/mpymodcore/blob/master/CHANGELOG.MD)
+[`CHANGELOG`](https://github.com/kr-g/mpymodcore/blob/master/CHANGELOG.md)
 for latest ongoing, or upcoming news
 
 
@@ -61,7 +61,7 @@ Alpha state.
 The API or logical call flow might change without prior notice.
 
 In case your code breaks between two versions check
-[`CHANGELOG`](https://github.com/kr-g/mpymodcore/blob/master/CHANGELOG.MD)
+[`CHANGELOG`](https://github.com/kr-g/mpymodcore/blob/master/CHANGELOG.md)
 information first before creating a ticket / issue on github. thanks.
 
 
