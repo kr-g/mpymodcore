@@ -100,8 +100,12 @@ source/ sample code also there
 
 # Sample Code
 
-Some sample code can be found in [`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py)
-and under [`samples`](https://github.com/kr-g/mpymodcore/tree/master/samples) 
+Some sample code can be found in
+[`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py)
+and under [`samples`](https://github.com/kr-g/mpymodcore/tree/master/samples).
+
+In order to run the Samples sync the folder `www` from github to the local
+project folder from where running the samples.
 
 
 ### :heart: Credits
