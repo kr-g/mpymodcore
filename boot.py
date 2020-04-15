@@ -70,7 +70,9 @@ class ConsumerNTP(Module):
         if event!=None:
             self.info( "recv:", event, "data:", data )
             # data can contain True or False
-            # ntp server can have timeout ...
+            # setting ntp from server can have timeout ...
+            # micropython ntp module throws then exceptions
+            # this can take quite a while until it reconnects
             val = self.event_data_value(data)
             if val:
                 self.info("recalc schedule...")
