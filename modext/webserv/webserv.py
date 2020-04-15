@@ -34,6 +34,7 @@ class RequestHandler(LogSupport):
         self.client = client
         self.client_file = client_file
         self.request = None
+        ## todo, move floop out ? see winup
         self.fiberloop = None
         
     def __len__(self):

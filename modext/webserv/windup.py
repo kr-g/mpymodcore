@@ -101,6 +101,7 @@ class WindUp(LogSupport):
                 self.info( "request content len", len( req ) )
                 #req.load_content()
                 
+                ## todo, move floop out ? see webserv
                 req.fiberloop = FiberLoop()
                 
                 request = req.request
