@@ -174,6 +174,9 @@ class WindUp(LogSupport):
                             self.pending_requests.remove( req )
                             done_requests.append( req )
                         else:
+                            ## todo, use fiber stack instead
+                            # this impl anyway does the same as proposed
+                            # for fiber stack in fiber.py
                             self.info( "exe fiberloop" )
                             for status_change in req.fiberloop:
                                 # do something with status_change

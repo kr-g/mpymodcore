@@ -56,6 +56,16 @@ class TimerSupport(object):
                 + ")"
 
 
+## todo
+# in addition to fiber loop
+# create class fiber stack
+# execution in floop is done as "execute all fiber in the list"
+# execution in fstack is done as "execute only the fiber on the top"
+#  and remove it from the stack when done,
+#  continue with next top fiber until stack is empty
+#  -> all_done()==True, otherwise False
+
+
 class FiberLoop(LogSupport,TimerSupport):
     
     def __init__(self,timer=False):
