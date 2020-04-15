@@ -3,6 +3,8 @@
 
 ## next version v0.0.7
 
+- reworked fiber samples
+- FibreWatchdog timer exposed
 - 
 
 
@@ -10,8 +12,6 @@
 
 - ~~integrate fiber in modext.webserv~~
 - ~~integrate fiber in modcore~~
-- ~~finalize modext.webserv as own class,
- working name for included webserver "WindUp"~~
 - ~~tls/ssl support~~
 - rework api in @get and @post, so that accessing request parameter, and data needs less complex code
 - fiber and fiber call stack, fiber api change
