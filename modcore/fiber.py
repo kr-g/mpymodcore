@@ -225,8 +225,8 @@ class FiberWatchdog(Fiber):
     # default timeout is math.e
     # first i wanted to use math.pi,
     # but i fear the math.tau discussion
-    def __init__(self,func,max_time_auto_kill_ms=1000*math.e):
-        Fiber.__init__(self,func)
+    def __init__(self,func,timer=False,max_time_auto_kill_ms=1000*math.e):
+        Fiber.__init__(self,func,timer=timer)
         self.max_time_auto_kill_ms = max_time_auto_kill_ms
 
     def __next__(self):
