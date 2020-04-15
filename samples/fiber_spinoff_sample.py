@@ -3,8 +3,8 @@ from modcore.fiber import *
 
 """
 
-this deals with a more complex scenario, where a object is moved out
-of and moved an other context, but staying in the same fiber loop
+this deals with a more complex scenario, where an object is moved out
+of, and moved an other context; but staying in the same fiber loop
 
 ## todo, describe use cases more in detail
 
