@@ -74,6 +74,9 @@ def master(use_excep,less_yields,floop):
     
     # this one deals with normal types,
     # no lock, or atom write, or etc required since fiber ensures this by concept
+    # between 2 yield statements no other processing takes place
+    # since there is no other "outer scheduler" which can interrupt 
+    # the data is always syncronized between the different fiber
     # the sending and receiving lists
     a2b_q = []
     b2a_q = []
