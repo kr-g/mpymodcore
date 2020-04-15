@@ -72,6 +72,12 @@ class FiberLoop(LogSupport,TimerSupport):
     def add(self,fbr):
         self.fiber.append(fbr)
         
+    def close(self):
+        ## todo,
+        ## call close of all fibers
+        ## kill directly vs extra __close__ func ?
+        pass
+        
     def kill(self,fbr,reason=None):
         self.fiber.remove(fbr)
         fbr.kill(reason)
@@ -161,6 +167,7 @@ class Fiber(LogSupport,TimerSupport):
     def kill(self,reason=None):
         self.close()
         self.func = None
+        ## todo usage together with close?
         self.__kill__(reason)
         
     def __kill__(self,reason=None):

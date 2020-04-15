@@ -1,15 +1,8 @@
 
 # Changelog
 
-## version v0.0.6
+## next version v0.0.7
 
-- set_cookie path parameter
-- url path filter decode %20 as space
-- redirect http request
-- fix REST xurl
-- WindUp as included web server
-- moved samples to own folder
-- added ssl suppport (ussl.wrap_socket callback after accept in class WebServer and WindUp)
 - 
 
 
@@ -27,6 +20,18 @@
 - package structure
 - testing
 - documentation
+
+
+## version v0.0.6
+
+- set_cookie path parameter
+- url path filter decode %20 as space
+- redirect http request
+- fix REST xurl
+- WindUp as included web server
+- moved samples to own folder
+- added ssl suppport (ussl.wrap_socket callback after accept in class WebServer and WindUp)
+- 
 
 
 ## version v0.0.5
