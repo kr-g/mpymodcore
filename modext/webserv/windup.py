@@ -24,12 +24,15 @@ class WindUp(LogSupport):
         self.bodyfilter = self.bodyfilter_default()
         self.generators = self.generators_default()
         self.post_proc = self.post_proc_default()
+        
         self.allowed=["GET","POST","PUT"]
+        
+        self.html404 = None
 
         self.calls = 0
         self.pending_requests = []
 
-    def start(self,generators=None):        
+    def start(self, generators=None ):        
         self.ws.start()
         self.info( 'listening on', self.ws.addr )
         if generators:
@@ -152,7 +155,12 @@ class WindUp(LogSupport):
                     # not found send 404
                     done_requests.append(req)
                     self.warn("not found 404", request.xpath )
-                    req.send_response( status=404, suppress_id=self.suppress_id )
+                    if self.html404==None:
+                        req.send_response( status=404, suppress_id=self.suppress_id )
+                    else:
+                        # custom 404 page
+                        # req gets destructed by next round
+                        self.html404( req )
                     
         except Exception as ex:
             self.excep( ex )

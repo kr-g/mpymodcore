@@ -5,6 +5,7 @@
 
 - reworked fiber samples
 - FibreWatchdog timer exposed
+- custom HTML 404 handling
 - 
 
 
