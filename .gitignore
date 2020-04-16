@@ -15,5 +15,5 @@ softap.cfg
 wlan.cfg
 
 license/
-mod3rd/*/**
+#mod3rd/*/**
 

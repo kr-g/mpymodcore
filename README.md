@@ -79,8 +79,11 @@ Some sample code can be found in
 [`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py)
 and under [`samples`](https://github.com/kr-g/mpymodcore/tree/master/samples).
 
-In order to run the Samples sync the folder `www` from github to the local
+In order to run the samples sync the folder `www` from github to the local
 project folder from where running the samples.
+
+In oder to run the unsuported modules from the `mpod3rd` folder download
+this folder from github to the local project folder.
 
 
 # Related project

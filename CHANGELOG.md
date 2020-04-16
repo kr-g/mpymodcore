@@ -6,7 +6,7 @@
 - reworked fiber samples
 - FibreWatchdog timer exposed
 - custom HTML 404 handling
-- simple admin html app for wlan (under unsupported mod3rd folder)
+- simple admin html app for wlan (in unsupported mod3rd folder, not on pypi)
 - wlan module rework, scan added, reconnect
 - 
 
