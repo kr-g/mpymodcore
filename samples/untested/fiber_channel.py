@@ -215,11 +215,10 @@ def sample2():
     print( len(fc) )
 
     # fake end of transmisson
-    fc.hangup()
+    #fc.hangup()
     print("-"*37)
      
     while fc.data_available():
         chunk = fc.pop()
         print(chunk)
-
 
