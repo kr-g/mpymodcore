@@ -181,14 +181,45 @@ def sample():
             chunk = fc.pop()
             print(chunk)
      
-    if True: 
+    if False: 
         while fc.data_available():
             l = fc_readline(fc)
             if l!=None:
                 print(l.decode())
             else:
                 print(">dense")
-        
 
 
-sample()
+
+def sample2():     
+               
+    fc = FiberChannel()
+
+    cnt = 0
+    chk_size = 64
+    with open( "../../boot.py","rb" ) as f:
+        while True:
+            rc = f.read( chk_size )
+            if len(rc)==0:
+                break
+            
+            # add with line numbers
+            fc.put( (str(cnt) +":").encode() + rc )
+            
+            cnt += 1
+            # steal alreay some data...
+            if cnt % 3 == 0:
+                chunk = fc.pop()
+                print("pop at cnt=",cnt,"->",chunk) 
+
+    print( len(fc) )
+
+    # fake end of transmisson
+    fc.hangup()
+    print("-"*37)
+     
+    while fc.data_available():
+        chunk = fc.pop()
+        print(chunk)
+
+
