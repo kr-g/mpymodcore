@@ -52,8 +52,7 @@ class FiberChannelEmptyException(Exception):
     pass
 
 # optimized single link list
-# with option too peek (top)
-# and split at defined point
+# with option too peek (top) 
 class FiberChannel(object):
     
     def __init__(self):
