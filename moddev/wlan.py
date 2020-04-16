@@ -3,6 +3,8 @@ import network
 
 from modcore import modc, Module, LifeCycle
 
+from .timeout import Timeout
+
 
 WLAN_CFG = "wlan.cfg"
 
@@ -14,6 +16,8 @@ class WLAN(Module):
     def conf(self,config=None):
         super( Module, self ).conf(config)
         self.update()
+        ## todo config
+        self.last_try = Timeout( 60 )
         
     def update(self):
         try:
@@ -23,7 +27,6 @@ class WLAN(Module):
 
     def start(self):
         self.wlan_start()
-        #self.update()
 
     def loop(self,config=None,event=None):
         if self.current_level() != LifeCycle.RUNNING:
@@ -32,10 +35,22 @@ class WLAN(Module):
         if status != self.last_status:
             self.update()
             self.fire_event("wlan", status)
+            if status == False:
+                self.timeout.restart()
+            
+        if status == False and self.timeout.elapsed():
+            self.info("reconnect after timeout elpased")
+            self.timeout.restart()
+            self.wlan_start()
 
     def stop(self):
         self.wlan_stop()
         #self.update()
+
+    # custom
+
+    def scan(self):
+        return self.wlan.scan()
 
     ## deprecated
 

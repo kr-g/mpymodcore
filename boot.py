@@ -140,6 +140,19 @@ if fancy_stuff_i_have_a_sd_card:
 
 modc.startup(config=cfg)
 
+# just serving some static files
+from modext.webserv.windup import WindUp
+serv = WindUp()
+
+import mod3rd
+from mod3rd.admin_esp.wlan import router as router_wlan
+
+logger.info("config done. start windup.")
+
+serv.start( generators = [
+        router_wlan,
+    ])
+
 debug_mode = True
 
 def loop(run_until=None):    
@@ -153,8 +166,11 @@ def loop(run_until=None):
             if run_until<0:
                 run_until=None
         try:
+            # modules
             modc.run_loop( cfg )
-            time.sleep(0.25)
+            # web server
+            serv.loop()
+            
         except KeyboardInterrupt:
             logger.info( "\ncntrl+c, auto shutdown=", not debug_mode)
             if not debug_mode:
