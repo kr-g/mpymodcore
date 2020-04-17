@@ -20,7 +20,7 @@ and get the data back as echo into another list
 
 """
 
-from modcore.fiber import *
+from modext.fiber import *
             
 
 #

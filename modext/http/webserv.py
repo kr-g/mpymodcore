@@ -10,7 +10,7 @@ import json
 
 from modcore import VERSION
 from modcore.log import LogSupport, logger
-from modcore.fiber import Fiber
+from modext.fiber import Fiber
 
 from .http_func import *
 

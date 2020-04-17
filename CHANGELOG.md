@@ -12,6 +12,7 @@
  on smaller devices (ESP8266) too
 - new package `modext.http` containing basic request handling func
 - new package `modext.windup`, move code out of webserv (which is not available any more)
+- moved `fiber` from `modcore` to `modext.fiber` package
 - 
 
 

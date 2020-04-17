@@ -1,5 +1,5 @@
 
-from modcore.fiber import *
+from modext.fiber import *
 
 """
 
