@@ -79,6 +79,13 @@ class FiberLoop(LogSupport,TimerSupport):
         self.done=[]
         self.err=[]
               
+    def _clean_up(self):
+        for f in self.done:
+            f.close()
+        for f in self.err:
+            f.close()
+        self._prep()
+        
     def add(self,fbr):
         self.fiber.append(fbr)
         
@@ -86,7 +93,7 @@ class FiberLoop(LogSupport,TimerSupport):
         ## todo,
         ## call close of all fibers
         ## kill directly vs extra __close__ func ?
-        pass
+        self._clean_up()
         
     def kill(self,fbr,reason=None):
         self.fiber.remove(fbr)
@@ -107,7 +114,7 @@ class FiberLoop(LogSupport,TimerSupport):
 
     def all_done(self):
         return len(self.fiber)==0
-    
+        
     def loop(self):
         try:
             next(self)
@@ -116,7 +123,7 @@ class FiberLoop(LogSupport,TimerSupport):
         return len(self)>0
     
     def __next__(self):
-        self._prep()
+        self._clean_up()
         self.timer and self.measure_timer()
         for f in self.fiber:
             try:

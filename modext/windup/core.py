@@ -10,6 +10,8 @@ from .content import StaticFiles
 from .router import Router
 from .session import SessionStore
 
+from .proc import Processor
+
 
 store = SessionStore( )
 
@@ -30,10 +32,12 @@ class WindUp(LogSupport):
         self.allowed=["GET","POST","PUT"]
         
         self.html404 = None
+        
+        self.exec_class = Processor
 
         self.calls = 0
-        self.pending_requests = []
-
+        self.exec = []
+        
     def start(self, generators=None ):        
         self.ws.start()
         self.info( 'listening on', self.ws.addr )
@@ -42,10 +46,10 @@ class WindUp(LogSupport):
 
     def stop(self):
         self.ws.stop()
-        for req in self.pending_requests:
-            req.fiberloop.kill_all("stop")
-            req.close()
-        self.pending_requests = []
+        for e in self.exec:
+            e.kill("stop")
+            e.close()
+        self.exec = []
 
     def headerfilter_default(self):
         # depending on app needs filter are added, or left out
@@ -88,130 +92,71 @@ class WindUp(LogSupport):
         return post_proc
     
     def loop(self):
-        done_requests = []
+
         req = None
+        exec = None
         try:
             if self.ws.can_accept():
                 
-                req = self.ws.accept() 
-                                                
+                req = self.ws.accept()                                                 
                 self.calls += 1
                 
-                req.load_request(self.allowed)
-                
-                # when logging use argument list rather then
-                # concatenate strings together -> performace
-                
-                self.info( "request" , req.request )
-                self.info( "request content len", len( req ) )
-                #req.load_content()
-                
-                ## todo, move floop out ? see webserv
-                req.fiberloop = FiberLoop()
-                
-                request = req.request
-                for f in self.headerfilter:
-                    f.filterRequest( request )
-                
-                # check logging level...
-                if self.info():
-                    self.info( "cookies",request.xcookies )
-                    self.info( "xsession_is_new", request.xsession_is_new )
-                    self.info( "xpath, xquery", request.xpath, request.xquery )
-                    self.info( "xparam", request.xparam )
-                    self.info( "xkeyval", request.xkeyval )
-                    self.info( "xpar", request.xpar )                      
-
-                req.load_content( max_size=4096 )
-                if req.overflow == True:
-                    # if bodydata is too big then no data is loaded automatically
-                    # dont run body filters automatically if max size exceeds
-                    # if a request contains more data the generator
-                    # needs to decide what to do in detail
-                    #
-                    # some req.x-fields are then not available !!!
-                    # because each filter sets them on its own !!!
-                    #
-                    self.warn("no auto content loading. size=", len(req))
-                    self.warn("not all req.x-fields area available")
-                else:
-                    for f in self.bodyfilter:
-                        f.filterRequest( request )
-                
-                # after auto cleanup with filter this can be None
-                body = req.request.body 
-                if body!=None:
-                    self.info( "request content", body )
-                  
-                req_done = False
-                for gen in self.generators:
-                    req_done = gen.handle( req )
-                    if req_done:
-                        break
-                                              
+                # create processor
+                exec = self.exec_class( self )
+                self.exec.append(exec)
+                req_done = exec.run(req)
                 self.info( "req_done", req_done )
+                
                 if req_done:
-                    # schedule for post processing
-                    self.pending_requests.append( req )
-                else:
-                    # not found send 404
-                    done_requests.append(req)
-                    self.warn("not found 404", request.xpath )
-                    if self.html404==None:
-                        req.send_response( status=404, suppress_id=self.suppress_id )
-                    else:
-                        # custom 404 page
-                        # req gets destructed by next round
-                        self.html404( req )
+                    exec._after_run_done( req )      
+                else:                   
+                    exec._after_run_undone( req )
                     
         except Exception as ex:
             self.excep( ex )
-            if req!=None:
-                done_requests.append(req)
+            if exec!=None:
+                exec.kill("run-fail")
+                exec.close()
+                self.exec.remove(exec)
+            else:
+                req.close()
+            return
 
-        try:
-            if len(self.pending_requests)>0:
-                self.info("pending requests", len(self.pending_requests))
-                for req in self.pending_requests:
-                    request = req.request
+        for e in self.exec:
+            try:
+                if e.done()==True:
+                    self.exec.remove(e)
+                    
+                    req = e.req
+                    request = req.request  
+                    self.info("run post proc")
+
                     try:
-                        if req.fiberloop!=None and req.fiberloop.all_done():
-                            self.info("run post proc")
-                            for f in self.post_proc:
-                                ## todo fiber
-                                f.filterRequest( request )
-                                
-                            self.pending_requests.remove( req )
-                            done_requests.append( req )
-                        else:
-                            ## todo, use fiber stack instead
-                            # this impl anyway does the same as proposed
-                            # for fiber stack in fiber.py
-                            self.info( "exe fiberloop" )
-                            for status_change in req.fiberloop:
-                                # do something with status_change
-                                # and stop after the first loop 
-                                break
-                            self.info( "exe fiberloop done" )
-                            
+                        for f in self.post_proc:
+                            f.filterRequest( request )
                     except Exception as ex:
-                        self.excep( ex, "post processing failed" )
-                        if req.fiberloop!=None:
-                            floop = req.fiberloop
-                            # set to None if kill_all fails drop next round
-                            req.fiberloop=None
-                            floop.kill_all("postfail")
-                            
-                        self.pending_requests.remove( req )
-                        done_requests.append( req )
+                        self.excep( ex, "filter post-proc")
+                        
+                    e.close()
+
+                    self.info("exec done", type(e))
+                else:
+                    self.info("pending exec", len(self.exec))
+                    e.loop()
                     
-            if len(done_requests)>0:
-                self.info("done requests", len(done_requests))
-                for req in done_requests:
-                    done_requests.remove(req)
-                    req.close()
-                    
-        except Exception as ex:
-            self.excep( ex )
-                 
+            except Exception as ex:
+                self.excep( ex )
+                e.kill("post-proc-fail")
+                e.close()
+                self.exec.remove(e)
+                  
+    def call404(self,req):
+        self.warn("not found 404", req.request.xpath )
+        if self.html404==None:
+            req.send_response( status=404, suppress_id=self.suppress_id )
+        else:
+            # custom 404 page
+            # req gets destructed by next round
+            self.html404( req )
+        
         

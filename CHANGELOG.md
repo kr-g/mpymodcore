@@ -13,6 +13,8 @@
 - new package `modext.http` containing basic request handling func
 - new package `modext.windup`, move code out of webserv (which is not available any more)
 - moved `fiber` from `modcore` to `modext.fiber` package
+- removed WindUp request processing from loop to Processor class
+- added fiber processor class, to allow WindUp to work in non-fiber-mode
 - 
 
 

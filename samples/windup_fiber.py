@@ -2,6 +2,7 @@
 from modcore.log import logger
 
 from modext.windup import WindUp, Router
+from modext.windup.proc_fiber import ProcessorFiber
 
 
 router = Router( )
@@ -50,6 +51,7 @@ def my_complex_fiber( req, args ):
         yield
         
         for line in lines:
+            logger.info("line",line)
             # this is of course slow since data packages sent are small
             # http overhead for sending counts here 
             req.send_data(line)            
@@ -60,6 +62,9 @@ def my_complex_fiber( req, args ):
 
 def serve():
     serv = WindUp()
+    
+    # replace standard executor with fiber executor
+    serv.exec_class = ProcessorFiber
 
     serv.start(generators=[
             router,
