@@ -8,7 +8,8 @@ curl http://yourip/form -X POST -d 'field1=value1&field2=value2' -H "Content-Typ
 
 from modcore.log import logger
 
-from modext.webserv.windup import WindUp, Router
+from modext.windup import WindUp, Router
+
 
 router = Router( )
 

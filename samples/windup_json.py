@@ -8,7 +8,8 @@ curl http://yourip/json -X POST -d '{"hello":"world"}' -H "Content-Type: applica
 
 from modcore.log import logger
 
-from modext.webserv.windup import WindUp, Router
+from modext.windup import WindUp, Router
+
 
 router = Router( )
 

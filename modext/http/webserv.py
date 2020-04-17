@@ -159,6 +159,8 @@ class WebServer(LogSupport):
         self.host = host
         self.port = port
         self.wrap_socket = wrap_socket
+        self.socket = None
+        self.poll = None
         
     def start(self):
         self.addr = socket.getaddrinfo( self.host, self.port)[0][-1]
@@ -188,7 +190,11 @@ class WebServer(LogSupport):
         return RequestHandler( self, addr, client, client_file )
               
     def stop(self):
-        self.poll.unregister( self.socket )
-        self.socket.close()
+        if self.poll!=None:
+            self.poll.unregister( self.socket )
+            self.poll = None
+        if self.socket!=None:
+            self.socket.close()
+            self.socket = None
         
 

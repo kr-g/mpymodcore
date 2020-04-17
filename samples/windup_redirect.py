@@ -1,7 +1,7 @@
 
 from modcore.log import logger
 
-from modext.webserv.windup import WindUp, Router
+from modext.windup import WindUp, Router
 
 
 router = Router( )

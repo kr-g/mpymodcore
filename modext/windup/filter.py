@@ -2,8 +2,9 @@
 import json
 
 from modcore.log import LogSupport
-from .http_func import BadRequestException
-from .webserv import COOKIE_HEADER
+
+from modext.http.http_func import BadRequestException
+from modext.http.webserv import COOKIE_HEADER
 
 
 auto_cleanup = False

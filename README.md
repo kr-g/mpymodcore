@@ -16,9 +16,9 @@ for latest ongoing, or upcoming news
 
 # Web Server included
 
-In package `modext.webserv` there are basic HTTP request handling functions.
+In package `modext.http` there are basic HTTP request handling functions.
 
-In package `modext.webserv.windup` is WindUp as included web server.
+In package `modext.windup` is WindUp as included web server.
 
 The WindUp web server is like 
 [Apache](https://en.wikipedia.org/wiki/Apache_HTTP_Server)
@@ -81,8 +81,11 @@ and under [`samples`](https://github.com/kr-g/mpymodcore/tree/master/samples).
 
 In order to run the samples sync the folder `www` from github to the local
 project folder from where running the samples.
+If running together with `boot.py` check for `run_not_in_sample_mode` and
+set to `False` to prevent autostarting WindUp and blocking the socket,
+or provide your own `boot.py`.
 
-In oder to run the unsuported modules from the `mpod3rd` folder download
+In oder to run the unsuported modules from the `mod3rd` folder download
 this folder from github to the local project folder.
 
 

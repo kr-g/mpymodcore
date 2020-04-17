@@ -2,8 +2,8 @@
 import os
 
 from modcore.log import LogSupport
-from .webserv import RequestHandler
-from .http_func import BadRequestException
+from modext.http.webserv import RequestHandler
+from modext.http.http_func import BadRequestException
 
 
 class ContentGenerator(LogSupport):

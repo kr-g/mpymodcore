@@ -3,7 +3,7 @@ import ussl
 
 from modcore.log import logger
 
-from modext.webserv.windup import WindUp
+from modext.windup import WindUp, Router
 
 
 def _wrap_socket( sock ):

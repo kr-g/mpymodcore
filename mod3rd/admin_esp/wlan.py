@@ -3,7 +3,7 @@ import ubinascii
 
 from modcore.log import logger
 from moddev.wlan import wlan_ap
-from modext.webserv.windup import WindUp, Router
+from modext.windup import Router
 
 router = Router( root="/admin" )
 

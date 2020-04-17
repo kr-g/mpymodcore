@@ -1,14 +1,8 @@
 
-"""
-
-form data
-curl http://yourip/form -X POST -d 'field1=value1&field2=value2' -H "Content-Type: application/x-www-form-urlencoded"
-
-"""
-
 from modcore.log import logger
 
-from modext.webserv.windup import WindUp, Router
+from modext.windup import WindUp, Router
+
 
 router = Router( )
 
@@ -17,7 +11,7 @@ router = Router( )
 # login and logout sample
 #
 # note:
-#  this is not a recommandation for handling user login/logout
+#  this is _not_ a recommandation for handling user login/logout
 #
 
 @router.get("/login")

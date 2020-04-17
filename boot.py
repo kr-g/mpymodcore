@@ -141,7 +141,7 @@ if fancy_stuff_i_have_a_sd_card:
 modc.startup(config=cfg)
 
 # just serving some static files
-from modext.webserv.windup import WindUp
+from modext.windup import WindUp
 serv = WindUp()
 
 import mod3rd
@@ -149,9 +149,12 @@ from mod3rd.admin_esp.wlan import router as router_wlan
 
 logger.info("config done. start windup.")
 
-serv.start( generators = [
-        router_wlan,
-    ])
+run_not_in_sample_mode = True
+
+if run_not_in_sample_mode:
+    serv.start( generators = [
+            router_wlan,
+        ])
 
 debug_mode = True
 
