@@ -8,6 +8,8 @@ logger.logname = "http"
 
 HTTP_CRLF = "\r\n"
 
+class ConnectionClosedException(Exception):
+    pass
 
 class BadRequestException(Exception):
     pass
@@ -61,6 +63,10 @@ def get_http_request(client_file,client_addr, allowed=None):
         allowed = ALLOWED_DEFAULT
     
     line = client_file.readline()
+    
+    if len(line)==0:
+        raise ConnectionClosedException()
+    
     try:
         method, path, proto = line.decode().strip().split(" ")
     except:

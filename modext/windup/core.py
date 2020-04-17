@@ -3,7 +3,6 @@ from modcore.log import LogSupport
 from modext.fiber import FiberLoop, Fiber
 
 from modext.http.webserv import WebServer, COOKIE_HEADER, SET_COOKIE_HEADER
-from modext.http.http_func import BadRequestException 
 
 from .filter import *
 from .content import StaticFiles
