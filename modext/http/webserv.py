@@ -10,7 +10,12 @@ import json
 
 from modcore import VERSION
 from modcore.log import LogSupport, logger
-from modext.fiber import Fiber
+
+try:
+    from modext.fiber import Fiber
+    print("fiber module loaded")
+except:
+    print("fiber module not loaded")
 
 from .http_func import *
 
@@ -99,7 +104,10 @@ class RequestHandler(LogSupport):
 
     # fiber
     def send_fiber( self, fbr ):
-        self.fiberloop.add( Fiber( fbr ) )
+        try:
+            self.fiberloop.add( Fiber( fbr ) )
+        except:
+            self.warn("fiber modul not loaded. discard.")
 
     def close(self):
         self.info("close socket")
