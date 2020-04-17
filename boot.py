@@ -144,6 +144,9 @@ modc.startup(config=cfg)
 from modext.windup import WindUp
 serv = WindUp()
 
+# replace standard executor with fiber executor
+#serv.exec_class = ProcessorFiber
+
 import mod3rd
 from mod3rd.admin_esp.wlan import router as router_wlan
 
