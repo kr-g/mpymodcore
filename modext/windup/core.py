@@ -102,9 +102,11 @@ class WindUp(LogSupport):
                 
                 # create processor
                 exec = self.exec_class( self )
+                exec.callid = self.calls
+                
                 self.exec.append(exec)
                 req_done = exec.run(req)
-                self.info( "req_done", req_done )
+                self.info( "req_done", req_done, exec.callid )
                 
                 if req_done:
                     exec._after_run_done( req )      
@@ -128,24 +130,25 @@ class WindUp(LogSupport):
                     
                     req = e.req
                     request = req.request  
-                    self.info("run post proc")
+                    self.info("run post proc",e.callid)
 
                     try:
                         for f in self.post_proc:
                             f.filterRequest( request )
                     except Exception as ex:
                         self.excep( ex, "filter post-proc")
-                        
+
                     e.close()
 
-                    self.info("exec done", type(e))
+                    self.info("exec done", e.callid, type(e))
+
                 else:
-                    self.info("pending exec", len(self.exec))
+                    self.info("pending exec", e.callid, "total", len(self.exec))
                     e.loop()
                     
             except Exception as ex:
-                self.excep( ex )
-                e.kill("post-proc-fail")
+                self.excep( ex, "callid", e.callid )
+                e.kill("post-proc-fail",)
                 e.close()
                 self.exec.remove(e)
                   
