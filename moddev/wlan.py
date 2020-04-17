@@ -5,19 +5,24 @@ from modcore import modc, Module, LifeCycle
 
 from .timeout import Timeout
 
+WLAN_RESTART = "wlan-restart"
 
 WLAN_CFG = "wlan.cfg"
 
 class WLAN(Module):
-        
+
+    def watching_events(self):
+        return [WLAN_RESTART,] 
+
     def init(self):
         self.last_status = False
+        self.ssid = None
     
     def conf(self,config=None):
         super( Module, self ).conf(config)
         self.update()
         ## todo config
-        self.last_try = Timeout( 60 )
+        self.timeout = Timeout( 60 )
         
     def update(self):
         try:
@@ -31,6 +36,16 @@ class WLAN(Module):
     def loop(self,config=None,event=None):
         if self.current_level() != LifeCycle.RUNNING:
             return
+        
+        if event!=None:
+            self.info("got event",event)
+            
+            if event.name==WLAN_RESTART:
+                self.info("restart wlan on event request")
+                self.reconfigure(config)
+                
+            return
+        
         status = self.wlan.isconnected()
         if status != self.last_status:
             self.update()
@@ -38,7 +53,7 @@ class WLAN(Module):
             if status == False:
                 self.timeout.restart()
             
-        if status == False and self.timeout.elapsed():
+        if status == False and self.timeout!=None and self.timeout.elapsed():
             self.info("reconnect after timeout elpased")
             self.timeout.restart()
             self.wlan_start()
@@ -88,9 +103,11 @@ class WLAN(Module):
         try:
             credits = list(filter( lambda x : len(x.strip()) > 0, content.split("\n") ))
             
+            self.ssid = credits[0].strip()
+            
             if active:
                 self.wlan.active(active)
-                self.wlan.connect(credits[0].strip(), credits[1].strip())
+                self.wlan.connect( self.ssid, credits[1].strip())
                 self.info( "wlan", self.wlan.ifconfig() )
                            
         except Exception as ex:

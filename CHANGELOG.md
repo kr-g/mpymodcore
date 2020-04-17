@@ -7,7 +7,7 @@
 - FibreWatchdog timer exposed
 - custom HTML 404 handling
 - simple admin html app for wlan (in unsupported mod3rd folder, not on pypi)
-- wlan module rework, scan added, reconnect
+- wlan module rework, scan added, reconnect, `wlan-restart` event
 - package redesign, allowing to run simple web based app (e.g. single status page) 
  on smaller devices (ESP8266) too
 - new package `modext.http` containing basic request handling func
