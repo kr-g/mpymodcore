@@ -27,11 +27,11 @@ class FiberWorkerLoop(object):
                 next(w)
                 
             except StopIteration as ex:
-                self.debug and print( self.__class__.__name__, ex.__class__.__name__, id(w) )
+                self.debug and print( self.__class__.__name__, ex.__class__.__name__, id(w), ex )
                 pass
 
             except Exception as ex:
-                self.debug and print( self.__class__.__name__, ex.__class__.__name__, id(w) )
+                self.debug and print( self.__class__.__name__, ex.__class__.__name__, id(w), ex )
                 pass
             
     def kill(self, reason="kill" ):
