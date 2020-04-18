@@ -30,7 +30,7 @@ class FiberWorkerLoop(object):
                 raise ex
             except Exception as ex:
                 print(self.__class__.__name__, ex)
-                raise ex
+                #raise ex
             
     def kill(self,reason=None):
         for w in self.worker:
