@@ -169,7 +169,7 @@ class FiberStreamIO(object):
     # reading from fiber stream
     # return None if no data available
     # return zero length bytes() for EOF
-    def read(self, channel, max=None ):
+    def read(self, channel ):
         pass
     
     # writing into fiber stream
@@ -216,7 +216,7 @@ class FiberStream(object):
         except FiberChannelEmptyException:
             return bytes()
     
-    # if data is given write to channel, 
+    # if given write data to channel 
     def write(self,data=None):
         if data!=None:
             self.channel.push(data)
@@ -291,7 +291,6 @@ def sample3():
     class FiberStreamIO_file_input_writer(FiberStreamIO):
         
         def __init__(self,fnam,blksize=128,lineno=False):
-            FiberStreamIO.__init__(self)
             self.fnam = fnam
             self.blksize = blksize
             self.done = False
