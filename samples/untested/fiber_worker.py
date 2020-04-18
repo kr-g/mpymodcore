@@ -82,9 +82,8 @@ class FiberWorker(object):
         finally:
             self._run = False            
 
-    def spawn(self, func, **kwargs ):
-        self.suspend("spawn")
-        worker = FiberWorker( func=func, workerloop=self.floop, debug=self.debug, **kwargs )
+    def spawn_fiber(self, worker):
+
         worker.parent=self
         worker.resume("spawn-start")
 
@@ -97,6 +96,11 @@ class FiberWorker(object):
             return worker.rc
 
         return 1234567890
+
+    def spawn(self, func, **kwargs ):
+        self.suspend("spawn")
+        worker = FiberWorker( func=func, workerloop=self.floop, debug=self.debug, **kwargs )        
+        return self.spawn_fiber(worker)
 
     def _done_revoke_parent(self,reason="worker-done"):
         self.suspend(reason)
@@ -153,7 +157,10 @@ def sample():
             yield
             
         print("w2sub done", id(self))
+        # un/comment exception to test
         raise Exception("w2sub done with error")
+        # return value in rc
+        yield 153
 
     def w2func(self):
         
@@ -206,6 +213,8 @@ def sample():
     next(fl)
     next(fl)
     next(fl)
+    next(fl)
 
 
+sample()
 
