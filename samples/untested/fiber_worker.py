@@ -101,30 +101,40 @@ class FiberWorker(object):
     def close(self):
         self.kill("close")
  
- 
-def w1func(self):
-    c = 0
-    while True:
-        c+=1
-        if c>10:
-            break
-        print("w1", c, self.kwargs)
-        yield 
    
    
-if __name__=='__main__':
+def sample():
+
+    def w1func(self):
+        c = 0
+        while True:
+            c+=1
+            if c>10:
+                break
+            print("w1", c, self.kwargs)
+            yield 
+       
+    def w2func(self):
+        c = 1
+        while True:
+            print("w2", c, self.kwargs)
+            c+=c
+            yield 
 
     fl = FiberWorkerLoop()
 
     w1 = FiberWorker( func=w1func, workerloop=fl, a=3 )
+    w2 = FiberWorker( func=w2func, workerloop=fl, a=15 )
         
     w1.start()
+    w2.start()
 
     next(fl)
     next(fl)
     next(fl)
 
     w1.suspend()
+    print("suspend")
 
     print("hop1")
     next(fl)
@@ -132,14 +142,15 @@ if __name__=='__main__':
     next(fl)
 
     w1.resume()
+    print("resume")
 
     next(fl)
     next(fl)
-
-    print("reset")
 
     w1.reset()
     w1.start()
+
+    print("reset")
 
     next(fl)
     next(fl)
