@@ -16,7 +16,7 @@
 - removed WindUp request processing from loop to Processor class
 - added fiber processor class, to allow WindUp to work in non-fiber-mode
 - added [`fiber worker`](https://github.com/kr-g/mpymodcore/blob/master/samples/untested/fiber_worker.py)
- under new concepts/ untestedin samples
+ under new concepts/ untested in samples
 -
 
 
