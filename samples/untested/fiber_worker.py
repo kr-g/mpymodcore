@@ -34,7 +34,7 @@ class FiberWorkerLoop(object):
             
     def kill(self,reason=None):
         for w in self.worker:
-            w.suspend()
+            w.kill()
     
     def close():
         for w in self.worker:
@@ -43,10 +43,10 @@ class FiberWorkerLoop(object):
 
 class FiberWorker(object):
     
-    def __init__(self,func,fiberloop=None,debug=True,**kwargs):
+    def __init__(self,func,workerloop=None,debug=True,**kwargs):
         self.debug = debug
         self.func = func
-        self.fiberloop = fiberloop
+        self.floop = workerloop
         self._run = False
         self.kwargs = kwargs
         self.reset("init")
@@ -63,17 +63,17 @@ class FiberWorker(object):
         
     def resume(self):
         try:
-            if self._run or self.fiberloop==None:
+            if self._run or self.floop==None:
                 return
-            self.fiberloop.append(self._inner)
+            self.floop.append(self._inner)
         finally:
             self._run = True            
         
     def suspend(self):
         try:
-            if not self._run or self.fiberloop==None:
+            if not self._run or self.floop==None:
                 return
-            self.fiberloop.remove(self._inner)
+            self.floop.remove(self._inner)
         finally:
             self._run = False            
 
@@ -106,38 +106,42 @@ def w1func(self):
     c = 0
     while True:
         c+=1
+        if c>10:
+            break
         print("w1", c, self.kwargs)
         yield 
-    
+   
+   
+if __name__=='__main__':
 
-fl = FiberWorkerLoop()
+    fl = FiberWorkerLoop()
 
-w1 = FiberWorker( func=w1func, fiberloop=fl, a=3 )
-    
-w1.start()
+    w1 = FiberWorker( func=w1func, workerloop=fl, a=3 )
+        
+    w1.start()
 
-next(fl)
-next(fl)
-next(fl)
+    next(fl)
+    next(fl)
+    next(fl)
 
-w1.suspend()
+    w1.suspend()
 
-print("hop1")
-next(fl)
-print("hop2")
-next(fl)
+    print("hop1")
+    next(fl)
+    print("hop2")
+    next(fl)
 
-w1.resume()
+    w1.resume()
 
-next(fl)
-next(fl)
+    next(fl)
+    next(fl)
 
-print("reset")
+    print("reset")
 
-w1.reset()
-w1.start()
+    w1.reset()
+    w1.start()
 
-next(fl)
-next(fl)
+    next(fl)
+    next(fl)
 
 
