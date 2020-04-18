@@ -17,7 +17,8 @@
 - added fiber processor class, to allow WindUp to work in non-fiber-mode
 - added [`fiber worker`](https://github.com/kr-g/mpymodcore/blob/master/samples/untested/fiber_worker.py)
  under new concepts/ untested in samples
--
+- added [`fiber channel/stream`](https://github.com/kr-g/mpymodcore/blob/master/samples/untested/fiber_channel.py)
+ under new concepts/ untested in samples
 
 
 ### backlog
