@@ -207,6 +207,7 @@ class FiberStream(object):
     def writer(self,fstreamio=None):
         self._writer = fstreamio
 
+    # if no reader is defined return chunk
     def read(self):
         try:
             if self._reader==None:
@@ -215,6 +216,7 @@ class FiberStream(object):
         except FiberChannelEmptyException:
             return bytes()
     
+    # if data is given write to channel, 
     def write(self,data=None):
         if data!=None:
             self.channel.push(data)
