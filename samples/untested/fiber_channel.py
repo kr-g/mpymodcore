@@ -3,7 +3,7 @@
 #from modcore.fiber import *
 
 
-class DataChunk(object):
+class FiberChannelDataChunk(object):
     
     def __init__(self,data):
         self.data = data
@@ -65,7 +65,7 @@ class FiberChannel(object):
     def put( self, data ):
         if self._broken==True:
             raise FiberChannelBrokenException()
-        chunk = DataChunk(data)
+        chunk = FiberChannelDataChunk(data)
         self.first = chunk.link( self.first )
         if self.last == None:
             self.last = self.first
@@ -101,6 +101,9 @@ class FiberChannel(object):
     
     def hangup(self):
         self._broken = True
+        
+    def broken(self):
+        return self._broken
         
     def dense(self):
         if self.last == None:
@@ -148,7 +151,7 @@ def fc_readline(fc,max_size_dense=128):
         return line    
     
     if chunk.pre==None:
-        if fc._broken:
+        if fc.broken()==True:
             # return pending bytes
             if len(chunk)>0:
                 chunk = fc.pop()
@@ -159,6 +162,8 @@ def fc_readline(fc,max_size_dense=128):
         raise Exception("buffer overflow")
     
     fc.dense()
+    
+    return None
           
   
 class FiberStreamIO(object):
@@ -169,12 +174,12 @@ class FiberStreamIO(object):
     # reading from fiber stream
     # return None if no data available
     # return zero length bytes() for EOF
-    def read(self, channel ):
+    def read(self, fchan ):
         pass
     
     # writing into fiber stream
     # return True is more data is available
-    def write(self, channel, data ):
+    def write(self, fchan ):
         pass
   
     def close(self):
@@ -300,18 +305,18 @@ def sample3():
             self.file = open(self.fnam,"rb")
             self.cnt = 0
             
-        def write( self, fc ):
+        def write( self, fchan ):
             self.cnt += 1
 
             if self.done==False:
                 
                 rc = self.file.read(self.blksize)
                 if len(rc)>0:
-                    fc.put(rc)
+                    fchan.put(rc)
                     
                 self.done = len(rc)==0                
                 if self.done:
-                    fc.hangup()
+                    fchan.hangup()
                     
             return self.done!=True
                
@@ -320,8 +325,8 @@ def sample3():
 
 
     class FiberStreamIO_readline_reader(FiberStreamIO):                        
-        def read( self, fc ):        
-            return fc_readline(fc)
+        def read( self, fchan ):        
+            return fc_readline(fchan)
                        
 
     fc = FiberChannel()

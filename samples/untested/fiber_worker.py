@@ -32,11 +32,11 @@ class FiberWorkerLoop(object):
                 print(self.__class__.__name__, ex)
                 #raise ex
             
-    def kill(self,reason=None):
+    def kill(self,reason="kill"):
         for w in self.worker:
-            w.kill()
+            w.kill(reason)
     
-    def close():
+    def close(self):
         for w in self.worker:
             w.kill("close")
         
