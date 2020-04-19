@@ -1,2 +1,1 @@
-test recorder beispiel {testid:1}
-one line
+/home/benutzer/repo/mpymodcore/modext/testrecorder/testrecorder.trec.txt
