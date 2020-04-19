@@ -21,7 +21,8 @@
  under new concepts/ untested in samples
 - added [`TestRecorder`](https://github.com/kr-g/mpymodcore/blob/master/modext/testrecorder/testrecorder.py) 
  for testing complex scenarios with id() tracking, approach as simple as `doctest`.
- limitation: not running under micropython as of now
+ see [`trec.txt`](https://github.com/kr-g/mpymodcore/blob/master/modext/testrecorder/testrecorder.trec.txt) file.
+ __limitation__: not running under micropython as of now
 - 
 
 
