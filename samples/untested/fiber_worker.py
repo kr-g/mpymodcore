@@ -143,6 +143,7 @@ class FiberWorker(object):
         self.debug and print( self.__class__.__name__, "kill", reason, tid(self),)
         self.suspend(reason)
         self._inner = None
+        #untested
         if self.parent!=None:
             self.parent.kill(reason)
             self.parent = None
@@ -153,9 +154,8 @@ class FiberWorker(object):
     
 def sample():
 
-    TestRecorder.dest_dir = "./"
-
-    with TestRecorder("fiber-worker-sample",record=False,nil=False) as tr:
+    with TestRecorder("fiber-worker-sample",record=False,nil=False,\
+                      dest_dir = "./") as tr:
 
         def w1func(self):
             c = 0

@@ -159,8 +159,6 @@ def sample():
     print("*** testing TestRecorder itself ***" )
     print()    
     
-    TestRecorder.dest_dir = "./"
-
     nil = False
 
     testnam = "testrecorder"
@@ -169,12 +167,12 @@ def sample():
     if False:
         # no name, or blank name default to 'default'
         # create the recording
-        with TestRecorder(testnam,record=True,nil=nil) as tr:
+        with TestRecorder(testnam,record=True,nil=nil, dest_dir = "./") as tr:
             print("test recorder beispiel", tid(tr))
             print("one line")
         
     # check against recording, this will result in ok
-    with TestRecorder(testnam,record=False,nil=nil) as tr:
+    with TestRecorder(testnam,record=False,nil=nil, dest_dir = "./") as tr:
         print("test recorder beispiel", tid(tr))
         print("one line")
     
@@ -184,7 +182,7 @@ def sample():
     
     try:
         # check against recording, this will fail
-        with TestRecorder(testnam,record=False,nil=nil) as tr:
+        with TestRecorder(testnam,record=False,nil=nil, dest_dir = "./") as tr:
             print("test recorder beispiel", tid(tr))
             # missing line here
     except Exception as ex:
@@ -192,7 +190,7 @@ def sample():
     
     try:
         # check against recording, this will fail
-        with TestRecorder(testnam,record=False,nil=nil) as tr:
+        with TestRecorder(testnam,record=False,nil=nil, dest_dir = "./") as tr:
             # additional text
             print("test recorder beispiel", tid(tr)+"stupid")
             print("one line")
@@ -201,7 +199,7 @@ def sample():
     
     try:
         # print one additional line, this will result in exception
-        with TestRecorder(testnam,record=False,nil=nil) as tr:
+        with TestRecorder(testnam,record=False,nil=nil, dest_dir = "./") as tr:
             print("test recorder beispiel", tid(tr))
             print("one line")
             # one more line
