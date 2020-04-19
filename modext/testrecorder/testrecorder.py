@@ -76,12 +76,6 @@ class TestRecorder(object):
         
         self.record = record
         self.nil = nil
-        
-        ## todo -> dupterm, problem. will not work because eg thonny
-        ## todo -> unix port plus mocking
-        # fails on micropython
-        self.stdout = sys.stdout
-        sys.stdout = self
                 
         if self.record:
             try:
@@ -93,6 +87,26 @@ class TestRecorder(object):
         except:
             pass
         
+        self.open_platform_specific()
+        
+    # platform specific handling
+        
+    def open_platform_specific(self):
+        ## todo -> dupterm, problem. will not work because eg thonny
+        ## todo -> unix port plus mocking
+        # fails on micropython
+        self.stdout = sys.stdout
+        
+        # this will redirect all output to self.write 
+        sys.stdout = self
+      
+    def close_platform_specific(self):
+        ## todo
+        # this will fail on micropython
+        sys.stdout = sys.__stdout__
+
+    # end of platform specific handling
+
     def write(self,by):
         if not self.nil:
             if self.record:
@@ -108,9 +122,8 @@ class TestRecorder(object):
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        ## todo
-        # this will fail on micropython
-        sys.stdout = sys.__stdout__
+        
+        self.close_platform_specific()
             
         if exc_type==None:
             self._assert()
