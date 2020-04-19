@@ -8,10 +8,10 @@ FiberWorker resume start {testid:1}
 FiberWorker resume start {testid:2}
 w1 1 {'a': 3} {testid:1}
 spawn to w2subfunc {testid:2}
-FiberWorker suspend spawn {testid:2}
 FiberWorker kill init {testid:3}
 FiberWorker suspend init {testid:3}
 FiberWorker reset init {testid:3}
+FiberWorker suspend spawn {testid:2}
 FiberWorker resume spawn-start {testid:3}
 w1 2 {'a': 3} {testid:1}
 w2sub 51 {testid:3}

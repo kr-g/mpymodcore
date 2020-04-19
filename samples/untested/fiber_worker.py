@@ -98,7 +98,7 @@ class FiberWorker(object):
             self._run = False            
 
     def spawn_fiber(self, worker):
-
+        self.suspend("spawn")
         worker.parent=self
         worker.resume("spawn-start")
 
@@ -113,7 +113,6 @@ class FiberWorker(object):
         return 1234567890
 
     def spawn(self, func, **kwargs ):
-        self.suspend("spawn")
         worker = FiberWorker( func=func, workerloop=self.floop, debug=self.debug, **kwargs )        
         return self.spawn_fiber(worker)
 
