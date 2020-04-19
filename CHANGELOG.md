@@ -19,6 +19,9 @@
  under new concepts/ untested in samples
 - added [`fiber channel/stream`](https://github.com/kr-g/mpymodcore/blob/master/samples/untested/fiber_channel.py)
  under new concepts/ untested in samples
+- added `TestRecorder` for testing complex scenarios with id() tracking, approach as simple as `doctest`.
+ limitation: not running under micropython
+- 
 
 
 ### backlog

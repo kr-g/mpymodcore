@@ -17,3 +17,6 @@ wlan.cfg
 license/
 #mod3rd/*/**
 
+# testrecorder files
+**/*.trun.txt
+#samples/**/*.tr.txt
