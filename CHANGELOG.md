@@ -1,7 +1,7 @@
 
 # Changelog
 
-## next version v0.0.7
+## version v0.0.7
 
 - reworked fiber samples
 - FibreWatchdog timer exposed
