@@ -1,6 +1,25 @@
 
 # Changelog
 
+## next version v0.0.8
+
+- 
+
+
+### backlog
+
+- ~~integrate fiber in modext.webserv~~
+- ~~integrate fiber in modcore~~
+- ~~tls/ssl support~~
+- rework api in @get and @post, so that accessing request parameter, and data needs less complex code
+- fiber and fiber call stack, fiber api change
+- WindUp configuration rework
+- code review 
+- package structure
+- testing
+- documentation
+
+
 ## version v0.0.7
 
 - reworked fiber samples
@@ -24,20 +43,6 @@
  see [`trec.txt`](https://github.com/kr-g/mpymodcore/blob/master/modext/testrecorder/testrecorder.trec.txt) file.
  __limitation__: not running under micropython as of now
 - 
-
-
-### backlog
-
-- ~~integrate fiber in modext.webserv~~
-- ~~integrate fiber in modcore~~
-- ~~tls/ssl support~~
-- rework api in @get and @post, so that accessing request parameter, and data needs less complex code
-- fiber and fiber call stack, fiber api change
-- WindUp configuration rework
-- code review 
-- package structure
-- testing
-- documentation
 
 
 ## version v0.0.6
