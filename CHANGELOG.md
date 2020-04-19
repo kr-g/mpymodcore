@@ -7,7 +7,11 @@
 - added custom configurable event to fire to `moddev.interval`
  (see `boot.py` for `ntp-sync` event).
  e.g. with a few lines of code ntp sync can be triggered periodically 
-- 
+- added module `moddev.control`. listens to events below:
+-- `restart` values `[hard|modcore]`. hardreset, or restart all modcore modules (modc)
+-- `status` values `[mem_0|mem_1|memfree]`. print the memory info
+-- `gc` . perform gc, print before, and after memory info
+-
 
 
 ### backlog

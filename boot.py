@@ -33,6 +33,8 @@ def hardreset():
 from modcore import modc, Module, LifeCycle
 from modcore import DEBUG, INFO, NOTSET, logger
 
+import moddev.control
+
 from moddev import wlan
 from moddev.wlan import wlan_ap
 
