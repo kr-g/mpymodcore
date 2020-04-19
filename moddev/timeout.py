@@ -30,4 +30,7 @@ class Timeout():
         
         return False
    
-   
+    def __repr__(self):
+        return self.__class__.__name__ + " ms: " + str(self.timeout * self.timebase)
+    
+    

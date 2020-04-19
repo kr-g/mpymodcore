@@ -106,6 +106,9 @@ modc.add( int2 )
 int3 = MyInterval( "int3" )
 modc.add( int3 )
 
+int_ntp = Interval( "int_ntp" )
+modc.add( int_ntp )
+
 
 # configuration data
 
@@ -118,6 +121,9 @@ cfg = {
         "int2:timebase" : 100, # 1/100 sec timebase
         "int3" : 1,
         "int3:timebase" : 1000*60, # 1 min timebase
+        "int_ntp" : 60,
+        "int_ntp:timebase" : 1000*60, # 1 min timebase
+        "int_ntp:event" : "ntp-sync", # event to fire
     }
 
 

@@ -15,9 +15,15 @@ class Interval(Module):
         
     def conf(self,config=None):
         if config!=None:
-            timeout = config.get( self.id, None )
+            
+            timeout = config.get( self.id, None ) ##todo None?
             timebase = config.get( self.id + ":timebase", TIME_BASE )
+            
             self.timeout = Timeout( timeout, timebase )
+            self.event = config.get( self.id + ":event", None )
+            
+            self.info("config", self.timeout, "event:", self.event )
+            
         if not self.timeout.configured():
             self.warn( "interval not configured" )
 
@@ -31,6 +37,8 @@ class Interval(Module):
         
         if self.timeout.elapsed():
             self.timer.restart()
+            if self.event!=None:
+                self.fire_event(self.event)
             return self.__timeout__(config=config)
     
     def __timeout__(self,config=None):

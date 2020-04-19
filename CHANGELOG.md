@@ -3,6 +3,10 @@
 
 ## next version v0.0.8
 
+- added `ntp-sync` eventto ntp module, after sync was done sucessfully `ntp` event is raised
+- added custom configurable event to fire to `moddev.interval`
+ (see `boot.py` for `ntp-sync` event).
+ e.g. with a few lines of code ntp sync can be triggered periodically 
 - 
 
 

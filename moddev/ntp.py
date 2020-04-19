@@ -5,6 +5,12 @@ import ntptime
 from modcore import modc, Module, LifeCycle
 from modcore.log import LogSupport
 
+from .timeout import Timeout
+
+
+WLAN="wlan"
+TZ="tz"
+NTP_SYNC="ntp-sync"
 
 class NTP(Module):
          
@@ -14,21 +20,24 @@ class NTP(Module):
     def init(self):
         self.offset = 0
         self._timeout = False
+        self.retry_after = Timeout( 5 ) ## todo config
         
     def conf(self,config=None):
         if config!=None:
             self.set_tz_ofset( config.get("TZ") )
         
     def watching_events(self):
-        return ["WLAN","TZ"] # case does not matter
+        return [WLAN,TZ,NTP_SYNC,] 
 
     def _settime(self):
         try:
             ntptime.settime()
             self._timeout = False
+            #self.retry_after.reset() ##todo config
             self.info( "ntp time", self.localtime() )
         except Exception as ex:
             self._timeout = True
+            self.retry_after.restart()
             self.excep( ex, "ntp settime" )
         self.fire_event( "ntp", not self._timeout )
 
@@ -36,20 +45,24 @@ class NTP(Module):
         if self.current_level() != LifeCycle.RUNNING:
             return
         
-        if self._timeout:
+        if self._timeout and self.retry_after.elapsed():
             self._settime()
         
         if event==None:
-            return        
+            return
+        
         val = self.event_value(event)
         
-        if self.is_event( event, "wlan" ):
+        if self.is_event( event, WLAN ):
             if val:
                 self._settime()
             else:
                 self.fire_event( "ntp", False )
                 
-        if self.is_event( event, "tz" ):
+        if self.is_event( event, NTP_SYNC ):
+            self._settime()
+                
+        if self.is_event( event, TZ ):
             if val:
                 self.set_tz_ofset( val )
             else:
