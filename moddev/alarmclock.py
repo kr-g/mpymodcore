@@ -66,19 +66,21 @@ class AlarmClock(EventEmitter):
 
         if now >= self.alarm_time:
             self.info("alarm, reschedule next alarm")
+            self.info("current", list(time.localtime( now )) , list(time.localtime( self.alarm_time )) )
             # set next alarm to tomorrow
             self.recalc(ONE_DAY_SEC)
             return self.__alarm__(config=config) or True
     
     def recalc(self,offset=0):
         self.info( "recalc", offset )
+        self.alarm_time = None
         try:
             h, m = self.conf_alarm_time.split(":")
             h = int(h)
             m = int(m)
             now_s = self.time()
             now = time.localtime(now_s)
-            if now[3]>=h and now[4]>=m:
+            if now[3]>h or (now[3]==h and now[4]>=m):
                 offset = ONE_DAY_SEC
             at = list(time.localtime( now_s + offset ))
             at[3]=h

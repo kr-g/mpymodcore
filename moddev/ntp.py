@@ -41,11 +41,11 @@ class NTP(Module):
             self._timeout = False
             #self.retry_after.reset() ##todo config
             self.info( "ntp time", self.localtime() )
+            self.fire_event( "ntp", True )
         except Exception as ex:
             self._timeout = True
             self.retry_after.restart()
             self.excep( ex, "ntp settime" )
-        self.fire_event( "ntp", not self._timeout )
 
     def loop(self,config=None,event=None):
         if self.current_level() != LifeCycle.RUNNING:
@@ -63,6 +63,7 @@ class NTP(Module):
             if val:
                 self._settime()
             else:
+                # ntp lost
                 self.fire_event( "ntp", False )
                 
         if self.is_event( event, NTP_SYNC ):
