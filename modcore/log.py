@@ -26,6 +26,9 @@ class LogSupport(object):
 
     timefunc = _timefunc
     
+    stdout = sys.stdout
+    stderr = sys.stderr ##todo write level >= WARN also on stderr??
+    
     level = INFO
     showdate = True
     showtime = True
@@ -56,17 +59,22 @@ class LogSupport(object):
         if len( args ) == 0:
             return self._loglevel( level )
         if self._loglevel( level ):
-            self._log2( _logstr[level], *args )
+            self._log2( level, _logstr[level], *args )
             
-    def _log2( self, infostr, *args ):
+    def _log2( self, level, infostr, *args ):
         if self.showtime:
-            print( self._timestr(), end=':' )
+            self._print_fd( self._timestr(), end=':' )
         if infostr:
-            print( infostr, end=':' )
-        print( self.logname, end=':' )
+            self._print_fd( infostr, end=':' )
+        self._print_fd( self.logname, end=':' )
         if "id" in self.__dict__:
-            print( self.id, end=':' )
-        print( *args )
+            self._print_fd( self.id, end=':' )
+        self._print_fd( *args )
+        
+    def _print_fd( self, *args, end="\n", file=None ):
+        if file==None:
+            file = LogSupport.stdout
+        print( *args, end=end, file=file )
 
     def debug( self, *args ):
         return self._log( DEBUG, *args )
@@ -81,7 +89,7 @@ class LogSupport(object):
     
     def excep( self, ex, *args ):
         self.critical( *args )
-        sys.print_exception( ex )     
+        sys.print_exception( ex ) ##todo print with  _print_fd    
 
 
 logger = LogSupport()
