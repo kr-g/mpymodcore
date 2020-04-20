@@ -118,21 +118,40 @@ modc.add( int3 )
 int_ntp = Interval( "int_ntp" )
 modc.add( int_ntp )
 
+from moddev.alarmclock import AlarmClock
+
+alarm1 = AlarmClock("alarm1")
+modc.add( alarm1 )
+
+alarm2 = AlarmClock("alarm2")
+modc.add( alarm2 )
 
 # configuration data
 
 cfg = {
         "TZ" : 60*60*2,
+        
         "SD_SLOT" : 3, # default for esp32 with psram / TTGO
         "SD_PATH" : "/sd",
+        
         "int1" : 5, # timeout in sec, default timebase 1000
+        
         "int2" : 130,
         "int2:timebase" : 100, # 1/100 sec timebase
+        
         "int3" : 1,
         "int3:timebase" : 1000*60, # 1 min timebase
-        "int_ntp" : 60,
+        
+        "int_ntp" : 5,
         "int_ntp:timebase" : 1000*60, # 1 min timebase
         "int_ntp:event" : "ntp-sync", # event to fire
+        
+        "alarm1" : "11:11",
+        "alarm1:utc" : False, # default, can be obmitted
+        "alarm1:event" : "gc",
+        
+        "alarm2" : "11:13",
+        "alarm2:event" : "status:mem_0", # event, and data to send
     }
 
 

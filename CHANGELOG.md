@@ -12,6 +12,8 @@
   - `status` values `[mem_0|mem_1|memfree]`. print the memory info
   - `gc` . perform gc, print before, and after memory info
 - added `EventEmitter` as base class for `Interval`
+- added `AlarmClock` for defined alarm handling (once a day), with optional raising an event
+- ntp module fires `ntp` now also after timezone change
 - 
 
 

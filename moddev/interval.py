@@ -26,6 +26,9 @@ class Interval(EventEmitter):
             self.timeout = Timeout( timeout, timebase )            
             self.info("period", self.timeout )
             
+        if self.timer.configured()==False:
+            self.warn("timeout not configured")
+            
     def start(self):
         self.timeout.restart()
     

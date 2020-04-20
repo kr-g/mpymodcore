@@ -24,12 +24,18 @@ class NTP(Module):
         
     def conf(self,config=None):
         if config!=None:
-            self.set_tz_ofset( config.get("TZ") )
+            self.set_tz_ofset( config.get("TZ"), fire_event=False ) # dont fire extra event
         
     def watching_events(self):
         return [WLAN,TZ,NTP_SYNC,] 
 
     def _settime(self):
+        
+        ## todo grace period for setting ntp time
+        ## otherwise ntp is raise twice during startup
+        ## 1. during ntp module startup when ntptime.settime() internal grace commits
+        ## 2. when wlan event is reached
+        
         try:
             ntptime.settime()
             self._timeout = False
@@ -74,13 +80,17 @@ class NTP(Module):
     def utctime(self):
         return time.localtime( self.utc() )
 
-    def set_tz_ofset(self,offset):
+    def set_tz_ofset(self,offset,fire_event=True):
         try:
             offset = int(offset)
         except:
             offset = 0
         self.debug( "tz offset", offset )
-        self.offset = offset
+        if self.offset != offset:
+            self.info( "timezone", offset )
+            if fire_event:
+                self.fire_event( "ntp", True )
+            self.offset = offset
     
     def time(self):
         return self.utc() + self.offset
