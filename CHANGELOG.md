@@ -11,7 +11,8 @@
   - `restart` values `[hard|modcore]`. hardreset, or restart all modcore modules (modc)
   - `status` values `[mem_0|mem_1|memfree]`. print the memory info
   - `gc` . perform gc, print before, and after memory info
--
+- added `EventEmitter` as base class for `Interval`
+- 
 
 
 ### backlog

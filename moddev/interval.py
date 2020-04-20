@@ -3,12 +3,13 @@ import time
 
 from modcore import modc, Module, LifeCycle
 
+from .eventemitter import EventEmitter
 from .timeout import Timeout
 
 
 TIME_BASE = 1000
 
-class Interval(Module):
+class Interval(EventEmitter):
 
     def on_add(self):
         self.timer = Timeout( None, TIME_BASE )
@@ -16,31 +17,25 @@ class Interval(Module):
     def conf(self,config=None):
         if config!=None:
             
+            # important. call config of EventEmitter
+            super().conf(config)
+            
             timeout = config.get( self.id, None ) ##todo None?
             timebase = config.get( self.id + ":timebase", TIME_BASE )
             
-            self.timeout = Timeout( timeout, timebase )
-            self.event = config.get( self.id + ":event", None )
+            self.timeout = Timeout( timeout, timebase )            
+            self.info("period", self.timeout )
             
-            self.info("config", self.timeout, "event:", self.event )
-            
-        if not self.timeout.configured():
-            self.warn( "interval not configured" )
-
     def start(self):
         self.timeout.restart()
     
-    def __loop__(self,config=None,event=None,data=None):
-        
-        if self.current_level() != LifeCycle.RUNNING:
-            return
-        
+    def __emit__(self,config=None):
+
         if self.timeout.elapsed():
             self.timer.restart()
-            if self.event!=None:
-                self.fire_event(self.event)
-            return self.__timeout__(config=config)
+            return self.__timeout__(config=config) or True
     
+    # overload this, return True if outer event shoud emitted
     def __timeout__(self,config=None):
         pass
     
