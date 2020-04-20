@@ -29,6 +29,13 @@ def mem_info(verbose=True,auto_free=True):
 def hardreset():
     machine.reset()
     
+def gc_print_stat():
+    before = gc.mem_free(), gc.mem_alloc()
+    gc.collect() 
+    after = gc.mem_free(), gc.mem_alloc()
+    print( "(free,alloc)", "before", before )
+    print( "(free,alloc)", "after", after )
+
 
 from modcore import modc, Module, LifeCycle
 from modcore import DEBUG, INFO, NOTSET, logger
@@ -199,8 +206,9 @@ def loop(run_until=None):
 
 
 print()
+gc_print_stat()
+
 print( "ip ->", wlan_ap.ifconfig() )
-print()
 print( "current time ->", ntp_serv.localtime() )
 print()
 print( "call loop() to start :-)" )
