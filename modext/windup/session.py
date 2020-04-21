@@ -9,8 +9,8 @@ SID = "xsession_id"
 EXPIRES = "xsession_expires"
 CREATED = "xsession_created"
 TIMEOUT = 60*30
-    
-        
+
+
 class SessionLoad(Filter):
     
     def __init__(self, session_store, cleanup=None):
@@ -102,17 +102,26 @@ class SessionStore(LogSupport):
         
         return sid
     
+    def is_expired(self,session):
+        exp = session.get(EXPIRES, 0 ) 
+        now = time.ticks_ms()
+        self.info( now, exp )
+        diff = time.ticks_diff( exp, now )
+        return diff<0        
+    
+    def purge_expired(self):
+        for sid in self.sessions.keys():
+            session = self.sessions.get(sid)
+            if self.is_expired(session):
+                self.destroy(sid)
+    
     def load(self,sid):
         self.info("load", sid )
         session = self.sessions.get(sid,None)
         self.info("session", session )
         if session==None:
             return
-        exp = session.get(EXPIRES, 0 ) 
-        now = time.ticks_ms()
-        self.info( now, exp )
-        diff = time.ticks_diff( exp, now )
-        if diff<0:
+        if self.is_expired(session):
             self.destroy(sid)
             return        
         self.renew(session)
@@ -139,4 +148,8 @@ class SessionStore(LogSupport):
         return SessionSave(self,cleanup=self.cleanup)
 
          
-        
+store = SessionStore( )
+
+def purge_expired():
+    store.purge_expired()
+

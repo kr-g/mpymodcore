@@ -194,12 +194,18 @@ if fancy_stuff_i_have_a_sd_card:
     # use again (no auto detection!)
     # sdc.change_level(LifeCycle.MOUNT)
     
+    
+# enable winup session manager module
+import modext.windup.session_mod 
 
+
+# add all modules to start automatically before this call
 modc.startup(config=cfg)
 
 # just serving some static files
 from modext.windup import WindUp
 serv = WindUp()
+
 
 # replace standard executor with fiber executor
 #serv.exec_class = ProcessorFiber

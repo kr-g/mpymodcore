@@ -17,7 +17,9 @@
 - added `Button` for button optional with sending event. supports debouncing
 - Button can emit event direclty by pressing, or when released (default)
 - added `AlarmCounter` check upper and lower bounds, fires optional event
-- 
+- moved global `SessionStore` to module `session`, added `session_mod` serving event `session-man`
+ which purges all the expired sessions. can be triggered together with `Inverval` periodically
+ - 
 
 
 ### backlog

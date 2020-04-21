@@ -66,5 +66,10 @@ class Module(LifeCycle,LogSupport):
         return self.__loop_run__(config,event,data)
 
     def __loop_run__(self,config=None,event=None,data=None):
+        if event==None:
+            return
+        return self.__loop_event__(config,event,data)
+
+    def __loop_event__(self,config=None,event=None,data=None):
         pass
 

@@ -7,12 +7,10 @@ from modext.http.webserv import WebServer, COOKIE_HEADER, SET_COOKIE_HEADER
 from .filter import *
 from .content import StaticFiles
 from .router import Router
-from .session import SessionStore
+from .session import store
 
 from .proc import Processor
 
-
-store = SessionStore( )
 
 class WindUp(LogSupport):
     
