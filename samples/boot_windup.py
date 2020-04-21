@@ -13,6 +13,8 @@ import moddev . ntp
 import moddev . webrepl
 import moddev . softap
 
+# package 'modext.fiber' is not required only 'http' and 'windup'
+
 from modext.windup import WindUp, Router
 serv = WindUp()
 
