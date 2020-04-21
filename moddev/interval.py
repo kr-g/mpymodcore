@@ -11,7 +11,7 @@ TIME_BASE = 1000
 
 class Interval(EventEmitter):
 
-    def on_add(self):
+    def init(self):
         self.timer = Timeout( None, TIME_BASE )
         
     def conf(self,config=None):

@@ -21,10 +21,13 @@ class AlarmClock(EventEmitter):
     def watching_events(self):
         return ["ntp",]
     
-    def on_add(self):
+    def init(self):
+        super().init()
         self.conf_alarm_time = None
         self.is_utc = False
         self.alarm_time = None
+        
+        #self.check_lifecycle = False ##todo ?
         
     def conf(self,config=None):
         if config!=None:

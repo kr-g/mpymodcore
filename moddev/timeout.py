@@ -31,6 +31,7 @@ class Timeout():
         return False
    
     def __repr__(self):
-        return self.__class__.__name__ + " ms: " + str(self.timeout * self.timebase)
+        return self.__class__.__name__ + " ms: " \
+               + "-" if self.timeout==None else str(self.timeout * self.timebase)
     
     

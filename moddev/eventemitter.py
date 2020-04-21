@@ -6,6 +6,9 @@ from modcore import modc, Module, LifeCycle
 
 class EventEmitter(Module):
 
+    def on_add(self):
+        self.check_lifecycle = True
+
     def init(self):
         self.event = None
         
@@ -23,7 +26,7 @@ class EventEmitter(Module):
      
     def __loop__(self,config=None,event=None,data=None):
         
-        if self.current_level() != LifeCycle.RUNNING:
+        if self.check_lifecycle and self.current_level() != LifeCycle.RUNNING:
             return
         
         if self.__loop2__(config,event,data)==False:

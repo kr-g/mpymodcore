@@ -126,6 +126,11 @@ modc.add( alarm1 )
 alarm2 = AlarmClock("alarm2")
 modc.add( alarm2 )
 
+from moddev.button import Button
+
+boot_btn = Button("boot_btn")
+modc.add( boot_btn )
+
 # configuration data
 
 cfg = {
@@ -152,6 +157,12 @@ cfg = {
         
         "alarm2" : "11:13",
         "alarm2:event" : "status:mem_0", # event, and data to send
+
+        "boot_btn" : 0, # pin no -> gpio 0
+        "boot_btn:debounce" : 100, # 100ms - default, can be obmitted
+        "boot_btn:neg_logic" : True, # boot button gpio0 becomes signaled with value 0 by pressing
+        "boot_btn:event" : "status:mem_1", # event to fire
+
     }
 
 
