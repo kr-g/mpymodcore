@@ -20,3 +20,6 @@ license/
 # testrecorder files
 **/*.trun.txt
 #samples/**/*.tr.txt
+
+compile.txt
+mpy/
