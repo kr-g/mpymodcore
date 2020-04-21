@@ -59,7 +59,12 @@ class Module(LifeCycle,LogSupport):
         if event != None:
             return self.__loop__(config,event.name,event.data)
         return self.__loop__(config)
-    
+
     def __loop__(self,config=None,event=None,data=None):
-        return None
+        if self.current_level() != LifeCycle.RUNNING:
+            return        
+        return self.__loop_run__(config,event,data)
+
+    def __loop_run__(self,config=None,event=None,data=None):
+        pass
 
