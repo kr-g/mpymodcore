@@ -161,6 +161,7 @@ cfg = {
         "boot_btn" : 0, # pin no -> gpio 0
         "boot_btn:debounce" : 100, # 100ms - default, can be obmitted
         "boot_btn:neg_logic" : True, # boot button gpio0 becomes signaled with value 0 by pressing
+        "boot_btn:fire_on_up" : True, # default, fires when releasing
         "boot_btn:event" : "status:mem_1", # event to fire
 
     }

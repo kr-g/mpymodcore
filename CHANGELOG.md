@@ -15,6 +15,7 @@
 - added `AlarmClock` for defined alarm handling (once a day), with optional raising an event
 - ntp module fires `ntp` now also after timezone change
 - added `Button` for button optional with sending event. supports debouncing
+- Button can emit event direclty by pressing, or when released (default)
 - 
 
 

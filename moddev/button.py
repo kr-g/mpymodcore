@@ -27,6 +27,7 @@ class Button(EventEmitter):
         self.pin = None
         self.neg_logic = False
         self.debounce = Timeout( None )
+        self.fire_on_up = True
         
         self.pressed = None
         self.last_state = False
@@ -53,12 +54,14 @@ class Button(EventEmitter):
             self.debounce = Timeout( debounce, 1 ) # 1ms timebase          
             self.info("debounce ms", self.debounce )
          
+            self.fire_on_up = config.get( self.id + ":fire_on_up", self.fire_on_up ) # waits for releasing
+            
         if self.pin==None:
             self.warn("pin not configured")
             
     def start(self):
         self.pressed = None
-        self.last_state = False    
+        self.last_state = False
     
     def __emit__(self,config=None):
         
@@ -70,18 +73,26 @@ class Button(EventEmitter):
             return
         
         self.last_state = signaled
-        
+            
         if self.pressed==None:
-            self.info("pressed")
+            self.info("deboucing")
             self.pressed = _ticks()
             self.debounce.restart()
             return
-        
-        if self.debounce.elapsed() and not signaled:            
-            self.info("released")
-            self.pressed = None
+                
+        if not self.debounce.elapsed():
+            return False
+
+        self.pressed = None
+
+        if signaled and not self.fire_on_up:            
+            self.info("pressed")            
             return self.__timeout__(config=config) or True
-    
+
+        if not signaled and self.fire_on_up:            
+            self.info("released")
+            return self.__timeout__(config=config) or True
+
     # overload this, return True if outer event shoud emitted
     def __timeout__(self,config=None):
         pass
