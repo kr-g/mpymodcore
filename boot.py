@@ -118,6 +118,9 @@ modc.add( int3 )
 int_ntp = Interval( "int_ntp" )
 modc.add( int_ntp )
 
+session_purge = Interval( "session_purge" )
+modc.add( session_purge )
+
 from moddev.alarmclock import AlarmClock
 
 alarm1 = AlarmClock("alarm1")
@@ -156,6 +159,10 @@ cfg = {
         "int_ntp" : 5,
         "int_ntp:timebase" : 1000*60, # 1 min timebase
         "int_ntp:event" : "ntp-sync", # event to fire
+        
+        "session_purge" : 30,
+        "session_purge:timebase" : 1000*60, # 1 min timebase
+        "session_purge:event" : "session-man", # event to fire
         
         "alarm1" : "11:11",
         "alarm1:utc" : False, # default, can be obmitted
