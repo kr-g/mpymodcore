@@ -131,6 +131,12 @@ from moddev.button import Button
 boot_btn = Button("boot_btn")
 modc.add( boot_btn )
 
+from moddev.alarmcounter import AlarmCounter
+
+alarm_counter=AlarmCounter("alarm_counter")
+modc.add( alarm_counter )
+
+
 # configuration data
 
 cfg = {
@@ -164,6 +170,11 @@ cfg = {
         "boot_btn:fire_on_up" : True, # default, fires when releasing
         "boot_btn:event" : "status:mem_1", # event to fire
 
+        "alarm_counter" : None, # not configured
+        "alarm_counter:delta_period" : 5,
+        "alarm_counter:under" : 1,
+        "alarm_counter:above" : 10, # alarm_count counts state changes 0->1, and 1->0 
+        
     }
 
 

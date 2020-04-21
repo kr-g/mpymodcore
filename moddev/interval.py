@@ -38,7 +38,7 @@ class Interval(EventEmitter):
             self.timer.restart()
             return self.__timeout__(config=config) or True
     
-    # overload this, return True if outer event shoud emitted
+    # overload this
     def __timeout__(self,config=None):
         pass
     

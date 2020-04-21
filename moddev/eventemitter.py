@@ -37,7 +37,7 @@ class EventEmitter(Module):
                 event, data = self.split_event_data( self.event )
                 self.fire_event(event,data)
 
-    # overload this if required, return False to return with call emit
+    # overload this if required, return False to return without call emit
     def __loop2__(self,config=None,event=None,data=None):
         pass
 

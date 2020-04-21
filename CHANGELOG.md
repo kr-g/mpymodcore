@@ -16,6 +16,7 @@
 - ntp module fires `ntp` now also after timezone change
 - added `Button` for button optional with sending event. supports debouncing
 - Button can emit event direclty by pressing, or when released (default)
+- added `AlarmCounter` check upper and lower bounds, fires optional event
 - 
 
 

@@ -40,7 +40,6 @@ class Button(EventEmitter):
             super().conf(config)
             
             pin = config.get( self.id, None ) ##todo None?
-            pin = int(pin)
             if pin!=None:
                 self.pin = Pin(pin,Pin.IN)
             self.info("pin", pin )
@@ -87,14 +86,14 @@ class Button(EventEmitter):
 
         if signaled and not self.fire_on_up:            
             self.info("pressed")            
-            return self.__timeout__(config=config) or True
+            return self.__button__(config=config) or True
 
         if not signaled and self.fire_on_up:            
             self.info("released")
-            return self.__timeout__(config=config) or True
+            return self.__button__(config=config) or True
 
-    # overload this, return True if outer event shoud emitted
-    def __timeout__(self,config=None):
+    # overload this
+    def __button__(self,config=None):
         pass
     
 

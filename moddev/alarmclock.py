@@ -101,7 +101,7 @@ class AlarmClock(EventEmitter):
     def time(self):
         return _utc() if self.is_utc else _time() 
         
-    # overload this, return True if outer event shoud emitted
+    # overload this
     def __alarm__(self,config=None):
         pass
     
