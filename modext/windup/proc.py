@@ -29,12 +29,8 @@ class Processor(LogSupport):
         if self.info():
             self.info( "cookies",request.xcookies )
             self.info( "xsession_is_new", request.xsession_is_new )
-            self.info( "xpath, xquery", request.xpath, request.xquery )
-            self.info( "xparam", request.xparam )
-            self.info( "xkeyval", request.xkeyval )
+            self.info( "xpath", request.xpath )
             self.info( "xpar", request.xpar )                      
-            #self.info( "xform", request.xform )                      
-            #self.info( "xjson", request.xjson )                      
 
         req.load_content( max_size=4096 )
         if req.overflow == True:
@@ -51,6 +47,11 @@ class Processor(LogSupport):
         else:
             for f in self.windup.bodyfilter:
                 f.filterRequest( request )
+                
+            if self.info():
+                self.info( "xform", request.xform )                      
+                self.info( "xjson", request.xjson )                      
+                #self.info( "xurl", request.xurl )                              
         
         # after auto cleanup with filter this can be None
         body = req.request.body 
