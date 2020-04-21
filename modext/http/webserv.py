@@ -32,8 +32,9 @@ EXPIRE_COOKIE = ";expires=Thu, Jan 01 1970 00:00:00 UTC;"
    
 class RequestHandler(LogSupport):
     
-    def __init__(self,webserver,addr,client,client_file):
+    def __init__(self,webserver,addr,client,client_file,suppress_id = False):
         LogSupport.__init__(self)
+        self.suppress_id = suppress_id
         self.webserver = webserver
         self.addr = addr
         self.client = client
@@ -68,23 +69,23 @@ class RequestHandler(LogSupport):
         return self.request.overflow
     
     # send redirect
-    def send_redirect(self, url, status=302, header=None, suppress_id = False ):
+    def send_redirect(self, url, status=302, header=None ):
         if header==None:
             header=[]
         header.append( ("Location", url ) )
-        self.send_response( status=status, header=header, suppress_id=suppress_id )
+        self.send_response( status=status, header=header )
     
     # send a complete response
     def send_response(self, status=200, header=None, response=None, \
-                      type="text/html", suppress_id = False, response_i=None ):
-        header = self._add_server_header(header,suppress_id)        
+                      type="text/html", response_i=None ):
+        header = self._add_server_header(header)        
         self._add_session_cookie(header)
         
         send_http_response( self.client_file, status, header, response, type, response_i )
 
     # send portions: header part
-    def send_head(self, status=200, header=None, type="text/html", suppress_id = False ):
-        header = self._add_server_header(header,suppress_id)        
+    def send_head(self, status=200, header=None, type="text/html" ):
+        header = self._add_server_header(header)        
         self._add_session_cookie(header)
         # send empty response -> just send header
         send_http_response_header( self.client_file, status, header, type )
@@ -95,7 +96,7 @@ class RequestHandler(LogSupport):
 
     # json
     def send_json( self, obj, header=None, status=200, \
-                   type='application/json', suppress_id = False ):
+                   type='application/json' ):
         
         response = json.dumps( obj )
         
@@ -131,11 +132,11 @@ class RequestHandler(LogSupport):
                 self.excep( ex, "send status failed" )
         self.close()
     
-    def _add_server_header(self,header,suppress_id):
+    def _add_server_header(self,header):
         if header==None:
             header=[]
         _id = ""
-        if not suppress_id:
+        if not self.suppress_id:
             _id = ":"+binascii.hexlify( machine.unique_id() ).decode()
         header.append( ("Server", "modcore/" + str(VERSION) \
                            + " (" + sys.platform + _id  + ")" ) )
@@ -162,13 +163,14 @@ class RequestHandler(LogSupport):
   
 class WebServer(LogSupport):
     
-    def __init__(self,host='0.0.0.0',port=80,wrap_socket=None):
+    def __init__(self,host='0.0.0.0',port=80,wrap_socket=None,suppress_id=False):
         LogSupport.__init__(self)
         self.host = host
         self.port = port
         self.wrap_socket = wrap_socket
         self.socket = None
         self.poll = None
+        self.suppress_id = suppress_id
         
     def start(self):
         self.addr = socket.getaddrinfo( self.host, self.port)[0][-1]
@@ -195,7 +197,7 @@ class WebServer(LogSupport):
             self.excep(ex, "SSL failed" )
         
         client_file = client.makefile( 'rwb', 0 )
-        return RequestHandler( self, addr, client, client_file )
+        return RequestHandler( self, addr, client, client_file, suppress_id=self.suppress_id )
               
     def stop(self):
         if self.poll!=None:

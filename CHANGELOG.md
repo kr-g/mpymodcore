@@ -19,6 +19,7 @@
 - added `AlarmCounter` check upper and lower bounds, fires optional event
 - moved global `SessionStore` to module `session`, added `session_mod` serving event `session-man`
  which purges all the expired sessions. can be triggered together with `Inverval` periodically
+ - fix socket close after 404
  - 
 
 

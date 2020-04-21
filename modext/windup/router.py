@@ -5,8 +5,8 @@ from .regex import xurl_params
 
 class Router(ContentGenerator):
 
-    def __init__( self, root=None, suppress_id=False ):
-        ContentGenerator.__init__(self,root,suppress_id)
+    def __init__( self, root=None ):
+        ContentGenerator.__init__(self,root)
         self.route = []
 
     def handle(self,req):

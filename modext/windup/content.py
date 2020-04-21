@@ -28,8 +28,8 @@ class ContentGenerator(LogSupport):
 
 class StaticFiles(ContentGenerator):
 
-    def __init__( self, static_paths, root=None, suppress_id=False, send_buffer=64 ):
-        ContentGenerator.__init__(self,root,suppress_id)
+    def __init__( self, static_paths, root=None, send_buffer=64 ):
+        ContentGenerator.__init__(self,root)
         self.static_paths = static_paths
         self.send_buffer = send_buffer
         
@@ -102,7 +102,7 @@ class StaticFiles(ContentGenerator):
                         break
                     yield c
 
-        request.send_response( response_i=_send_chunk, suppress_id=self.suppress_id )
+        request.send_response( response_i=_send_chunk )
           
         
 

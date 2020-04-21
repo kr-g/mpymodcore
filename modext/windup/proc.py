@@ -70,7 +70,7 @@ class Processor(LogSupport):
         pass
     
     def _after_run_undone(self,req):
-        req.req_done = True
+        self.req_done = True
         self.windup.call404(req)
         
     def loop(self):

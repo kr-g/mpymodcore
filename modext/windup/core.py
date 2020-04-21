@@ -17,7 +17,7 @@ class WindUp(LogSupport):
     def __init__(self, wrap_socket=None, suppress_id=False):
         LogSupport.__init__(self)
         self.suppress_id = suppress_id
-        self.ws = WebServer(wrap_socket=wrap_socket)
+        self.ws = WebServer(wrap_socket=wrap_socket,suppress_id=suppress_id)
         self._set_default()
         
     def _set_default(self):
@@ -78,7 +78,7 @@ class WindUp(LogSupport):
     
     def generators_default(self):
         generators = [
-                StaticFiles(["/www"], suppress_id=self.suppress_id ),
+                StaticFiles(["/www"]),
             ]
         return generators
 
@@ -153,7 +153,7 @@ class WindUp(LogSupport):
     def call404(self,req):
         self.warn("not found 404", req.request.xpath )
         if self.html404==None:
-            req.send_response( status=404, suppress_id=self.suppress_id )
+            req.send_response( status=404, )
         else:
             # custom 404 page
             # req gets destructed by next round
