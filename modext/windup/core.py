@@ -1,6 +1,9 @@
 
-from modcore.log import LogSupport
-from modext.fiber import FiberLoop, Fiber
+from modcore.log import LogSupport, logger
+try:
+    from modext.fiber import FiberLoop, Fiber
+except:
+    logger.warn("fiber module not loaded")
 
 from modext.http.webserv import WebServer, COOKIE_HEADER, SET_COOKIE_HEADER
 
