@@ -1,1 +1,1 @@
-/home/benutzer/repo/mpymodcore/modext/testrecorder/testrecorder.trec.txt
+../../modext/testrecorder/testrecorder.trec.txt

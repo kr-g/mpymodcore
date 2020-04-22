@@ -20,7 +20,11 @@
 - moved global `SessionStore` to module `session`, added `session_mod` serving event `session-man`
  which purges all the expired sessions. can be triggered together with `Inverval` periodically
  - fix socket close after 404
- - 
+ - added `switch` to [`FiberWorker`](https://github.com/kr-g/mpymodcore/blob/master/samples/untested/fiber_worker.py)
+  as simple approach for scheduling and balancing workload to a given overall system reaction time
+- added `sleep_ms` and `waitfor_ms` to `FiberWorker`
+- 
+
 
 
 ### backlog

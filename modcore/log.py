@@ -35,7 +35,7 @@ class LogSupport(object):
 
     def __init__(self, level=None ):
         self.log_level( level )
-        self.logname = self.__qualname__
+        self.logname = self.__class__.__name__
         self.showtime = LogSupport.showtime
 
     def log_level(self,level=None):
