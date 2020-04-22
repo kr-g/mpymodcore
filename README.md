@@ -1,5 +1,5 @@
 
-# mpymodcore - a micro framework for MicroPython
+# mpy-modcore - a micro framework for MicroPython
 
 An approach to modularize MicroPython projects.
 
@@ -91,7 +91,7 @@ this folder from github to the local project folder.
 
 # Related project
 
-`mpymodcore` is the successor of [mpyconfigbase](https://github.com/kr-g/mpyconfigbase)
+`mpy-modcore` is the successor of [mpyconfigbase](https://github.com/kr-g/mpyconfigbase)
 
 For configuration of automatic startup of WLAN, SoftAP, and WebRepl refer to the 
 source/ sample code also there
@@ -113,6 +113,14 @@ source/ sample code also there
 
     `python3 -m pygitgrab -f mpymodcore.pygg`
  
+
+# License
+
+`mpy-modcore` is published as [`dual licensed`](https://github.com/kr-g/mpymodcore/blob/master/LICENSE).
+
+##
+##
+##
 
 ### :heart: Credits
 
