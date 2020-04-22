@@ -38,7 +38,7 @@ Anyway response times under 1 secs are already possible.
 
 ### New to fiber ?
 
-Like an async coroutines is a fiber an approach of cooperative multitasking.
+Like an async coroutine is a fiber an approach of cooperative multitasking.
 Whereas objectives are the same.
 
 Pros and Cons? 
