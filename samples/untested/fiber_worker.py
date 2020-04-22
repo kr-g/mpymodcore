@@ -150,15 +150,12 @@ class FiberWorkerLoop(TimerSupport):
     
     def __next__(self):
                 
+        tpf = self._schedule()
         ## todo measure_timer ?
         self.timer and self.start_timer()
         for w in self.worker:
             
-            tpf = self._schedule()
-            if tpf!=None:
-                w._switch_time = time.ticks_add( tpf, time.ticks_ms() )
-            else:
-                w._switch_time = None
+            w._switch_time = time.ticks_add( tpf, time.ticks_ms() ) if tpf!=None else None
             
             try:
                 next(w)
