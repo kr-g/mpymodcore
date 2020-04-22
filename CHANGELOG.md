@@ -13,6 +13,7 @@
   - `gc` perform gc, print before, and after memory info
   - `pin`  control output pin, value data format `pinno:[on|off|toggle]`
 - added `EventEmitter` as base class for `Interval`
+ - evaluates id:event in config, and fires this. whereas event can be also a list of strings
 - added `AlarmClock` for defined alarm handling (once a day), with optional raising an event
 - ntp module fires `ntp` now also after timezone change
 - added `Button` for button optional with sending event. supports debouncing
