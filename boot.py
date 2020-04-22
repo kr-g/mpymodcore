@@ -210,12 +210,40 @@ import modext.windup.session_mod
 modc.startup(config=cfg)
 
 # just serving some static files
-from modext.windup import WindUp
+from modext.windup import WindUp, Router
 serv = WindUp()
 
 
 # replace standard executor with fiber executor
 #serv.exec_class = ProcessorFiber
+
+status = Router()
+@status.get("/status")
+def get_status(req,args):
+    
+    obj = {
+        "mem_alloc" : gc.mem_alloc(),
+        "mem_free" : gc.mem_free(),
+        }
+    
+    req.send_json( obj )
+
+@status.get("/gc")
+def get_gc(req,args):
+    
+    before = gc.mem_free(), gc.mem_alloc()
+    gc.collect() 
+    after = gc.mem_free(), gc.mem_alloc()
+
+    obj = {
+        "order" : "(free,alloc)",
+        "before" : before,
+        "after" : after,
+        "free_delta" : after[0]-before[0],
+        }
+    
+    req.send_json( obj )
+
 
 import mod3rd
 from mod3rd.admin_esp.wlan import router as router_wlan
@@ -227,6 +255,7 @@ run_not_in_sample_mode = True
 if run_not_in_sample_mode:
     serv.start( generators = [
             router_wlan,
+            status,
         ])
 
 debug_mode = True
