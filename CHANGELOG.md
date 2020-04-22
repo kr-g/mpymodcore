@@ -23,8 +23,8 @@
  - added `switch` to [`FiberWorker`](https://github.com/kr-g/mpymodcore/blob/master/samples/untested/fiber_worker.py)
   as simple approach for scheduling and balancing workload to a given overall system reaction time
 - added `sleep_ms` and `waitfor_ms` to `FiberWorker`
-- 
-
+- added new [`samples`](https://github.com/kr-g/mpymodcore/blob/master/samples)
+-
 
 
 ### backlog
