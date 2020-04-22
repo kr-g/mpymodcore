@@ -81,7 +81,7 @@
 ## version v0.0.5
 
 - added Guard, Detachable, and FiberContext in
- [`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
+ [`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modext/fiber/core.py)
  module
 - added fiber samples
 - added performance counters to fiber loop
@@ -96,7 +96,7 @@
 ## version v0.0.4 
 
 - support for long running tasks (without asyncio) with
- [`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modcore/fiber.py)
+ [`fiber`](https://github.com/kr-g/mpymodcore/blob/master/modext/fiber/core.py)
  (wrapper around performance optimized generator functions)
 - FormDataDecodeFilter for decoding "%" chars in form data
 
