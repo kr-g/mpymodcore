@@ -34,6 +34,7 @@
 - ~~tls/ssl support~~
 - rework api in @get and @post, so that accessing request parameter, and data needs less complex code
 - fiber and fiber call stack, fiber api change
+- fiber stream integration
 - WindUp configuration rework
 - code review 
 - package structure
