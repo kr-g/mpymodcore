@@ -1,7 +1,7 @@
 
 # Changelog
 
-## next version v0.0.8
+## version v0.0.8
 
 - added `ntp-sync` event to ntp module, after sync was done sucessfully `ntp` event is raised
 - added custom configurable event to fire to `moddev.interval`
