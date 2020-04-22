@@ -386,7 +386,7 @@ def sample():
                     stat,rc,err = yield from self.waitfor_ms( self.wait_var_w1, 250 )
                     print( "w1 waiting result", stat,rc, err )
                     
-                yield 
+                #yield 
 
 
         global fl
@@ -430,6 +430,7 @@ def sample():
         next(fl)
         
         # this is not really recommendet
+        # checking inner state of w2, and stop after 12 iterations
         while w2.done == None and w2.soft_sleep<12:
             next(fl)
         
