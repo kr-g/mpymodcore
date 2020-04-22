@@ -124,5 +124,7 @@ source/ sample code also there
 
 ### :heart: Credits
 
-Developed with [Thonny](https://github.com/thonny/thonny) :+1:
+Running on [`MicroPython`](http://micropython.org/), more about the project on [`github`](https://github.com/micropython/micropython) :+1:
+
+Developed with [`Thonny`](https://github.com/thonny/thonny) :+1:
     
