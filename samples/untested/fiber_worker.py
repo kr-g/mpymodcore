@@ -112,8 +112,9 @@ class TimerSupport(object):
 
 class FiberWorkerLoop(TimerSupport):
     
-    def __init__(self, react_time_ms=None, debug=True, timer=True ):
+    def __init__(self, name=None, react_time_ms=None, debug=True, timer=True ):
         TimerSupport.__init__(self)
+        self.name = name
         self.debug = debug
         self.timer = timer
         self.worker = []
@@ -161,11 +162,11 @@ class FiberWorkerLoop(TimerSupport):
                 next(w)
                 
             except StopIteration as ex:
-                self.debug and print( self.__class__.__name__, ex.__class__.__name__, tid(w), ex )                
+                self.debug and print( self.__class__.__name__, self.name, ex.__class__.__name__, tid(w), ex )                
                 pass
 
             except Exception as ex:
-                self.debug and print( self.__class__.__name__, ex.__class__.__name__, tid(w), ex )
+                self.debug and print( self.__class__.__name__, self.name, ex.__class__.__name__, tid(w), ex )
                 pass
         self.timer and self.stop_timer()
             
@@ -187,7 +188,7 @@ class FiberWorker(object):
         
     def reset(self, reason="reset" ):
         self.kill(reason)
-        self.debug and print( self.__class__.__name__, "reset", reason, tid(self),)
+        self.debug and print( self.__class__.__name__, "reset", reason, tid(self), self.floop.name)
         self.rc = None
         self.err = None
         self.done = None
@@ -206,7 +207,7 @@ class FiberWorker(object):
         self.resume("start")
         
     def resume(self,reason="resume"):
-        self.debug and print( self.__class__.__name__, "resume", reason, tid(self),) 
+        self.debug and print( self.__class__.__name__, "resume", reason, tid(self), self.floop.name)
         try:
             if self._run or self.floop==None:
                 return
@@ -215,7 +216,7 @@ class FiberWorker(object):
             self._run = True            
         
     def suspend(self,reason="suspend"):
-        self.debug and print( self.__class__.__name__, "suspend", reason, tid(self),)
+        self.debug and print( self.__class__.__name__, "suspend", reason, tid(self), self.floop.name)
         try:
             if not self._run or self.floop==None:
                 return
@@ -224,7 +225,7 @@ class FiberWorker(object):
             self._run = False            
 
     def kill(self, reason="kill" ):
-        self.debug and print( self.__class__.__name__, "kill", reason, tid(self),)
+        self.debug and print( self.__class__.__name__, "kill", reason, tid(self), self.floop.name)
         self.suspend(reason)
         self._inner = None
         #untested
@@ -251,7 +252,7 @@ class FiberWorker(object):
             return 
         if time.ticks_diff( self._switch_time, time.ticks_ms() )>0:
             return False
-        self.debug and print( self.__class__.__name__, "switch", tid(self),)
+        self.debug and print( self.__class__.__name__, "switch", tid(self), self.floop.name)
         yield
         return True
 
@@ -268,7 +269,7 @@ class FiberWorker(object):
                 #raise FiberWaitTimeout()
             yield          
         
-    def spawn_fiber(self, worker):
+    def spawn_fiber(self, worker ):
         self.suspend("spawn")
         worker.parent=self
         worker.resume("spawn-start")
@@ -283,8 +284,10 @@ class FiberWorker(object):
 
         return 1234567890
 
-    def spawn(self, func, **kwargs ):
-        worker = FiberWorker( func=func, workerloop=self.floop, debug=self.debug, **kwargs )        
+    def spawn(self, func, workerloop=None, **kwargs ):
+        if workerloop==None:
+            workerloop=self.floop
+        worker = FiberWorker( func=func, workerloop=workerloop, debug=self.debug, **kwargs )        
         return self.spawn_fiber(worker)
 
     def _done_revoke_parent(self,reason="worker-done"):
@@ -348,11 +351,17 @@ def sample():
             # return value in rc
             yield 153
 
+        fl_outer = FiberWorkerLoop(react_time_ms=250,name="!!!!loop2!!!!")
+
         def w2func(self):
-            
+
+            self.soft_sleep = 0
+
             try:
                 print("spawn to w2subfunc", tid(self))
-                rc = yield from self.spawn( func= w2subfunc )
+                # this spawns to an other workerloop, suspends this one and resumes after done
+                # in case the worker errors an exception is raised here!
+                rc = yield from self.spawn( func= w2subfunc, workerloop=fl_outer )
                 print("return from w2subfunc", rc, tid(self) )
             except Exception as ex:
                 print( "excep in w2subfunc", ex, tid(self) )
@@ -368,7 +377,6 @@ def sample():
             sw = yield from self.switch()
             print( "switched", sw )
                   
-            self.soft_sleep = 0
             c = 1
             stat = None
             while True:
@@ -390,7 +398,7 @@ def sample():
 
 
         global fl
-        fl = FiberWorkerLoop(react_time_ms=250)
+        fl = FiberWorkerLoop(name="main", react_time_ms=250)
 
         # fiber class and function usage
         w1 = w1func( workerloop=fl, a=5, b=6 )
@@ -433,9 +441,11 @@ def sample():
         # checking inner state of w2, and stop after 12 iterations
         while w2.done == None and w2.soft_sleep<12:
             next(fl)
+            # execute both loops
+            next (fl_outer)
         
         #print(fl)
-
+        print(fl_outer)
 
 sample()
 

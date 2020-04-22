@@ -24,7 +24,8 @@
   as simple approach for scheduling and balancing workload to a given overall system reaction time
 - added `sleep_ms` and `waitfor_ms` to `FiberWorker`
 - added new [`samples`](https://github.com/kr-g/mpymodcore/blob/master/samples)
--
+- fiber worker can spawn now into an different workerloop for execution (e.g. loop with higher prio)
+- 
 
 
 ### backlog
