@@ -25,11 +25,13 @@ LOGLEVEL="loglevel" ##todo
 
 GC="gc"
 
+PIN="pin"
+
 
 class ControlServer(Module):
 
     def watching_events(self):
-        return [RESTART,GC,STATUS,] 
+        return [RESTART,GC,STATUS,PIN,] 
     
     def loop(self,config=None,event=None):
         
@@ -65,7 +67,23 @@ class ControlServer(Module):
             after = gc.mem_free(), gc.mem_alloc()
             self.info( GC, "(free,alloc)", "before", before )
             self.info( GC, "(free,alloc)", "after", after )
-        
+
+        if self.is_event(event,PIN):
+            try:
+                pinno, mode = val.split(":")
+                pinno = int(pinno)
+                pin = machine.Pin( pinno, machine.Pin.OUT )
+                mode = mode.lower()
+                if mode not in ["on","off","toggle",]:
+                    raise Exception("mode not supported", mode )
+                if mode == "on":
+                    pin.on()
+                if mode == "off":
+                    pin.off()
+                if mode == "toggle":
+                    pin.value( not pin.value() )
+            except Exception as ex:
+                self.warn( ex, "failed", val )
     
 control_serv = ControlServer("watchdog")
 modc.add( control_serv )
