@@ -112,12 +112,12 @@ class TimerSupport(object):
 
 class FiberWorkerLoop(TimerSupport):
     
-    def __init__(self, react_time_ms=250, debug=True, timer=True ):
+    def __init__(self, react_time_ms=None, debug=True, timer=True ):
         TimerSupport.__init__(self)
         self.debug = debug
         self.timer = timer
         self.worker = []
-        self.react_time = react_time_ms/1000
+        self.react_time = react_time_ms/1000 if react_time_ms!=None else None
         
     def append(self, worker ):
         self.worker.append(worker)
@@ -149,14 +149,16 @@ class FiberWorkerLoop(TimerSupport):
         return self
     
     def __next__(self):
-        
-        tpf = self._schedule()
-        
+                
+        ## todo measure_timer ?
         self.timer and self.start_timer()
         for w in self.worker:
             
-            tep = time.ticks_add( tpf, time.ticks_ms() )
-            w._switch_time = tep
+            tpf = self._schedule()
+            if tpf!=None:
+                w._switch_time = time.ticks_add( tpf, time.ticks_ms() )
+            else:
+                w._switch_time = None
             
             try:
                 next(w)
@@ -345,7 +347,7 @@ def sample():
             print("sleep", time.time(), self._switch_time)
             
             # block this fiber !!!
-            time.sleep_ms(200) # decrease this to see switch control below
+            time.sleep_ms(300) # decrease this to see switch control below
             
             print("wake")
             
@@ -375,7 +377,7 @@ def sample():
 
 
         global fl
-        fl = FiberWorkerLoop()
+        fl = FiberWorkerLoop(react_time_ms=250)
 
         w1 = FiberWorker( func=w1func, workerloop=fl, a=3 )
         w2 = FiberWorker( func=w2func, workerloop=fl, a=15 )
@@ -417,7 +419,7 @@ def sample():
         while w2.done == None and w2.soft_sleep<12:
             next(fl)
         
-        print(fl)
+        #print(fl)
 
 
 sample()
