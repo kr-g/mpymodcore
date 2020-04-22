@@ -175,9 +175,9 @@ class FiberWaitTimeout(Exception):
 
 class FiberWorker(object):
     
-    def __init__(self, func, workerloop=None, parent=None, debug=True, **kwargs ):
+    def __init__(self, func=None, workerloop=None, parent=None, debug=True, **kwargs ):
         self.debug = debug
-        self.func = func
+        self.func = func 
         self.floop = workerloop
         self.parent = parent
         self._run = False
@@ -191,7 +191,16 @@ class FiberWorker(object):
         self.rc = None
         self.err = None
         self.done = None
-        self._inner = self.func(self)
+        self._inner = self.__fiber__()
+        self.init()
+        
+    def __fiber__(self):
+        if self.func==None:
+            raise Exception("no fiber defined, or __fiber__ overloaded")
+        return self.func(self)
+    
+    def init(self):
+        pass
         
     def start(self):
         self.resume("start")
@@ -308,15 +317,22 @@ def sample():
 #    with TestRecorder("fiber-worker-sample",record=False,nil=True,\
 #                      dest_dir = "./") as tr:
 
-        def w1func(self):
-            c = 0
-            while True:
-                c+=1
-                if c>100:
-                    break
-                print("w1", c, self.kwargs, tid(self) )
-                yield 
-           
+        # a fiber class 
+        class w1func(FiberWorker):
+
+            def init( self ):
+                print("args", self.kwargs )
+
+            def __fiber__(self):
+                c = 0
+                while True:
+                    c+=1
+                    if c>100:
+                        break
+                    print("w1", c, self.kwargs, tid(self) )
+                    yield 
+        
+        # a fiber function
         def w2subfunc(self):
             c=50
             while True:
@@ -376,8 +392,9 @@ def sample():
         global fl
         fl = FiberWorkerLoop(react_time_ms=250)
 
-        w1 = FiberWorker( func=w1func, workerloop=fl, a=3 )
-        w2 = FiberWorker( func=w2func, workerloop=fl, a=15 )
+        # fiber class and function usage
+        w1 = w1func( workerloop=fl, a=5, b=6 )
+        w2 = FiberWorker( func=w2func, workerloop=fl, a=15, c=7 )
         
         w2.wait_var_w1 = w1
             
