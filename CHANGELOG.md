@@ -1,6 +1,27 @@
 
 # Changelog
 
+## next version v0.0.9
+
+- 
+
+
+
+### backlog
+
+- ~~integrate fiber in modext.webserv~~
+- ~~integrate fiber in modcore~~
+- ~~tls/ssl support~~
+- rework api in @get and @post, so that accessing request parameter, and data needs less complex code
+- fiber and fiber call stack, fiber api change
+- fiber stream integration
+- WindUp configuration rework
+- code review 
+- package structure
+- testing
+- documentation
+
+
 ## version v0.0.8
 
 - added `ntp-sync` event to ntp module, after sync was done sucessfully `ntp` event is raised
@@ -29,21 +50,6 @@
  and in [`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py) see config section
 - fiber worker can spawn now into a different workerloop for execution (e.g. loop with higher prio)
 - 
-
-
-### backlog
-
-- ~~integrate fiber in modext.webserv~~
-- ~~integrate fiber in modcore~~
-- ~~tls/ssl support~~
-- rework api in @get and @post, so that accessing request parameter, and data needs less complex code
-- fiber and fiber call stack, fiber api change
-- fiber stream integration
-- WindUp configuration rework
-- code review 
-- package structure
-- testing
-- documentation
 
 
 ## version v0.0.7
