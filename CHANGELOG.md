@@ -25,7 +25,8 @@
  - added `switch` to [`FiberWorker`](https://github.com/kr-g/mpymodcore/blob/master/samples/untested/fiber_worker.py)
   as simple approach for scheduling and balancing workload to a given overall system reaction time
 - added `sleep_ms` and `waitfor_ms` to `FiberWorker`
-- added new [`samples`](https://github.com/kr-g/mpymodcore/blob/master/samples)
+- added new samples in [`samples`](https://github.com/kr-g/mpymodcore/blob/master/samples)
+ and in [`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py) see config section
 - fiber worker can spawn now into a different workerloop for execution (e.g. loop with higher prio)
 - 
 
