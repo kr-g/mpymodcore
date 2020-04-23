@@ -74,10 +74,10 @@
    by enter an invalid user name it fake's a session with no user / roles /groups, so that
    it possible to see how rejecting a request works.
    try the following URLs to play with it:
-    - http://yourip/login
-    - http://yourip/logout
-    - http://yourip/top-secret # only admin has permission
-    - http://yourip/user-site # only admin and test have permssion
+    - http://your-ip/login
+    - http://your-ip/logout
+    - http://your-ip/top-secret # only admin has permission
+    - http://your-ip/user-site # only admin and test have permssion
   - important: there are no predefined roles/groups, and no default behaviour comes with it.
    the security sub-system only checks if a secured request is matching the user role/group.
    even the 2 example roles/groups in the sample `admin` and `normaluser` are just strings.
