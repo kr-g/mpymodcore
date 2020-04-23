@@ -11,25 +11,29 @@ router = Router( )
 @router.xget("/user/:user/id/:userid")
 def my_form( req, args ):
     
-    par = req.request.xurl
+    par = args.rest
     
+    # traditional approach
     user = par.get("user")
     userid = par.get("userid")
+    logger.info("user, id=", user, userid )
+    
+    # namespace access
+    user = par.user
+    userid = par.userid
     
     logger.info("user, id=", user, userid )
     
     data = """
             <h1>rest url data from the router </h1>
             <div> query parameter = %s </div>
-            <div> post data = %s </div>
-            <div> post type = %s </div>
             <div>  </div>
             <div>  </div>
             <div>  </div>
             <div> hello %s </div>
             <div> id %s  </div>
             """ % (
-                repr( args ), repr( par ), type( par ),
+                repr( args.param ),
                 user, userid,
                 )
     logger.info(data)

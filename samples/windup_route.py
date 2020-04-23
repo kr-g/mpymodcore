@@ -12,7 +12,7 @@ def my_app( req, args ):
     data = """
             <h1>from the router</h1>
             <div> query parameter = %s </div>
-            """ % repr( args )
+            """ % repr( args.param )
     logger.info(data)
     req.send_response( response=data )
 

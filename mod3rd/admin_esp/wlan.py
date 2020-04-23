@@ -72,10 +72,11 @@ def my_form( req, args ):
 @router.post("/wlan")
 def my_form( req, args ):
     
-    form = req.request.xform
+    form = args.form
     
-    ssid = netw[ form[ "fwifi" ]]
-    passwd = form[ "fpasswd" ]
+    # namespace     
+    ssid = netw[ form.fwifi ]
+    passwd = form.fpasswd
     
     data = """
             <h1>WLAN configuration saved</h1>

@@ -177,7 +177,7 @@ cfg = {
         "boot_btn:fire_on_up" : True, # default, fires when releasing
         #"boot_btn:event" : "status:mem_1", # event to fire
         #"boot_btn:event" : "pin:21:toggle", # toggle led on pin 21
-        "boot_btn:event" : ["gc","pin:21:toggle",], # raise 2 events
+        "boot_btn:event" : ["pin:21:toggle","gc",], # raise 2 events
 
         "alarm_counter" : None, # not configured
         "alarm_counter:delta_period" : 5,
@@ -245,6 +245,23 @@ def get_gc(req,args):
         }
     
     req.send_json( obj )
+
+@status.xget("/pin/:pin/:mode")
+def get_pin(req,args):
+    
+    # namespaced objects
+    logger.info( "sid cookie", args.cookies.sessionid )
+    
+    logger.info("session_id", args.session.xsession_id )
+    logger.info("rest parameter", args.rest )
+    
+    # keep the variable to avoid dict lookups -> performance
+    rest = args.rest
+    logger.info("pin", rest.pin )
+    # avoid this -> dict lookup
+    logger.info("mode", args.rest.mode )
+    
+    req.send_response( response="ok" )
 
 
 import mod3rd

@@ -54,17 +54,16 @@ class WindUp(LogSupport):
     def headerfilter_default(self):
         # depending on app needs filter are added, or left out
         headerfilter = [
+                        # keep them at the top
                         CookieFilter(),
                         store.pre_filter(),
                         # keep them together
                         PathSplitFilter(),
                         XPathDecodeFilter(),
+                        XPathSlashDenseFilter(),                        
                         ParameterSplitFilter(),
                         ParameterValueFilter(),
                         ParameterPackFilter(),
-                        # optional
-                        XPathSlashDenseFilter(),
-                        # optional dense len(list)==1 to single element 
                         ParameterDenseFilter(),
                         #
                      ]

@@ -2,6 +2,65 @@
 from modcore.log import LogSupport
 
 
+class Namespace(object):
+    
+    def update(self, val_dict ):
+        for key in val_dict:
+            data = val_dict[key]
+            self.set_attr(key,data) # recursion        
+    
+    def set_attr(self,nam,val):
+        dot = nam.split(".")
+        if len(dot)==1:
+            if type(val)==dict:
+                child = Namespace()
+                child.update( val )
+                val = child
+            setattr(self,nam,val)
+        else:
+            elem = self
+            for d_name in dot[:-1]:
+                d_name = d_name.strip()
+                if len(d_name)==0:
+                    raise Exception("malformed dotted name specifier")
+                if d_name in elem:
+                    elem = elem[d_name]
+                    continue
+                new_elem = Namespace()
+                setattr( elem, d_name, new_elem )
+                elem = new_elem
+            setattr(elem,dot[-1],val)
+
+    def __setitem__(self,key,val):
+        return self.set_attr(key,val)
+
+    def __delitem__(self,key):
+        return delattr(self,key)
+
+    def __getitem__(self,key):
+        return getattr(self,key)
+
+    def get(self,key,default=None):
+        return self.__dict__.get(key,default)
+
+    def __iter__(self):
+        for attr in self.__dict__:
+            yield attr
+            
+    def __repr__(self):
+        s = "{ "
+        for attr in self:
+            s += attr + " : "
+            val = getattr( self, attr )
+            if type(val)==str:
+                s += "'" + str(val) + "'"
+            else:
+                s += str(val) 
+            s += ", "
+        s += "}"
+        return s
+
+
 class Processor(LogSupport):
     
     def __init__(self,windup):
@@ -22,16 +81,12 @@ class Processor(LogSupport):
         self.info( "request content len", len( req ) )
                 
         request = req.request
+        
+        request.xargs = Namespace()
+        
         for f in self.windup.headerfilter:
             f.filterRequest( request )
         
-        # check logging level...
-        if self.info():
-            self.info( "cookies",request.xcookies )
-            self.info( "xsession_is_new", request.xsession_is_new )
-            self.info( "xpath", request.xpath )
-            self.info( "xpar", request.xpar )                      
-
         req.load_content( max_size=4096 )
         if req.overflow == True:
             # if bodydata is too big then no data is loaded automatically
@@ -48,11 +103,8 @@ class Processor(LogSupport):
             for f in self.windup.bodyfilter:
                 f.filterRequest( request )
                 
-            if self.info():
-                self.info( "xform", request.xform )                      
-                self.info( "xjson", request.xjson )                      
-                #self.info( "xurl", request.xurl )                              
-        
+        self.info( "xargs", request.xargs )
+
         # after auto cleanup with filter this can be None
         body = req.request.body 
         if body!=None:

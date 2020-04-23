@@ -17,10 +17,11 @@ router = Router( )
 @router.get("/login")
 def my_form( req, args ):
 
-    session = req.request.xsession
+    session = args.session
     
     logger.info( session )
 
+    # a not recommended scnario ... 
     # get the last login name, or default 
     login = session.get("user", "")
 
@@ -52,11 +53,11 @@ def my_form( req, args ):
 @router.post("/login")
 def my_form( req, args ):
     
-    session = req.request.xsession
-
     # get the form data
-    user = req.request.xform.get("fname")
+    user = args.form.fname
 
+    session = args.session
+    
     # get the login from the session
     login = session.get("user")
 
@@ -81,17 +82,20 @@ def my_form( req, args ):
 @router("/logout")
 def my_form( req, args ):
 
-    session = req.request.xsession
+    session = args.session
     
     # get the login from the session
-    login = session.get("user")
-    logger.info( "logging out", login )
+    login_get = session.get("user")
+
+    # or using namespace access
+    login = session.user
+    
+    logger.info( "logging out", login, login_get )
     
     # set the xsession to None will destory the session
-    req.request.xsession = None
+    args.session = None
     
     req.send_redirect( url="/login" )
-
 
 
 def serve():
@@ -108,5 +112,4 @@ def serve():
         logger.info("cntrl+c")
     finally:
         serv.stop()
-
 

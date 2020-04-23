@@ -2,6 +2,7 @@
 import time
 
 from modcore.log import LogSupport
+from .proc import Namespace
 from .filter import Filter
 
 
@@ -47,8 +48,15 @@ class SessionLoad(Filter):
         request.xsession_id = sid
         request.xsession = sess
         
+        xargs = request.xargs
+        xargs.set_attr("session", request.xsession)        
+        
         self.info( "sid", request.xsession_id, "created", request.xsession_is_new )
         
+        # untested
+        if self.cleanup:
+            del sess[SID]
+            del sess[EXPIRES]
 
 class SessionSave(Filter):
     
@@ -58,7 +66,9 @@ class SessionSave(Filter):
 
     def filterRequest( self, request ):
         
-        if request.xsession==None:
+        xargs = request.xargs
+        
+        if request.xsession==None or ("session" not in xargs) or xargs.session==None:
             if request.xsession_id!=None:
                 self.session_store.destroy( request.xsession_id )
         else:
@@ -96,7 +106,8 @@ class SessionStore(LogSupport):
 
         self.info("create", sid )
 
-        session = { SID : sid, CREATED : time.time() }
+        session = Namespace()
+        session.update( { SID : sid, CREATED : time.time() } )
         self.renew(session)
         self.sessions[sid] = session
         

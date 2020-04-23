@@ -36,12 +36,12 @@ class Router(ContentGenerator):
             
             if cond and ( method==None or method==request.method ):
                 self.info( "found route", self.root, to, method, func )
-                para = request.xpar
+
+                args = request.xargs
                 if xtract:
-                    request.xurl = xurl
-                if para==None:
-                    para = {}
-                f = func( req, para )
+                    args.set_attr( "rest", xurl )
+                    
+                f = func( req, args )
                 return True
         
     def _append(self,to,method,func,xtract):

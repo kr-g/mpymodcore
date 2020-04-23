@@ -20,7 +20,7 @@ router = Router( )
 def my_json_get( req, args ):
 
     data = {
-        "args" : args
+        "args" : args.param
         }
     
     logger.info(data)
@@ -32,14 +32,14 @@ def my_json_get( req, args ):
 @router.post("/json")
 def my_json_post( req, args ):
     
-    body = req.request.xjson
+    body = args.json
     
     data = """
             <h1>json from the router </h1>
             <div> query parameter = %s </div>
             <div> post data = %s </div>
             <div> post type = %s </div>
-            """ % ( repr( args ), repr( body ), type( body ) )
+            """ % ( repr( args.param ), repr( body ), type( body ) )
     logger.info(data)
     req.send_response( response=data )
 

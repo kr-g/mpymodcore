@@ -24,11 +24,15 @@ class Filter(LogSupport):
 class PathSplitFilter(Filter):
     
     def filterRequest( self, request ):
-        path, query, fragment = self.split(request.path)        
+        path, query, fragment = self.split(request.path)
+        
         request.xpath = path
         request.xquery = query
         request.xfragment = fragment
 
+        xargs = request.xargs
+        xargs["url"] = { "path" : path, "query" : query, "fragment" : fragment }
+        
         if self.cleanup:
             request.path = None
     
@@ -55,7 +59,10 @@ class XPathSlashDenseFilter(Filter):
             pos = request.xpath.find("//")
             if pos<0:
                 break
+            
             request.xpath = request.xpath[0:pos]+request.xpath[pos+1:]
+            request.xargs.set_attr("url.path",request.xpath)
+            
             found = True
             
 #        if len(request.xpath)>1 and request.xpath[-1]=="/":
@@ -69,6 +76,7 @@ class XPathDecodeFilter(Filter):
     
     def filterRequest( self, request ):
         request.xpath = request.xpath.replace("%20", " ")
+        request.xargs.set_attr("url.path",request.xpath)
         
 
 class ParameterSplitFilter(Filter):
@@ -78,6 +86,7 @@ class ParameterSplitFilter(Filter):
         if request.xquery==None:
             return
         param = self.split(request.xquery)
+        
         request.xparam = param
         
         if self.cleanup:
@@ -126,11 +135,14 @@ class ParameterPackFilter(Filter):
 class ParameterDenseFilter(Filter):
     
     def filterRequest( self, request ):
-        if request.xpar==None:
-            return
-        for k,v in request.xpar.items():
-            if len(v)==1:
-                request.xpar[k]=v[0]
+        
+        if request.xpar!=None:
+            
+            for k,v in request.xpar.items():
+                if len(v)==1:
+                    request.xpar[k]=v[0]
+
+        request.xargs.set_attr("param",request.xpar )
             
  
 class CookieFilter(Filter):
@@ -155,8 +167,10 @@ class CookieFilter(Filter):
                 cookies[k] = v.strip()
         except Exception as ex:
             self.excep(ex,cookie)
+            
         request.xcookies = cookies
- 
+        request.xargs.set_attr("cookies",request.xcookies)
+
         if self.cleanup:
             del request.header[COOKIE_HEADER]
 
@@ -195,11 +209,15 @@ class JsonParserFilter(Filter):
         
         if request.get_mime() in ['application/json','application/ld+json']:
             try:
+                
                 request.xjson = json.loads( request.body )
+                
                 self.info("decoded body data")
             except Exception as ex:
                 self.excep(ex)
-            
+
+            request.xargs.set_attr("json",request.xjson)
+
         if self.cleanup:
             request.body = None
 
@@ -225,7 +243,7 @@ class FormDataFilter(Filter):
                 self.info("decoded body data")
             except Exception as ex:
                 self.excep(ex)
-            
+
         if self.cleanup:
             request.body = None
     
@@ -235,6 +253,7 @@ class FormDataDecodeFilter(Filter):
     def filterRequest( self, request ):
         
         if request.xform == None:
+            request.xargs.set_attr("form", None)
             return
         
         if request.get_mime() in ['application/x-www-form-urlencoded']:
@@ -247,7 +266,9 @@ class FormDataDecodeFilter(Filter):
                 self.info("decoded url data", request.xform )
             except Exception as ex:
                 self.excep(ex)
-            
+
+            request.xargs.set_attr("form", request.xform)
+
     def _conv(self, val):
         
         ## todo not fully compliant
@@ -266,3 +287,4 @@ class FormDataDecodeFilter(Filter):
             else:
                 break
         return val
+

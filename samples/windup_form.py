@@ -48,14 +48,14 @@ def my_form( req, args ):
 @router.post("/form")
 def my_form( req, args ):
     
-    body = req.request.xform
+    body = args.form
     
     data = """
             <h1>form data from the router </h1>
             <div> query parameter = %s </div>
             <div> post data = %s </div>
             <div> post type = %s </div>
-            """ % ( repr( args ), repr( body ), type( body ) )
+            """ % ( repr( args.param ), repr( body ), type( body ) )
     
     logger.info(data)
     req.send_response( response=data )
