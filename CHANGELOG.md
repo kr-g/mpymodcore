@@ -51,6 +51,7 @@
 - ~~integrate fiber in modext.webserv~~
 - ~~integrate fiber in modcore~~
 - ~~tls/ssl support~~
+- WindUp security hardening, user module, secure router with redirect/bad request response
 - fiber and fiber call stack, fiber api change
 - fiber stream integration
 - WindUp configuration rework
