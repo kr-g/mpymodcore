@@ -20,11 +20,11 @@ from modext.windup_auth import AuthRouter
 # omit this to get plain 401
 secured_router = AuthRouter(status=302,location="/custom")
 
-@secured_router("/top-secret",groups=["admin"])
+@secured_router.get("/top-secret",groups=["admin"])
 def tops(req,args):
     req.send_response( response="ok, admin. you have permission" )
 
-@secured_router("/user-site",groups=["normaluser"])
+@secured_router.get("/user-site",groups=["normaluser"])
 def tops(req,args):
     req.send_response( response="ok, buddy. you have permission" )
 
