@@ -3,8 +3,15 @@ import json
 
 from modcore.log import LogSupport
 
-from modext.http.http_func import BadRequestException
+from modext.http.http_func import HTTPRequestException, BadRequestException
 from modext.http.webserv import COOKIE_HEADER
+
+
+class FilterException(Exception):
+    pass
+
+class FilterBadRequestException(FilterException):
+    pass
 
 
 auto_cleanup = False
@@ -215,6 +222,7 @@ class JsonParserFilter(Filter):
                 self.info("decoded body data")
             except Exception as ex:
                 self.excep(ex)
+                raise FilterBadRequestException("invalid json")
 
             request.xargs.set_attr("json",request.xjson)
 

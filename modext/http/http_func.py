@@ -8,13 +8,16 @@ logger.logname = "http"
 
 HTTP_CRLF = "\r\n"
 
-class ConnectionClosedException(Exception):
+class HTTPRequestException(Exception):
     pass
 
-class BadRequestException(Exception):
+class ConnectionClosedException(HTTPRequestException):
     pass
 
-class InternalErrorException(Exception):
+class BadRequestException(HTTPRequestException):
+    pass
+
+class InternalErrorException(HTTPRequestException):
     pass
 
 

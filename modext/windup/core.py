@@ -115,6 +115,13 @@ class WindUp(LogSupport):
                     
         except Exception as ex:
             self.excep( ex )
+            
+            if req!=None and isinstance(ex,FilterException):
+                # failed in early stage
+                # for later stage (generator) content and header
+                # are already send, just close the socket then
+                req.send_response(status=400)
+                
             if exec!=None:
                 exec.kill("run-fail")
                 exec.close()

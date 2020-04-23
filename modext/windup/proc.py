@@ -49,14 +49,16 @@ class Namespace(object):
             
     def __repr__(self):
         s = "{ "
+        deli = ""
         for attr in self:
-            s += attr + " : "
+            s += deli
+            s += '"' + attr + '" : '
             val = getattr( self, attr )
             if type(val)==str:
-                s += "'" + str(val) + "'"
-            else:
+                s += '"' + str(val) + '"'
+            else:                
                 s += str(val) 
-            s += ", "
+            deli = ", "
         s += "}"
         return s
 
@@ -85,7 +87,7 @@ class Processor(LogSupport):
         request.xargs = Namespace()
         
         for f in self.windup.headerfilter:
-            f.filterRequest( request )
+            rc = f.filterRequest( request )
         
         req.load_content( max_size=4096 )
         if req.overflow == True:

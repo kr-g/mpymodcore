@@ -44,6 +44,17 @@ def my_json_post( req, args ):
     req.send_response( response=data )
 
 
+@router.post("/echo")
+def my_json_get( req, args ):
+
+    data = {
+        "echo" : args.json
+        }
+    
+    logger.info(data)
+    req.send_json( obj=data )
+
+
 def serve():
     serv = WindUp()
 
