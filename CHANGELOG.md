@@ -3,16 +3,54 @@
 
 ## next version v0.0.9
 
-- 
+- reworked `Router` api: @get, @xget, @post and @xpost, so that accessing request
+ parameter, and data needs less complex code
+  - the function args parameter has changed __incompatible__ to the former versions!!!
+  - the args parameter is now a namespace, meaning parameter can accessed without
+    string qoutations. here an example following
+    [`REST`](https://en.wikipedia.org/wiki/Representational_state_transfer)
+    having a [`Clean URL`](https://en.wikipedia.org/wiki/Clean_URL)
+    
+        @status.xget("/pin/:pin/:mode")
+        def get_pin(req,args):
+            
+            # namespace access using args...
+            # 
+            logger.info( "sid cookie", args.cookies.sessionid )
+            
+            # probably a bit confusing, but looking on the cookie explains
+            # why the sid is here at an other variable...
+            logger.info("session_id", args.session.xsession_id )
+            
+            # log the rest args
+            logger.info("rest parameter", args.rest )
+            
+            # keep the variable to avoid dict lookups -> performance
+            rest = args.rest
+            logger.info("pin", rest.pin )
+            logger.info("mode", rest.mode )
+            
+            # avoid this -> dict lookup
+            logger.info("mode", args.rest.mode )
+            
+            # do something else here...
+            
+            req.send_response( response="ok" )
 
-
+  - the same applies to session, form, and json data
+    - args.session [.session_variable]*
+    - args.form [.form_field_name]*
+    - args.json [.attr_name]*
+    
+- all `windup_*.py` [`samples`](https://github.com/kr-g/mpymodcore/blob/master/samples)
+ have been updated 
+  
 
 ### backlog
 
 - ~~integrate fiber in modext.webserv~~
 - ~~integrate fiber in modcore~~
 - ~~tls/ssl support~~
-- rework api in @get and @post, so that accessing request parameter, and data needs less complex code
 - fiber and fiber call stack, fiber api change
 - fiber stream integration
 - WindUp configuration rework
