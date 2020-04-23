@@ -48,13 +48,45 @@
 - all `windup_*.py` [`samples`](https://github.com/kr-g/mpymodcore/blob/master/samples)
  have been updated 
   
+- WindUp security hardening, user module, secure router with redirect/bad request response
+  - added `AuthRouter` for checking permissions on role/group based access.
+   the authentication data is saved under
+   `/etc/shadow`.
+   for each user 2 files are required.
+   `_username_.pwd.txt`, and `_username_.grp.txt`. first contain the hashed password, and
+   second contains the roles/groups the user belongs too. 
+   some sample code:
+  
+        from modext.windup_auth import AuthRouter
+
+        secured_router = AuthRouter()
+
+        @secured_router("/top-secret",groups=["admin"])
+        def tops(req,args):
+            req.send_response( response="ok, admin. you have permission" )
+
+        @secured_router("/user-site",groups=["normaluser"])
+        def tops(req,args):
+            req.send_response( response="ok, buddy. you have permission" )
+           
+  - added one example windup_security.py. there are 2 predefined users `test` and `admin`.
+   by enter an invalid user name it fake's a session with no user / roles /groups, so that
+   it possible to see how rejecting a request works.
+   try the following URLs to play with it:
+    - http://yourip/login
+    - http://yourip/logout
+    - http://yourip/top-secret # only admin has permission
+    - http://yourip/user-site # only admin and test have permssion
+
+-
+
 
 ### backlog
 
 - ~~integrate fiber in modext.webserv~~
 - ~~integrate fiber in modcore~~
 - ~~tls/ssl support~~
-- WindUp security hardening, user module, secure router with redirect/bad request response
+- ~~WindUp security hardening, user module, secure router with redirect/bad request response~~
 - fiber and fiber call stack, fiber api change
 - fiber stream integration
 - WindUp configuration rework

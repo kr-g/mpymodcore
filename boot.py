@@ -264,6 +264,23 @@ def get_pin(req,args):
     req.send_response( response="ok" )
 
 
+# fake login just with user name, no password check
+from samples.windup_session import router as login_router
+
+from modext.windup_auth import AuthRouter
+
+secured_router = AuthRouter()
+
+@secured_router("/top-secret",groups=["admin"])
+def tops(req,args):
+    req.send_response( response="ok, admin. you have permission" )
+
+@secured_router("/user-site",groups=["normaluser"])
+def tops(req,args):
+    req.send_response( response="ok, buddy. you have permission" )
+
+
+
 import mod3rd
 from mod3rd.admin_esp.wlan import router as router_wlan
 
@@ -275,6 +292,8 @@ if run_not_in_sample_mode:
     serv.start( generators = [
             router_wlan,
             status,
+            login_router,
+            secured_router,
         ])
 
 debug_mode = True

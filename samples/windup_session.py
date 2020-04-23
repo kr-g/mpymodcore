@@ -3,6 +3,7 @@ from modcore.log import logger
 
 from modext.windup import WindUp, Router
 
+from modext.windup_auth import security_store
 
 router = Router( )
 
@@ -64,6 +65,10 @@ def my_form( req, args ):
     # just set the name in the session
     # thats all
     session["user"] = user
+    
+    # just load the user if available
+    session.update({ "auth_user" : security_store.find_user(user) } )
+    
 
     data = """
             <h2> Login result </h2>
