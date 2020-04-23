@@ -5,8 +5,8 @@
 
 - reworked `Router` api: @get, @xget, @post and @xpost, so that accessing request
  parameter, and data needs less complex code
-  - the function args parameter has changed __incompatible__ to the former versions!!!
-  - the args parameter is now implemented as a namespace, meaning parameter can accessed without
+  - the function `args` parameter has changed __incompatible__ to the former versions!!!
+  - the `args` parameter is now implemented as a namespace, meaning parameter can accessed without
     string quotations and using dict. here an example following
     [`REST`](https://en.wikipedia.org/wiki/Representational_state_transfer)
     having a [`Clean URL`](https://en.wikipedia.org/wiki/Clean_URL)
