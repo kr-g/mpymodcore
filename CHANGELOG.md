@@ -42,7 +42,7 @@
     - args.form [.form_field_name]*
     - args.json [.attr_name]*
     
-  - the 'old' method of accessing those data via `req.request.x[form|json|args|session]`
+  - the 'old' method of accessing this data via `req.request.x[form|json|args|session]`
    is still possible, but will be removed in the future
     
 - all `windup_*.py` [`samples`](https://github.com/kr-g/mpymodcore/blob/master/samples)
