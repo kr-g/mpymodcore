@@ -53,8 +53,8 @@
    the authentication data is saved under
    `/etc/shadow`.
    for each user 2 files are required.
-   `_username_.pwd.txt`, and `_username_.grp.txt`. first contain the hashed password, and
-   second contains the roles/groups the user belongs too. 
+   `_username_.pwd.txt`, and `_username_.grp.txt`. first contains the hashed password, and
+   second contains the roles/groups the user belongs too. the roles are separeted by `:`.
    some sample code:
   
         from modext.windup_auth import AuthRouter
@@ -69,7 +69,8 @@
         def tops(req,args):
             req.send_response( response="ok, buddy. you have permission" )
            
-  - added one example windup_security.py. there are 2 predefined users `test` and `admin`.
+  - added one example [windup_security.py](https://github.com/kr-g/mpymodcore/blob/master/samples/windup_security.py). 
+   there are 2 predefined users `test` and `admin`.
    by enter an invalid user name it fake's a session with no user / roles /groups, so that
    it possible to see how rejecting a request works.
    try the following URLs to play with it:
@@ -77,7 +78,10 @@
     - http://yourip/logout
     - http://yourip/top-secret # only admin has permission
     - http://yourip/user-site # only admin and test have permssion
-
+  - important: there are no predefined roles/groups, and no default behaviour comes with it.
+   the security sub-system only checks if a secured request is matching the user role/group.
+   even the 2 example roles/groups in the sample `admin` and `normaluser` are just strings.
+   
 -
 
 
