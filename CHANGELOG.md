@@ -11,7 +11,7 @@
     [`REST`](https://en.wikipedia.org/wiki/Representational_state_transfer)
     having a [`Clean URL`](https://en.wikipedia.org/wiki/Clean_URL)
     
-        @status.xget("/pin/:pin/:mode")
+        @router.xget("/pin/:pin/:mode")
         def get_pin(req,args):
             
             # namespace access using args...
