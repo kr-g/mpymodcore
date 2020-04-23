@@ -81,7 +81,8 @@
   - important: there are no predefined roles/groups, and no default behaviour comes with it.
    the security sub-system only checks if a secured request is matching the user role/group.
    even the 2 example roles/groups in the sample `admin` and `normaluser` are just strings.
-   
+   e.g. the admin user has 2 roles/groups [assigned](https://github.com/kr-g/mpymodcore/tree/master/etc/shadow).
+   these are: admin, and normaluser.
 -
 
 
