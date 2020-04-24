@@ -80,10 +80,15 @@ def my_form( req, args ):
     password = args.form.passwd
 
     session = args.session
+    login_ok = False
     
     user = security_store.find_user(username)
-    login_ok = security_store.check_password( user, password )
     
+    try:
+        login_ok = security_store.check_password( user, password )
+    except:
+        pass
+        
     session["user"] = username
     
     if login_ok:
