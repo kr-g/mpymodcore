@@ -83,8 +83,8 @@
    even the 2 example roles/groups in the sample `admin` and `normaluser` are just strings.
    e.g. the admin user has 2 roles/groups [assigned](https://github.com/kr-g/mpymodcore/tree/master/etc/shadow).
    these are: admin, and normaluser.
-- added `mod3rd.admin_user.login` module. handling of login and logout with checking password.
- under `/etc/shadow` there are 2 sample user. `test` and `admin` both pasword `test`
+- added `mod3rd.admin_user.login` module. handling of URL `/login` and `/logout` with checking password.
+ under `/etc/shadow` there are 2 sample user. `test` and `admin` both password `test`
 - 
 
 
