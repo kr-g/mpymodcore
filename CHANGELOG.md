@@ -98,9 +98,9 @@
 - fiber and fiber call stack, fiber api change
 - fiber stream integration
 - WindUp configuration rework
-- code review 
+- code review, coding standards
 - package structure
-- testing
+- testing, automatic testing
 - documentation
 
 
