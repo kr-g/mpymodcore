@@ -39,7 +39,7 @@
 
   - the same applies to session, form, and json data
     - args.session [.session_variable]*
-    - args.form [.form_field_name]*
+    - args.form [.form_field_name]
     - args.json [.attr_name]*
     
   - the 'old' method of accessing this data via `req.request.x[form|json|args|session]`
