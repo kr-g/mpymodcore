@@ -56,17 +56,16 @@ class Authentication(LogSupport):
        
     def find_user( self, username ):
         user = Namespace()
-        user["name"] = username
+        user["name"] = username.lower()
         self._get_password(user)
         self._get_groups(user)
         return user
        
     def check_group( self, user, groups ):
         self.info( "checking", user, groups )
-        for g in groups:
-            if g.lower() not in user.groups:
-                return False        
-    
+        for g in user.groups:
+            if g in groups:
+                return True
 
 security_store = None
 

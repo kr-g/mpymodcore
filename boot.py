@@ -272,7 +272,7 @@ secured_router = AuthRouter()
 def tops(req,args):
     req.send_response( response="ok, admin. you have permission" )
 
-@secured_router("/user-site",groups=["normaluser"])
+@secured_router("/user-site",groups=["normaluser", "restricted"])
 def tops(req,args):
     req.send_response( response="ok, buddy. you have permission" )
 

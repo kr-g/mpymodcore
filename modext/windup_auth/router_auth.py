@@ -35,7 +35,7 @@ class AuthRouter(Router):
             if "auth_user" not in session:
                 raise Exception("not logged in")
             allowed = security_store.check_group( session.auth_user, groups )
-            if allowed==False:
+            if not allowed:
                 raise Exception("no matching groups")
         except Exception as ex:
             self.excep( ex, "permission failed" )
