@@ -264,9 +264,6 @@ def get_pin(req,args):
     req.send_response( response="ok" )
 
 
-# fake login just with user name, no password check
-from samples.windup_session import router as login_router
-
 from modext.windup_auth import AuthRouter
 
 secured_router = AuthRouter()
@@ -283,6 +280,7 @@ def tops(req,args):
 
 import mod3rd
 from mod3rd.admin_esp.wlan import router as router_wlan
+from mod3rd.admin_user.login import router as router_login
 
 logger.info("config done. start windup.")
 
@@ -291,8 +289,8 @@ run_not_in_sample_mode = True
 if run_not_in_sample_mode:
     serv.start( generators = [
             router_wlan,
+            router_login,
             status,
-            login_router,
             secured_router,
         ])
 
