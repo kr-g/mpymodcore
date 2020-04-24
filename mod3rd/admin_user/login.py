@@ -92,6 +92,12 @@ def my_form( req, args ):
         req.send_redirect( url="/" )
         return
    
+    try:
+        # in case a already valid user returned ...
+        del session.auth_user
+    except:
+        pass
+    
     session["notify"] = "Login failed."
     
     logger.info("failed login",username)
