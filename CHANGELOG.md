@@ -84,7 +84,7 @@
    e.g. the admin user has 2 roles/groups [assigned](https://github.com/kr-g/mpymodcore/tree/master/etc/shadow).
    these are: admin, and normaluser.
 - added `mod3rd.admin_user.login` module. handling of URL `/login` and `/logout` with checking password.
- under `/etc/shadow` there are 2 sample user. `test` and `admin` both password `test`
+ under `/etc/shadow` there are 3 sample user. `admin`,`test`, and `john` all password `test`
 - 
 
 
