@@ -429,4 +429,17 @@ back
 remove dev_id
 
 """
+"""
+notes:
+
+bluetooth core spec v5.2 - vol 3 part c section 5
+
+micropython github
+https://github.com/micropython/micropython/pull/5051 
+
+master branch / extmod / modbluetooth.h|c
+
+
+
+"""
 
