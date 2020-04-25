@@ -87,7 +87,7 @@
  under `/etc/shadow` there are 3 sample user. `admin`,`test`, and `john` all password `test`
 - added first draft for `Bluetooth®` [`GATT`](https://www.bluetooth.com/de/specifications/gatt/characteristics/)
  support under [`samples/untested`](https://github.com/kr-g/mpymodcore/tree/master/samples/untested)
-
+- 
 
 
 ### backlog
@@ -96,6 +96,8 @@
 - ~~integrate fiber in modcore~~
 - ~~tls/ssl support~~
 - ~~WindUp security hardening, user module, secure router with redirect/bad request response~~
+- Bluetooth®
+- MQTT
 - fiber and fiber call stack, fiber api change
 - fiber stream integration
 - WindUp configuration rework
