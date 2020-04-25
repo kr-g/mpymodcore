@@ -432,7 +432,11 @@ remove dev_id
 """
 notes:
 
-bluetooth core spec v5.2 - vol 3 part c section 5
+security:
+bluetooth core spec v5.2
+- vol 3 part c section 5
+- vol 3 part g section 8
+- vol 6 part e - low energy link layer security
 
 micropython github
 https://github.com/micropython/micropython/pull/5051 
