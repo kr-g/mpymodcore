@@ -85,7 +85,7 @@
    these are: admin, and normaluser.
 - added `mod3rd.admin_user.login` module. handling of URL `/login` and `/logout` with checking password.
  under `/etc/shadow` there are 3 sample user. `admin`,`test`, and `john` all password `test`
-- 
+- added first draft for `Bluetooth®` support under [`samples/untested`](https://github.com/kr-g/mpymodcore/tree/master/samples/untested)
 
 
 
