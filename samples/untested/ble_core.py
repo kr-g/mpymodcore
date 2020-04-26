@@ -432,11 +432,11 @@ list-attributes
 select-attribute _long_characteristic_name_ (not uuid!!!)
 
 -> for system id, and clock -> read
--> for led -> write [0|1|2] => on|off|toggle
+-> for led -> write [0|1|2] => on|off|toggle (write cmd bluetoothctl)
 
 => enhanced sample for clock
 notify on
--> clock.write() -> update on connected pc
+-> clock.write() -> update on connected pc (write executed from repl)
 
 back
 remove dev_id
