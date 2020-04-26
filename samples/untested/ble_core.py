@@ -66,7 +66,8 @@ _ADV_TYPE_APPEARANCE = const(0x19)
 
 
 # Generate a payload to be passed to gap_advertise(adv_data=...).
-def advertising_payload(limited_disc=False, br_edr=False, name=None, services=None, appearance=0):
+def advertising_payload(limited_disc=False, br_edr=False, name=None, \
+                        services=None, appearance=0):
     payload = bytearray()
 
     def _append(adv_type, value):
@@ -241,7 +242,8 @@ class Bluetooth(object):
         for servk in self.services.keys():
             keys.append(servk)
             flatten = list()
-            _all = list(map( lambda x : flatten.extend(x.service_characteristics()), self.services[servk] ))
+            _all = list(map( lambda x : flatten.extend(x.service_characteristics()), \
+                             self.services[servk] ))
             
             all.append( (servk, tuple(flatten)) )
         
@@ -272,7 +274,8 @@ class Bluetooth(object):
     def advertise(self):
         name = "modcore-bt"#+self.sysid()
         self.payload = advertising_payload(
-            name=name, services=self.all_service_uuids(), appearance=APPEARANCE_GENERIC_COMPUTER
+            name=name, services=self.all_service_uuids(), \
+            appearance=APPEARANCE_GENERIC_COMPUTER
         )
         self._advertise()
 
@@ -377,6 +380,9 @@ class Led_BtService(BtService):
 
     # not gatt compliant...
     def _read(self,data):
+        
+        # esp32 ttgo board led is on pin 21
+        
         led = machine.Pin(21,Pin.OUT)
         if data[0]==0:
             led.on()
