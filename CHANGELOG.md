@@ -1,7 +1,7 @@
 
 # Changelog
 
-## next version v0.0.9
+## version v0.0.9
 
 - reworked `Router` api: @get, @xget, @post and @xpost, so that accessing request
  parameter, and data needs less complex code
