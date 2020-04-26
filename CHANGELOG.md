@@ -87,7 +87,10 @@
  under `/etc/shadow` there are 3 sample user. `admin`,`test`, and `john` all password `test`
 - added first draft for `Bluetooth®` [`GATT`](https://www.bluetooth.com/de/specifications/gatt/characteristics/)
  support under [`samples/untested`](https://github.com/kr-g/mpymodcore/tree/master/samples/untested)
-- 
+   - sample for Broadcaster/Advertiser and GATT Server/ Peripheral, full
+    roundtrip samples covering read, write, and notify with connected
+    PC (testing done with `bluetoothctl`)
+-
 
 
 ### backlog
