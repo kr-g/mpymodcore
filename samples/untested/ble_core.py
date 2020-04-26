@@ -356,7 +356,10 @@ class Clock_BtService(BtService):
     
     def _charac(self):
         return 0x2A2B # org.bluetooth.characteristic.current_time
-            
+
+    def mode(self):
+        return True, True, False
+
     # not gatt compliant...
     def _write( self ):
         ct = time.localtime(time.time())
@@ -430,6 +433,10 @@ select-attribute _long_characteristic_name_ (not uuid!!!)
 
 -> for system id, and clock -> read
 -> for led -> write [0|1|2] => on|off|toggle
+
+=> enhanced sample for clock
+notify on
+-> clock.write() -> update on connected pc
 
 back
 remove dev_id
