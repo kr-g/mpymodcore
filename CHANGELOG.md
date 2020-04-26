@@ -1,6 +1,30 @@
 
 # Changelog
 
+## next version v0.0.10
+
+- 
+
+
+
+### backlog
+
+- ~~integrate fiber in modext.webserv~~
+- ~~integrate fiber in modcore~~
+- ~~tls/ssl support~~
+- ~~WindUp security hardening, user module, secure router with redirect/bad request response~~
+- Bluetooth®
+- MQTT
+- fiber and fiber call stack, fiber api change
+- fiber stream integration
+- WindUp configuration rework
+- code review, coding standards
+- package structure
+- testing, automatic testing
+- documentation
+
+
+
 ## version v0.0.9
 
 - reworked `Router` api: @get, @xget, @post and @xpost, so that accessing request
@@ -91,23 +115,6 @@
     roundtrip samples covering read, write, and notify with connected
     PC (testing done with `bluetoothctl`)
 -
-
-
-### backlog
-
-- ~~integrate fiber in modext.webserv~~
-- ~~integrate fiber in modcore~~
-- ~~tls/ssl support~~
-- ~~WindUp security hardening, user module, secure router with redirect/bad request response~~
-- Bluetooth®
-- MQTT
-- fiber and fiber call stack, fiber api change
-- fiber stream integration
-- WindUp configuration rework
-- code review, coding standards
-- package structure
-- testing, automatic testing
-- documentation
 
 
 ## version v0.0.8
