@@ -67,6 +67,7 @@ class StaticFiles(ContentGenerator):
                 if self._handle_file( req, fp ):
                     return True
 
+    ## todo fiber, and fiber stream
     def _handle_file(self,req,path):
         for p in self.static_paths:
             fp = p + path
