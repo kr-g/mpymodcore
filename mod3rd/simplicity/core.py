@@ -3,8 +3,6 @@
 
 work in progress
 
-sample at the end of the file
-
 """
 
 
