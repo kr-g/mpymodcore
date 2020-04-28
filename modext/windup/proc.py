@@ -8,7 +8,24 @@ class Namespace(object):
         for key in val_dict:
             data = val_dict[key]
             self.set_attr(key,data) # recursion        
-    
+
+    ##todo untested
+    def get_attr(self,nam):
+        elem = self
+        dot = nam.split(".")
+        if len(dot)>1:
+            for d_name in dot[:-1]:
+                nam = d_name.strip()
+                if len(nam)==0:
+                    raise Exception("malformed dotted name specifier")
+                if nam in elem:
+                    elem = elem[nam]
+                else:
+                    raise Exception("not found", nam )
+            nam = dot[-1]
+        val = getattr(elem,nam)
+        return val
+        
     def set_attr(self,nam,val):
         dot = nam.split(".")
         if len(dot)==1:

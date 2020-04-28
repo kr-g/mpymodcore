@@ -3,8 +3,11 @@
 
 ## next version v0.0.10
 
-- 
-
+- added experimental template engine under
+ [`mod3rd`](https://github.com/kr-g/mpymodcore/tree/master/mod3rd)
+ current working name `Simplicity`. sample under
+ [`samples/other3rd`](https://github.com/kr-g/mpymodcore/tree/master/samples/other3rd)
+-
 
 
 ### backlog

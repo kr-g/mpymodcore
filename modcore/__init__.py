@@ -26,3 +26,17 @@ from .lic import *
 print( "-"*41 )
 
 
+def deprecated(f):
+    #@functools.wraps(f)
+    def inner(*argv,**kwargs):
+        print(f"warning: deprecated. call to {f.__class__} {f.__name__} : {f}", file=sys.stdout)
+        return f(*argv,**kwargs)
+    return inner
+
+def untested(f):
+    #@functools.wraps(f)
+    def inner(*argv,**kwargs):
+        print(f"error: untested call to {f.__class__} {f.__name__} : {f}", file=sys.stderr)
+        return f(*argv,**kwargs)
+    return inner
+
