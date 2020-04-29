@@ -134,8 +134,8 @@ class Simplicity(object):
             cnt = 0
             for l in iter:
                 for c in ast.children:
-                    context["_i"]=str(cnt)
-                    context["_"]=str(l)
+                    context["_i"]=cnt
+                    context["_"]=l
                     rc += str(self._print( c, context ))
                 cnt += 1
         else:
@@ -152,10 +152,15 @@ class Simplicity(object):
         if sec==-1:
             val = self._get_attr( context, var )
         else:
+            f = var[:sec[0]].strip() 
             v = var[sec[0]+1:sec[1]-1].strip()
-            f = var[:sec[0]].strip()
+            f = self._get_attr( context, f )
             v = self._get_attr( context, v )
-            val = str(context[f](v))
+            try:
+                val = f(v)
+            except Exception as ex:
+                print("err>",f)
+                raise ex
         return self._eval_ret(val,esc_func)
     
     def _eval_ret(self,val,esc_func=None):
@@ -165,6 +170,7 @@ class Simplicity(object):
     
     def _get_attr(self, context, var):
         if type(context)==Namespace:
+            #print(">",var, context)
             val = context.get_attr(var)
         else:
             if var in context:

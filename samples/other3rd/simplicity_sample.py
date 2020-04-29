@@ -28,6 +28,7 @@ def sample():
     ctx = { "test": not True, "var" : "'hello&world'", "it" : range(10,30,2), \
             "func" : func, "s_it" : range(1,3) }
 
+    print(ctx)
     print( smpl.print(ctx) )
 
 
@@ -37,8 +38,11 @@ def sample2():
     {*it} index {_i} -> {_}
            {*child.it} sub-iter {_i}
            {}
-        back in parent {_i} -> {_}
-        
+        back in parent {_i} -> {_}  
+    {}
+    {*obj} Name: {_.name} Login valid: {_.login}
+    {}
+    {*child.it} {_i} -> {var.func(_)}
     {}
     """
 
@@ -46,14 +50,21 @@ def sample2():
 
     def func(x):
         #print(x)
-        return int(x)+10
-
+        return x+10
+    
     context = Namespace()
     context["var.test"] = True # autocreate parent variable on the fly !!!
+    context["var.func"] = func
+    context["var"]["func2"] = func
     context["it"] = range(10,30,2)
     context["child"] = {
         "it" : range(1,3),
         }
+    context["obj"] = [
+            {"name":"admin","login":True},
+            {"name":"John","login":True},
+            {"name":"Susann","login":False},
+        ]
 
     print(context)
 
