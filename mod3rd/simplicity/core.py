@@ -40,6 +40,7 @@ dottet access -> todo with Namespace
 """
 
 from .conv import simple_esc_html
+from modext.windup import Namespace
 
 
 class _ast(object):
@@ -149,21 +150,28 @@ class Simplicity(object):
         if sec==-2:
             raise Exception("syntax error")
         if sec==-1:
-            val = context[var] # this could be also a func
-            #print(val)
-            return self._eval_ret(val,esc_func)
-        v = var[sec[0]+1:sec[1]-1].strip()
-        f = var[:sec[0]].strip()
-        ## todo add namespace access from windup
-        if v in context:
-            v = context[v]
-        val = str(context[f](v))
+            val = self._get_attr( context, var )
+        else:
+            v = var[sec[0]+1:sec[1]-1].strip()
+            f = var[:sec[0]].strip()
+            v = self._get_attr( context, v )
+            val = str(context[f](v))
         return self._eval_ret(val,esc_func)
     
     def _eval_ret(self,val,esc_func=None):
         if type(val)!=str:
             return val
         return val if esc_func==None else esc_func( val )
+    
+    def _get_attr(self, context, var):
+        if type(context)==Namespace:
+            val = context.get_attr(var)
+        else:
+            if var in context:
+                val = context[var] # this could be also a func
+            else:
+                raise Exception("not found", var )
+        return val      
     
     def _find_sec(self,delim="{}",pos=0):       
         sta = self._find_bound(delim=delim[0],pos=pos)
