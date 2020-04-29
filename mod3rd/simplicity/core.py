@@ -15,7 +15,7 @@ work in progress
 
 simplicity templating processor
 
-markup for simplicity.print(context) where context is a dict (Namespace later)
+markup for simplicity.print(context) where context is a dict / Namespace 
 
 {var} -> fill in the var from the context
 {!var} text {} -> prints the text until closing brakets '{}' when var is True
