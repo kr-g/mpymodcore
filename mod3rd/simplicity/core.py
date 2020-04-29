@@ -27,7 +27,6 @@ markup for simplicity.print(context) where context is a dict / Namespace
 \{ and \} in the template escapes curly brakets -> results in '{' and '}'
 
 only simple lookup of variables in dict!!!
-
 everything else must be done by functions in the context.
 
 this to encourage the developer to do 'less' in ui code (even slower in execution!)
