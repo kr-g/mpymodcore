@@ -32,9 +32,6 @@ everything else must be done by functions in the context.
 this to encourage the developer to do 'less' in ui code (even slower in execution!)
 and favor to specify an interface to the ui by using the context 
 
-##todo
-dottet access -> todo with Namespace
-
 """
 
 from .conv import simple_esc_html
