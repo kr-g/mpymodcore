@@ -28,8 +28,7 @@ markup for simplicity.print(context) where context is a dict (Namespace later)
 
 only simple lookup of variables in dict!!!
 
-everything else must be done by functions in the context,
-where parameter are passed as strings
+everything else must be done by functions in the context.
 
 this to encourage the developer to do 'less' in ui code (even slower in execution!)
 and favor to specify an interface to the ui by using the context 
