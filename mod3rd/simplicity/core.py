@@ -156,11 +156,7 @@ class Simplicity(object):
             v = var[sec[0]+1:sec[1]-1].strip()
             f = self._get_attr( context, f )
             v = self._get_attr( context, v )
-            try:
-                val = f(v)
-            except Exception as ex:
-                print("err>",f)
-                raise ex
+            val = f(v)
         return self._eval_ret(val,esc_func)
     
     def _eval_ret(self,val,esc_func=None):
