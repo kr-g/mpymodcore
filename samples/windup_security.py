@@ -1,3 +1,8 @@
+"""
+
+this uses the fake login router without any password check !!!
+
+"""
 
 from modcore.log import logger
 
@@ -29,6 +34,31 @@ def tops(req,args):
     req.send_response( response="ok, buddy. you have permission" )
 
 
+"""
+
+test with:
+
+curl http://your-ip/login -X POST -d 'fname=John' -H "Content-Type: application/x-www-form-urlencoded" --cookie cookies.txt --cookie-jar cookies.txt
+
+curl http://your-ip/userid/MyUserId --cookie cookies.txt 
+
+curl http://yourip/userdata/MyUserId -X POST -d '{"hello":"world"}' -H "Content-Type: application/json" --cookie cookies.txt 
+
+
+"""
+
+@secured_router.xget("/userid/:user",groups=["restricted"])
+def tops(req,args):
+    uid = args.rest.user
+    req.send_response( response="ok, received '"+uid+"'" )
+
+@secured_router.xpost("/userdata/:user",groups=["restricted"])
+def tops(req,args):
+    uid = args.rest.user
+    json = args.json
+    req.send_response( response="ok, received '"+repr(json)+"' for "+uid )
+
+
 def serve():
     serv = WindUp()
 
@@ -46,4 +76,5 @@ def serve():
         serv.stop()
 
 
+# from samples.windup_session import serve
 

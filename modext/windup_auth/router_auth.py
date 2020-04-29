@@ -54,7 +54,7 @@ class AuthRouter(Router):
     def xget(self,to,groups):
         return self._decor(to,"GET",groups,True)
     
-    def xpost(self,to):
+    def xpost(self,to,groups):
         return self._decor(to,"POST",groups,True)
     
     def __call__(self,to,groups,method=None,xtract=False):
