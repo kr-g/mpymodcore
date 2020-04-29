@@ -9,7 +9,6 @@ class Namespace(object):
             data = val_dict[key]
             self.set_attr(key,data) # recursion        
 
-    ##todo untested
     def get_attr(self,nam):
         elem = self
         dot = nam.split(".")
