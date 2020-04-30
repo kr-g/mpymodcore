@@ -6,8 +6,9 @@ TestRecorder is a testing tool for testing based on the
 
 ## Background
 
-Every software component gets Input, does some Processing, and finally
-produces an Output.
+Every software component gets Input, does some Processing, and finally 
+produces an Output - meaning also: test procedures can be written that 
+they do so in case the software component as such do not produce a readable output.
 
 This output can be captured and saved, and later compared against a new output
 what the software produces in a different run.
