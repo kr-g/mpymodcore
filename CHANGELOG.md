@@ -9,6 +9,7 @@
  [`samples/other3rd`](https://github.com/kr-g/mpymodcore/tree/master/samples/other3rd)
 - fixed xpost group checking in `AuthRouter`, added samples
 - added `IGNORE` option to `TestRecorder`
+- added `TestRecoder.print()` for selective capturing content
 - 
 
 

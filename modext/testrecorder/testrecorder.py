@@ -39,6 +39,7 @@ def tid(obj):
 class TestRecorder(object):
       
     IGNORE = "!-"
+    _platform_hint = True
     
     # the folder MUST exist, no automatic creation!
     dest_dir = "~/testrecorder/"
@@ -51,8 +52,9 @@ class TestRecorder(object):
     #
     # nil: True for ignore everything
     # reset: reset internal counter and obj cache
-    
-    def __init__(self,testname=None,record=False,nil=False,dest_dir=None,reset=True):
+    # capture_all: True for redirecting stdout - does not work on all platforms
+    def __init__(self,testname=None,record=False,nil=False,dest_dir=None,\
+                 reset=True, capture_all=False):
         
         if reset:
             _reset()
@@ -78,6 +80,7 @@ class TestRecorder(object):
         
         self.record = record
         self.nil = nil
+        self.capture_all = capture_all
                 
         if self.record:
             try:
@@ -89,23 +92,32 @@ class TestRecorder(object):
         except:
             pass
         
-        self.open_platform_specific()
-        
+        try:
+            self.open_platform_specific()
+        except:
+            if TestRecorder._platform_hint:
+                TestRecorder._platform_hint = False
+                print("on this plattform calling print is not recorded. "\
+                      "use testrecorder.print() instead")        
     # platform specific handling
         
     def open_platform_specific(self):
         ## todo -> dupterm, problem. will not work because eg thonny
         ## todo -> unix port plus mocking
-        # fails on micropython
-        self.stdout = sys.stdout
-        
-        # this will redirect all output to self.write 
-        sys.stdout = self
+        self.stdout = sys.stdout        
+        if self.capture_all:
+            # fails on micropython
+            # this will redirect all output to self.write 
+            sys.stdout = self
       
     def close_platform_specific(self):
         ## todo
         # this will fail on micropython
-        sys.stdout = sys.__stdout__
+        try:
+            if self.capture_all:
+                sys.stdout = sys.__stdout__
+        except:
+            pass
 
     # end of platform specific handling
 
@@ -119,6 +131,22 @@ class TestRecorder(object):
                     f.write(by)
             
         return print( by, file=self.stdout, end="" )
+    
+    #
+    
+    def print(self,*args):
+        if not self.nil:
+            if self.record:
+                with open( self.fnam_record, "a+" ) as f:
+                    print( *args, file=f )
+            else:
+                with open( self.fnam_run, "a+" ) as f:
+                    print( *args, file=f )
+            
+        return print( *args, file=self.stdout )
+        
+    
+    #
         
     def __enter__(self):
         return self
@@ -179,15 +207,15 @@ def sample():
         # use set record to False, then output will
         # be compared against former recording
         with TestRecorder(testnam,record=True,nil=nil, dest_dir = "./") as tr:
-            print("test recorder beispiel", tid(tr))
-            print(TestRecorder.IGNORE,"ignore this text" )
-            print("one line")
+            tr.print("test recorder beispiel", tid(tr))
+            tr.print(TestRecorder.IGNORE,"ignore this text" )
+            tr.print("one line")
         
     # check against recording, this will result in ok
     with TestRecorder(testnam,record=False,nil=nil, dest_dir = "./") as tr:
-        print("test recorder beispiel", tid(tr))
-        print(TestRecorder.IGNORE,"ignore this too 2" )
-        print("one line")
+        tr.print("test recorder beispiel", tid(tr))
+        tr.print(TestRecorder.IGNORE,"ignore this too 2" )
+        tr.print("one line")
     
     print()
     print("--- from here onwards only fails ---" )
@@ -196,8 +224,8 @@ def sample():
     try:
         # check against recording, this will fail
         with TestRecorder(testnam,record=False,nil=nil, dest_dir = "./") as tr:
-            print("test recorder beispiel", tid(tr))
-            print(TestRecorder.IGNORE,"ignore this too 3" )
+            tr.print("test recorder beispiel", tid(tr))
+            tr.print(TestRecorder.IGNORE,"ignore this too 3" )
             # missing line here
     except Exception as ex:
         print(ex)
@@ -206,20 +234,20 @@ def sample():
         # check against recording, this will fail
         with TestRecorder(testnam,record=False,nil=nil, dest_dir = "./") as tr:
             # additional text
-            print("test recorder beispiel", tid(tr)+"stupid")
-            print(TestRecorder.IGNORE,"ignore this too 4" )
-            print("one line")
+            tr.print("test recorder beispiel", tid(tr)+"stupid")
+            tr.print(TestRecorder.IGNORE,"ignore this too 4" )
+            tr.print("one line")
     except Exception as ex:
         print(ex)
     
     try:
         # print one additional line, this will result in exception
         with TestRecorder(testnam,record=False,nil=nil, dest_dir = "./") as tr:
-            print("test recorder beispiel", tid(tr))
-            print(TestRecorder.IGNORE,"ignore this too 5" )
-            print("one line")
+            tr.print("test recorder beispiel", tid(tr))
+            tr.print(TestRecorder.IGNORE,"ignore this too 5" )
+            tr.print("one line")
             # one more line
-            print("bullshit")
+            tr.print("bullshit")
     except Exception as ex:
         print(ex)
    
