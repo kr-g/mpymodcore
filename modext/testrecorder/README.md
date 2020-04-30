@@ -28,5 +28,5 @@ different levels of granularity, or scopes.
 In principle it can be used therefore also for
 [`White-Box Test`](https://en.wikipedia.org/wiki/White-box_testing)
 when test procedures are written in that way that they inspect the inner
-behaviour of the software component.
+behaviour (or state) of the software component.
 
