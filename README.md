@@ -88,6 +88,15 @@ or provide your own `boot.py`.
 In oder to run the unsuported modules from the `mod3rd` folder download
 this folder from github to the local project folder.
 
+There are hints how to use or test with `curl`,
+all using URL `http://your-ip/...`.
+Add the following to `/etc/hosts` to use them more easily.
+e.g. when your device has the following IP address:
+
+    `192.168.178.26    your-ip`
+    
+
+
 
 # Related project
 

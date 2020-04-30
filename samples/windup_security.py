@@ -36,13 +36,13 @@ def tops(req,args):
 
 """
 
-test with:
+test with: (replace your-ip with ip, or add to /etc/hosts)
 
 curl http://your-ip/login -X POST -d 'fname=John' -H "Content-Type: application/x-www-form-urlencoded" --cookie cookies.txt --cookie-jar cookies.txt
 
 curl http://your-ip/userid/MyUserId --cookie cookies.txt 
 
-curl http://yourip/userdata/MyUserId -X POST -d '{"hello":"world"}' -H "Content-Type: application/json" --cookie cookies.txt 
+curl http://your-ip/userdata/MyUserId -X POST -d '{"hello":"world"}' -H "Content-Type: application/json" --cookie cookies.txt 
 
 
 """
