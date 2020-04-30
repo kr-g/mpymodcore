@@ -113,6 +113,9 @@ source/ sample code also there
 
     `python3 -m pygitgrab -f mpymodcore.pygg`
  
+ 
+Add the `mpy-modcore` folders to your `.gitignore`
+
 
 # License
 
