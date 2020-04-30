@@ -33,3 +33,8 @@ behaviour (or state) of the software component.
 After creating a test recording a captured output can be altered in the same
 way as program code with an text editor, or merging tools.
 
+
+# Test tracking of objects
+
+For tracking objects created during the test use `tid()` method to get a 
+trackable id for an object.
