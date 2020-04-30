@@ -37,6 +37,8 @@ def tid(obj):
 
 
 class TestRecorder(object):
+      
+    IGNORE = "!-"
     
     # the folder MUST exist, no automatic creation!
     dest_dir = "~/testrecorder/"
@@ -142,8 +144,14 @@ class TestRecorder(object):
                 if len(trun)==0:
                     raise Exception( self.__class__.__name__,  "failed, missing line", cnt )
                 t2 = trun.pop(0)
+                
+                if len(t1)>=2 and t1.startswith(TestRecorder.IGNORE):
+                    if t2.startswith(TestRecorder.IGNORE):
+                        continue
+                
                 if t1!=t2:
                     raise Exception( self.__class__.__name__,  "failed, line", cnt )
+                
                 cnt+=1
             if len(trun)>0:
                 raise Exception( self.__class__.__name__,  "failed, overflow line", cnt )
@@ -167,13 +175,18 @@ def sample():
     if False:
         # no name, or blank name default to 'default'
         # create the recording
+        # to use the same code later as test case
+        # use set record to False, then output will
+        # be compared against former recording
         with TestRecorder(testnam,record=True,nil=nil, dest_dir = "./") as tr:
             print("test recorder beispiel", tid(tr))
+            print(TestRecorder.IGNORE,"ignore this text" )
             print("one line")
         
     # check against recording, this will result in ok
     with TestRecorder(testnam,record=False,nil=nil, dest_dir = "./") as tr:
         print("test recorder beispiel", tid(tr))
+        print(TestRecorder.IGNORE,"ignore this too 2" )
         print("one line")
     
     print()
@@ -184,6 +197,7 @@ def sample():
         # check against recording, this will fail
         with TestRecorder(testnam,record=False,nil=nil, dest_dir = "./") as tr:
             print("test recorder beispiel", tid(tr))
+            print(TestRecorder.IGNORE,"ignore this too 3" )
             # missing line here
     except Exception as ex:
         print(ex)
@@ -193,6 +207,7 @@ def sample():
         with TestRecorder(testnam,record=False,nil=nil, dest_dir = "./") as tr:
             # additional text
             print("test recorder beispiel", tid(tr)+"stupid")
+            print(TestRecorder.IGNORE,"ignore this too 4" )
             print("one line")
     except Exception as ex:
         print(ex)
@@ -201,6 +216,7 @@ def sample():
         # print one additional line, this will result in exception
         with TestRecorder(testnam,record=False,nil=nil, dest_dir = "./") as tr:
             print("test recorder beispiel", tid(tr))
+            print(TestRecorder.IGNORE,"ignore this too 5" )
             print("one line")
             # one more line
             print("bullshit")
