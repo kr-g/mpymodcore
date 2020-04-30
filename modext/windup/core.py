@@ -1,4 +1,9 @@
 
+"""
+    (c)2020 K. Goger (k.r.goger@gmail.com)
+    legal: https://github.com/kr-g/mpymodcore/blob/master/LICENSE
+"""
+
 from modcore.log import LogSupport, logger
 try:
     from modext.fiber import FiberLoop, Fiber
