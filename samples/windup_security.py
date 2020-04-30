@@ -76,5 +76,5 @@ def serve():
         serv.stop()
 
 
-# from samples.windup_session import serve
+# from samples.windup_security import serve
 
