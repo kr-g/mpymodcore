@@ -30,3 +30,6 @@ In principle it can be used therefore also for
 when test procedures are written in that way that they inspect the inner
 behaviour (or state) of the software component.
 
+After creating a test recording a captured output can be altered in the same
+way as program code with an text editor, or merging tools.
+
