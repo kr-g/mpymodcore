@@ -31,6 +31,8 @@ Session handling (in-memory), REST stlye URL parameter parser, and extraction, e
 
 Multi-tasking processing support of HTTP requests based on fiber 
 ([`source`](https://github.com/kr-g/mpymodcore/blob/master/modext/fiber/core.py)).
+The standard processor for the request handling is blocking mode.
+Fiber processor (experimental) is not activated by default.
 
 WindUp is in Alpha state and not performance optimized. 
 Anyway response times under 1 secs are already possible.
