@@ -105,3 +105,9 @@ def compile_all():
         for fnam in files:
             print(fnam, file=f)
         
+
+if __name__=='__main__':
+    compile_all()
+    
+    
+        
