@@ -13,8 +13,11 @@ compile the project with mpcross
 - writes delta information to compile.txt
 
 remark: 
-mpcross is not included, refer to micropython github,
-and homepage on how to setup the environment
+- mpcross is not included, refer to micropython github,
+  and homepage on how to setup the environment
+- to find the proper byte code version use check_mpy.py
+  (also in this folder)
+
 
 call to execute:
 
