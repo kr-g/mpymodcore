@@ -1,11 +1,25 @@
 
 """
 
-(c) 2020 K. Goger
-    email: k.r.goger@gmail.com
+    (c)2020 K. Goger (k.r.goger@gmail.com)
+    legal: https://github.com/kr-g/mpymodcore/blob/master/LICENSE
 
 """
+"""
 
+compile the project with mpcross 
+- checks for date/time which py file has changed
+- writes delta information to compile.txt
+
+remark: 
+mpcross is not included, refer to micropython github,
+and homepage on how to setup the environment
+
+call to execute:
+
+compile_all()
+
+"""
 
 import os
 import sys
@@ -79,6 +93,8 @@ def compile_delta():
             print("up to date", f )
     return compiled
 
+
+# call this
 
 def compile_all():
     files = compile_delta()
