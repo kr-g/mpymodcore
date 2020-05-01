@@ -38,6 +38,11 @@ Fiber processor (experimental) is not activated by default.
 WindUp is in Alpha state and not performance optimized. 
 Anyway response times under 1 secs are already possible.
 
+## Secure Role based Access to URL Routes 
+
+WindUp supports you to write Role based applications, with a minimal side effort.
+Refer to the additional `Login/Logout` module under `mod3rd` on how to use this.
+
 
 ### New to fiber ?
 
