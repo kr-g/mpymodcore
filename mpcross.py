@@ -7,7 +7,8 @@
 """
 """
 
-compile the project with mpcross 
+compile the project with mpcross
+- compile target folder {proj_folder}/mpy/...
 - checks for date/time which py file has changed
 - writes delta information to compile.txt
 
