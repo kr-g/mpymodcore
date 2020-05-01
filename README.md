@@ -79,7 +79,7 @@ Some sample code can be found in
 [`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py)
 and under [`samples`](https://github.com/kr-g/mpymodcore/tree/master/samples).
 
-In order to run the samples sync the folder `www` from github to the local
+In order to run the samples sync the folder `www` and `etc` from github to the local
 project folder from where running the samples.
 If running together with `boot.py` check for `run_not_in_sample_mode` and
 set to `False` to prevent autostarting WindUp and blocking the socket,
