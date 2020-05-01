@@ -22,7 +22,8 @@ In package `modext.windup` is WindUp as included web server.
 
 The WindUp web server is like 
 [Apache](https://en.wikipedia.org/wiki/Apache_HTTP_Server)
-based on the concept of Filter and Content Generator. 
+based on the concept of 
+[`Filter and Content Generator`](https://httpd.apache.org/docs/2.4/filter.html). 
 What makes WindUp easy extensible; and flexible how requests are processed.
 
 WindUp comes already with a bunch of Filters, e.g. HTML Form data parser, 
