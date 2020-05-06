@@ -10,6 +10,7 @@
 - fixed xpost group checking in `AuthRouter`, added samples
 - added `IGNORE` option to [`TestRecorder`](https://github.com/kr-g/mpymodcore/tree/master/modext/testrecorder)
 - added `TestRecoder.print()` for selective capturing content
+- added code snipplet for websocket's under `samples/untested`
 - 
 
 
