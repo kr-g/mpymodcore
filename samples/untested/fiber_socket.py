@@ -120,12 +120,12 @@ def send_frame(sock,data,opcode=0x02,mask=None):
     if mask!=None:
         print("send mask")
         buf += struct.pack( ">I", mask )
-        maskbuf = buf[-4:] 
+        mask_key = buf[-4:] 
         #print( [bin(mb) for mb in maskbuf], end = " " )
         
         nbuf = bytes()
         for p in range(0,len(data)):
-            decoded = data[p] ^ maskbuf[p % 4]
+            decoded = data[p] ^ mask_key[p % 4]
             nbuf += bytes([decoded])
         data = nbuf
         
@@ -176,18 +176,17 @@ def recv_frame(sock):
         send_data( sock, buf )
         return None
     
-    mask = buf[1] & 0b10000000
+    byte1 = buf[1] 
+    mask = byte1 & 0b10000000
     
-    payload_len = buf[1] & 0b01111111
-
+    payload_len = byte1 & 0b01111111
+    paylen = [ payload_len ]
     pos = 2
-
     if payload_len == 126:
-        payload_len = struct.unpack( ">H", buf[pos:pos+2] )
-        pos += 2
+        paylen = struct.unpack( ">H", buf[pos:pos+2] )
     if payload_len == 127:
-        payload_len = struct.unpack( ">Q", buf[pos:pos+8] )
-        pos += 8
+        paylen = struct.unpack( ">Q", buf[pos:pos+8] )
+    pos += len(paylen)
 
     data = bytes()
     
