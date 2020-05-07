@@ -95,29 +95,28 @@ def recv_data(sock,max=200000):
     return buf if len(buf)>0 else None
 
 
-def send_frame(sock,data,type=0x02,mask=None):
+def send_frame(sock,data,opcode=0x02,mask=None):
     
     ## todo use stream object
     
     payload_len = len(data)
     
     buf = bytes()
-    buf += bytes([1<<7 | type])
+    buf += bytes([ 0b10000000 | ( opcode & 0b00001111 ) ]) # FIN bit always set, mask opcode
     
     byte1 = [ payload_len ]
+    paylen = []
     if payload_len>=126 and payload_len<=0xffff:
         byte1 = [126]
+        paylen = struct.pack(">H",payload_len)
     if payload_len>0xffff:
         byte1 = [127]
+        paylen = struct.pack(">Q",payload_len) 
     if mask!=None:
-       byte1[0] |= 1<<7
+       byte1[0] |= 0b10000000 # set MASK bit   
     buf += bytes(byte1)
-    
-    if payload_len>=126 and payload_len<=0xffff:
-        buf += struct.pack(">H",payload_len) 
-    if payload_len > 0xffff:
-        buf += struct.pack(">Q",payload_len)
-        
+    buf += bytes(paylen)
+            
     if mask!=None:
         print("send mask")
         buf += struct.pack( ">I", mask )
@@ -159,31 +158,36 @@ def recv_frame(sock):
     print()
     """
 
-    fin = buf[0] & 0x80
-    rsv = buf[0]>>4 & 7
-    opcode = buf[0] & 15
+    fin = buf[0] & 0b10000000
+    rsv = buf[0]>>4 & 0b00000111
+    opcode = buf[0] & 0b00001111
+    
+    if not fin:
+        raise Exception("recv continue frame. not supported.")
+    if rsv!=0:
+        print( "recv RSV=", rsv )
     
     if opcode==0x9:
         print( "recv ping" )
         # ping, pong back
-        opcode = 0xa
-        buf[0] = ( buf[0] & 0xf0 ) | opcode
+        opcode = 0xa # pong opcode
+        buf[0] = ( buf[0] & 0x11110000 ) | opcode
 
         send_data( sock, buf )
         return None
     
-    mask = buf[1] & 0x80
+    mask = buf[1] & 0b10000000
     
-    payload_len = buf[1] & 127
+    payload_len = buf[1] & 0b01111111
 
     pos = 2
 
     if payload_len == 126:
-        payload_len = struct.unpack( ">H", buf[2:4] )
-        pos = 4
+        payload_len = struct.unpack( ">H", buf[pos:pos+2] )
+        pos += 2
     if payload_len == 127:
-        payload_len = struct.unpack( ">Q", buf[2:10] )
-        pos = 10
+        payload_len = struct.unpack( ">Q", buf[pos:pos+8] )
+        pos += 8
 
     data = bytes()
     
@@ -245,7 +249,7 @@ def sample():
     else:
         raise Exception("websocket handshake missing" )
     
-    send_frame(sock,"this is a masked demo text".encode(),type=0x2 , \
+    send_frame(sock,"this is a masked demo text".encode(),opcode=0x2 , \
                mask = 0b10101010101010101010101010101010)
 
     max = 1
