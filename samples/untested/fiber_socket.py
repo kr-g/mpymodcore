@@ -104,13 +104,16 @@ def send_frame(sock,data,type=0x02,mask=None):
     buf = bytes()
     buf += bytes([1<<7 | type])
     
-    byte1 = [ payload_len if payload_len <= 0x7d else 0x7e ]
+    byte1 = [ payload_len ]
+    if payload_len>=126 and payload_len<=0xffff:
+        byte1 = [126]
+    if payload_len>0xffff:
+        byte1 = [127]
     if mask!=None:
        byte1[0] |= 1<<7
-    
     buf += bytes(byte1)
     
-    if payload_len >= 0x7e and payload_len <= 0xffff:
+    if payload_len>=126 and payload_len<=0xffff:
         buf += struct.pack(">H",payload_len) 
     if payload_len > 0xffff:
         buf += struct.pack(">Q",payload_len)
@@ -156,8 +159,8 @@ def recv_frame(sock):
     print()
     """
 
-    fin = buf[0] & 1
-    rsv = buf[0]>>1 & 7
+    fin = buf[0] & 0x80
+    rsv = buf[0]>>4 & 7
     opcode = buf[0] & 15
     
     if opcode==0x9:
