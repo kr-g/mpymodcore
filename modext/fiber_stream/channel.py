@@ -1,13 +1,5 @@
 
 """
-
-in process / working / concept
-
-
-"""
-
-
-"""
     (c)2020 K. Goger (k.r.goger@gmail.com)
     legal: https://github.com/kr-g/mpymodcore/blob/master/LICENSE
 """
@@ -99,7 +91,7 @@ class FiberChannel(object):
     
     def __len__(self):
         if self.last==None:
-            raise FiberChannelEmptyException()
+            return 0
         _len = 0
         next = self.last
         while next != None:
@@ -122,15 +114,8 @@ class FiberChannel(object):
             self.first = self.last
         self.last.merge()
     
-    def data_available(self):
+    def more(self):
         return self.last != None
-    
-    def poll(self):
-        if self._broken==True:
-            raise FiberChannelBrokenException()
-        if self.last==None:
-            raise FiberChannelEmptyException()
-        return True
     
     def close(self):
         if self.last!=None:
@@ -176,66 +161,3 @@ def fc_readline(fc,max_size_dense=128):
     return None
           
      
-     
-def sample():     
-               
-    fc = FiberChannel()
-
-    chk_size = 64
-    with open( "../../boot.py","rb" ) as f:
-        while True:
-            rc = f.read( chk_size )
-            if len(rc)==0:
-                break
-            fc.put( rc )
-
-    print( len(fc) )
-
-    # fake end of transmisson
-    fc.hangup()
-     
-    if False:
-        while fc.data_available():
-            chunk = fc.pop()
-            print(chunk)
-     
-    if True: 
-        while fc.data_available():
-            l = fc_readline(fc)
-            if l!=None:
-                print(l)
-            else:
-                print(">dense")
-
-
-def sample2():     
-               
-    fc = FiberChannel()
-
-    cnt = 0
-    chk_size = 64
-    with open( "../../boot.py","rb" ) as f:
-        while True:
-            rc = f.read( chk_size )
-            if len(rc)==0:
-                break
-            
-            # add with line numbers
-            fc.put( (str(cnt) +":").encode() + rc )
-            
-            cnt += 1
-            # steal alreay some data...
-            if cnt % 3 == 0:
-                chunk = fc.pop()
-                print("pop at cnt=",cnt,"->",chunk) 
-
-    print( len(fc) )
-
-    # fake end of transmisson
-    #fc.hangup()
-    print("-"*37)
-     
-    while fc.data_available():
-        chunk = fc.pop()
-        print(chunk)
-

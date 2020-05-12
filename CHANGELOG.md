@@ -11,6 +11,7 @@
 - added `IGNORE` option to [`TestRecorder`](https://github.com/kr-g/mpymodcore/tree/master/modext/testrecorder)
 - added `TestRecoder.print()` for selective capturing content
 - added code snipplet for websocket's under `samples/untested`
+- moved `fiber channel/stream` to `modext.fiber_stream`
 - 
 
 
