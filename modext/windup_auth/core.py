@@ -72,11 +72,9 @@ class Authentication(LogSupport):
             if g in groups:
                 return True
 
-security_store = None
 
 def create_store(basedir="/etc/shadow/"):
-    global security_store
-    security_store = Authentication(basedir)
+    return Authentication(basedir)
 
 def hash_password(password_plain):
     h = hashlib.sha256()
@@ -84,5 +82,6 @@ def hash_password(password_plain):
     hash = binascii.hexlify( h.digest() )
     return hash.decode()
 
-create_store()
+
+security_store = create_store()
 
