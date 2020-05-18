@@ -121,15 +121,7 @@ source/ sample code also there
     `# install to the current (project) folder`
     
     `python3 -m pip install mpymodcore --target .` 
-    
- 
-- with [pygitgrab](https://github.com/kr-g/pygitgrab)
- to sync the master branch to your project folder 
- download the `mpymodcore.pygg` file from the repo to your local project folder
- and download the sources then with:
-
-    `python3 -m pygitgrab -f mpymodcore.pygg`
- 
+     
  
 Add the `mpy-modcore` folders to your `.gitignore`
 
