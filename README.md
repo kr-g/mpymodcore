@@ -120,7 +120,7 @@ source/ sample code also there
 
     `# install to the current (project) folder`
     
-    `python3 -m pip install mpymodcore --target .` 
+    `python3 -m pip install mpymodcore --no-compile --target .` 
      
  
 Add the `mpy-modcore` folders to your `.gitignore`
