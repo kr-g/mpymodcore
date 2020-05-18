@@ -1,5 +1,7 @@
 
 from modext.fiber import *
+from modext.fiber.timer import time
+
 
 """
 

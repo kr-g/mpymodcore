@@ -18,104 +18,16 @@ in process / working / concept
     legal: https://github.com/kr-g/mpymodcore/blob/master/LICENSE
 """
 
-# faking the platform, requires py 3.7
+from modcore.log import LogSupport
+from modext.fiber.timer import time, TimerSupport
 
-import time as _time
 
-class time(object):
-    @staticmethod
-    def time():
-        return _time.time()
-    @staticmethod
-    def ticks_ms():
-        # py 3.7
-        return _time.time_ns()/1000000
-    @staticmethod
-    def ticks_diff(t1,t2):
-        return t1-t2
-    @staticmethod
-    def ticks_add(t1,t2):
-        return t1+t2
-    @staticmethod
-    def sleep_ms(t):
-        return _time.sleep(t/1000)
+class FiberWorkerLoop(LogSupport,TimerSupport):
     
-class LogSupport(object):
-    
-    def info(self,*args):
-        print(*args)
-    def excep(self,*args):
-        print(*args)
-
-# end of platform fake
-
-# doubled code, testrecorder tid and ...
-
-__ids = {}
-__id_cnt = 0
-
-def tid(obj):
-    global __ids
-    global __id_cnt 
-    oid = id(obj)
-    rid = None
-    if oid in __ids:
-        rid = __ids[oid]
-    else:
-        __id_cnt += 1
-        rid = __id_cnt
-        __ids[oid]=__id_cnt
-    return "{tid:"+str(rid)+"}"
-
-class TimerSupport(object):
-    
-    def __init__(self):
-        self.start_timer()
-        
-    def start_timer(self):
-        self.start_time = time.ticks_ms()
-        self.stop_time = 0       
-        self.cpu_time = 0
-        self.lastcall_start = 0
-        self.lastcall_time = 0
-    
-    def run_time(self):
-        return time.ticks_diff(self.stop_time,self.start_time)
-
-    def run_time_diff_ms(self):
-        now = time.ticks_ms()
-        return time.ticks_diff(now,self.start_time)
-
-    def stop_timer(self):
-        self.stop_time = time.ticks_ms()
-        
-    def measure_timer(self,start=True):
-        if start:
-            self.lastcall_start = time.ticks_ms()
-        else:
-            now = time.ticks_ms()
-            self.lastcall_time = time.ticks_diff(now,self.lastcall_start)
-            self.cpu_time += self.lastcall_time
-    
-    def __repr__(self):
-        return self.__class__.__name__ \
-                + "(start: " + str(self.start_time) \
-                +", stop: " + str(self.stop_time) \
-                + ", run time: " + str(self.run_time()) \
-                + ", cpu time: " + str( self.cpu_time ) \
-                + ")"
-
-# end of doubled code
-
-#from testrecorder import TestRecorder, tid
-
-
-class FiberWorkerLoop(TimerSupport):
-    
-    def __init__(self, name=None, react_time_ms=None, debug=True, timer=True ):
+    def __init__(self, name=None, react_time_ms=None, timer=True ):
+        LogSupport.__init__(self)
         TimerSupport.__init__(self)
         self.name = name
-        self.debug = debug
         self.timer = timer
         self.worker = []
         self.react_time = react_time_ms/1000 if react_time_ms!=None else None
@@ -151,33 +63,49 @@ class FiberWorkerLoop(TimerSupport):
     
     def __next__(self):
                 
-        tpf = self._schedule()
-        ## todo measure_timer ?
+        tpf = self._schedule() # time per fiber
+        unused_tpf = 0
+        
         self.timer and self.start_timer()
+        
         for w in self.worker:
             
-            w._switch_time = time.ticks_add( tpf, time.ticks_ms() ) if tpf!=None else None
+            trfts = tpf + unused_tpf # this round fiber time slot
+
+            #unused_tpf>0 and self.debug and print( "!-", "tpf", tpf, "unused", unused_tpf )
+                
+            w._switch_time = time.ticks_add( trfts, time.ticks_ms() ) if tpf!=None else None
+            unused_tpf = 0
             
             try:
+                self.timer and self.measure_timer()
                 next(w)
                 
             except StopIteration as ex:
-                self.debug and print( self.__class__.__name__, self.name, ex.__class__.__name__, tid(w), ex )                
+                self.debug( repr(w), ex )                
                 pass
 
             except Exception as ex:
-                self.debug and print( self.__class__.__name__, self.name, ex.__class__.__name__, tid(w), ex )
+                self.excep( ex, repr(w) )
                 pass
+            
+            finally:
+                if self.timer:
+                    self.measure_timer(False)
+                    diff = trfts - self.lastcall_time
+                    if diff>0:
+                        unused_tpf = diff 
+                
         self.timer and self.stop_timer()
             
 
 class FiberWaitTimeout(Exception):
     pass
 
-class FiberWorker(object):
+class FiberWorker(LogSupport):
     
-    def __init__(self, func=None, workerloop=None, parent=None, debug=True, **kwargs ):
-        self.debug = debug
+    def __init__(self, func=None, workerloop=None, parent=None, **kwargs ):
+        LogSupport.__init__(self)
         self.func = func 
         self.floop = workerloop
         self.parent = parent
@@ -188,7 +116,7 @@ class FiberWorker(object):
         
     def reset(self, reason="reset" ):
         self.kill(reason)
-        self.debug and print( self.__class__.__name__, "reset", reason, tid(self), self.floop.name)
+        self.info("reset", reason, repr(self), self.floop.name)
         self.rc = None
         self.err = None
         self.done = None
@@ -207,7 +135,7 @@ class FiberWorker(object):
         self.resume("start")
         
     def resume(self,reason="resume"):
-        self.debug and print( self.__class__.__name__, "resume", reason, tid(self), self.floop.name)
+        self.info( "resume", reason, repr(self), self.floop.name)
         try:
             if self._run or self.floop==None:
                 return
@@ -216,7 +144,7 @@ class FiberWorker(object):
             self._run = True            
         
     def suspend(self,reason="suspend"):
-        self.debug and print( self.__class__.__name__, "suspend", reason, tid(self), self.floop.name)
+        self.info("suspend", reason, repr(self), self.floop.name)
         try:
             if not self._run or self.floop==None:
                 return
@@ -225,7 +153,7 @@ class FiberWorker(object):
             self._run = False            
 
     def kill(self, reason="kill" ):
-        self.debug and print( self.__class__.__name__, "kill", reason, tid(self), self.floop.name)
+        self.info( "kill", reason, repr(self), self.floop.name)
         self.suspend(reason)
         self._inner = None
         #untested
@@ -238,6 +166,7 @@ class FiberWorker(object):
 
     def sleep_ms(self,msec=None):
         if msec==None or msec==0:
+            # switch to next fiber
             yield
             return
         now = time.ticks_ms()
@@ -252,11 +181,12 @@ class FiberWorker(object):
             return 
         if time.ticks_diff( self._switch_time, time.ticks_ms() )>0:
             return False
-        self.debug and print( self.__class__.__name__, "switch", tid(self), self.floop.name)
+        self.debug("switch", repr(self), self.floop.name)
+        # switch to next fiber
         yield
         return True
 
-    def waitfor_ms(self,worker,timeout_ms=-1):
+    def waitfor_ms(self,worker,timeout_ms=-1,raise_ex=False):
         if worker==None:
             return
         now = time.ticks_ms()
@@ -265,8 +195,10 @@ class FiberWorker(object):
             if worker.done!=None:
                 return worker.done,worker.rc,worker.err
             if time.ticks_diff( stop, time.ticks_ms() )<0:
-                return worker.done,None,None
-                #raise FiberWaitTimeout()
+                if raise_ex:
+                    ##todo behaviour ?
+                    raise FiberWaitTimeout()                
+                return worker.done,None,None                
             yield          
         
     def spawn_fiber(self, worker ):
@@ -274,8 +206,11 @@ class FiberWorker(object):
         worker.parent=self
         worker.resume("spawn-start")
 
+        # switch to next fiber
         # exactly once!
         yield
+        # return here after resume
+        # from _done_revoke_parent()
         
         if worker.err != None:
             raise worker.err
@@ -287,7 +222,7 @@ class FiberWorker(object):
     def spawn(self, func, workerloop=None, **kwargs ):
         if workerloop==None:
             workerloop=self.floop
-        worker = FiberWorker( func=func, workerloop=workerloop, debug=self.debug, **kwargs )        
+        worker = FiberWorker( func=func, workerloop=workerloop, **kwargs )        
         return self.spawn_fiber(worker)
 
     def _done_revoke_parent(self,reason="worker-done"):
@@ -296,16 +231,19 @@ class FiberWorker(object):
             self.parent.resume("spawn-return")        
 
     def __next__(self):
+        
         try:
             self.rc = next( self._inner )
             return self.rc
+        
         except StopIteration as ex:
-            self.debug and print( self.__class__.__name__, "stop", tid(self), ex)
+            self.debug("stop", repr(self) )
             self.done = time.ticks_ms()
             self._done_revoke_parent()
             raise ex
+        
         except Exception as ex:
-            self.debug and print( self.__class__.__name__, "except", tid(self), ex)
+            self.excep( ex, repr(self) )
             self.err = ex
             self.done = time.ticks_ms()
             self._done_revoke_parent("exception")
@@ -316,6 +254,8 @@ class FiberWorker(object):
         
     
 def sample():
+
+        from modext.testrecorder import TestRecorder, tid
 
 #    with TestRecorder("fiber-worker-sample",record=False,nil=True,\
 #                      dest_dir = "./") as tr:
@@ -447,5 +387,8 @@ def sample():
         #print(fl)
         print(fl_outer)
 
-sample()
+
+if __name__=='__main__':
+    sample()
+
 

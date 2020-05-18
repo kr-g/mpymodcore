@@ -296,16 +296,13 @@ if run_not_in_sample_mode:
 
 debug_mode = True
 
-def loop(run_until=None):    
+def loop():    
 
     # turn debug level on for more detailed log info
     #modc.change_log_level( DEBUG if debug_mode else None )
 
-    while run_until==None:
-        if run_until!=None:
-            run_until -= 1
-            if run_until<0:
-                run_until=None
+    while True:
+
         try:
             # modules
             modc.run_loop( cfg )
