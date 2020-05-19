@@ -54,7 +54,7 @@ def sample(path):
     
     
     # try
-    # from modcore.fiber import sample
+    # from samples.fiber_sample import sample
     # e.g.
     # sample("boot.py")
     

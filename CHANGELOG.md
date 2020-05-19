@@ -12,6 +12,7 @@
 - added `TestRecoder.print()` for selective capturing content
 - added code snipplet for websocket's under `samples/untested`
 - moved `fiber channel/stream` to `modext.fiber_stream`
+- moved `fiber worker` to `modext.fiber`
 - 
 
 

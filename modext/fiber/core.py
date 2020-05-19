@@ -10,6 +10,12 @@
     legal: https://github.com/kr-g/mpymodcore/blob/master/LICENSE
 """
 
+print("\n"*3)
+print("-"*37)
+print("fiber version 1 is deprecated.")
+print("-"*37)
+print("\n"*3)
+
 
 import math
 
