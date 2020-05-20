@@ -129,7 +129,7 @@ Add the `mpy-modcore` folders to your `.gitignore`
 # License
 
 `mpy-modcore` is published as [`dual licensed`](https://github.com/kr-g/mpymodcore/blob/master/LICENSE).
-read license properly.
+read properly.
 
 ##
 ##
