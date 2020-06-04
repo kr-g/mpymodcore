@@ -15,6 +15,7 @@
 - moved `fiber worker` to `modext.fiber`
 - fiber version 1 is marked as deprecated, will be slowly replaced by fiber worker
  (rename of fiber worker to fiber, and fiber loop resp.)
+- addded `modext.config.Config` for json based configuration values
 - 
 
 
