@@ -10,9 +10,12 @@ class Config(Namespace):
         #Namespace.__init__(self)
         self._fnam = fnam
     
-    def load(self):
+    def load(self,fnam=None):
         
-        with open(self._fnam,"r") as f:
+        if fnam==None:
+            fnam = self._fnam
+        
+        with open(fnam,"r") as f:
             cont = f.read()
             
         cfg = json.loads( cont )
