@@ -78,7 +78,8 @@ class Namespace(object):
     def __iter__(self):
         for attr in self.__dict__:
             yield attr
-            
+         
+    ##todo refactor with ReprDict
     def __repr__(self):
         s = "{ "
         deli = ""
