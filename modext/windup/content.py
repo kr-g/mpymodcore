@@ -64,6 +64,14 @@ class StaticFiles(ContentGenerator):
         return True
 
     def _handle_index(self,req,path):
+        """
+            url schema is different:
+            - your-ip/url
+            - your-ip/url/
+            
+            important:
+            only with a trailing '/' the index file handling is done 
+        """
         if path.endswith("/"):
             path += "index"
         if path.endswith("/index"):
