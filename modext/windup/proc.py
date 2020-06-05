@@ -12,7 +12,8 @@ class Namespace(object):
     def update(self, val_dict ):
         for key in val_dict:
             data = val_dict[key]
-            self.set_attr(key,data) # recursion        
+            self.set_attr(key,data) # recursion
+        return self
 
     def get_attr(self,nam):
         elem = self
@@ -36,6 +37,16 @@ class Namespace(object):
             if type(val)==dict:
                 child = Namespace()
                 child.update( val )
+                val = child
+            elif type(val)==list:
+                child = []
+                for ch in val:
+                    ##todo list, tuple, ...
+                    if type(ch)==dict:
+                        el = Namespace()
+                        el.update( ch )
+                        ch = el
+                    child.append( ch )
                 val = child
             setattr(self,nam,val)
         else:
@@ -77,6 +88,14 @@ class Namespace(object):
             val = getattr( self, attr )
             if type(val)==str:
                 s += '"' + str(val) + '"'
+            elif type(val)==list:
+                s += '['
+                dell = ""
+                for el in val:
+                    s += dell
+                    s += str(el)
+                    dell =", "
+                s += ']'
             else:                
                 s += str(val) 
             deli = ", "
