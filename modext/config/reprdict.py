@@ -18,3 +18,7 @@ class ReprDict(object):
     def reprlist(self,it):
         return list(map( lambda x : dict(x), it ))
 
+    def __repr__(self):
+        raise Exception("implementation missing")
+    
+    
