@@ -91,6 +91,12 @@ class SoftAP(Module):
     def ifconfig(self):
         return self.ap.ifconfig()
     
+    def active(self):
+        return self.ap.active()
+
+    def mac(self):
+        return self.ap.config("mac")
+
     
 soft_ap = SoftAP("soft_ap")
 modc.add( soft_ap )

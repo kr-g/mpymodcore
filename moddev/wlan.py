@@ -126,6 +126,12 @@ class WLAN(Module):
     def ifconfig(self):
         return self.wlan.ifconfig()
     
+    def active(self):
+        return self.wlan.active()
+    
+    def mac(self):
+        return self.wlan.config("mac")
+    
     
 wlan_ap = WLAN("wlan")
 modc.add( wlan_ap )
