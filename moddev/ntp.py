@@ -101,8 +101,19 @@ class NTP(Module):
     def time(self):
         return self.utc() + self.offset
         
-    def localtime(self):
-        return time.localtime( self.time() )
+    def localtime(self,cron_dow=False):
+        local = time.localtime( self.time() )
+        if cron_dow==True:
+            local = list(local)
+            local[6] += 1
+        return local
+    
+    def cron_dow(self):
+        """
+            unix cron day of week
+        """
+        dow = time.localtime( self.time() )[6] + 1
+        return dow
     
     
 ntp_serv = NTP("ntp")
