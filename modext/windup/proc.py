@@ -10,8 +10,8 @@ from modcore.log import LogSupport
 class Namespace(object):
     
     def update(self, val_dict ):
-        for key in val_dict:
-            data = val_dict[key]
+        for key,data in val_dict.items():
+            #data = val_dict[key]
             self.set_attr(key,data) # recursion
         return self
 
@@ -75,15 +75,18 @@ class Namespace(object):
     def get(self,key,default=None):
         return self.__dict__.get(key,default)
 
+    def items(self):
+        return self.__dict__.items()
+
     def __iter__(self):
         for attr in self.__dict__:
-            yield attr
+            yield attr, self.__dict__[attr]
          
     ##todo refactor with ReprDict
     def __repr__(self):
         s = "{ "
         deli = ""
-        for attr in self:
+        for attr, _ in self:
             s += deli
             s += '"' + attr + '" : '
             val = getattr( self, attr )

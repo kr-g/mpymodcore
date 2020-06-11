@@ -102,6 +102,7 @@ class WindUp(LogSupport):
         try:
             if self.ws.can_accept():
                 
+                self.info("new request")
                 req = self.ws.accept()                                                 
                 self.calls += 1
                 
