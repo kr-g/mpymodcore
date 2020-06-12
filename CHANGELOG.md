@@ -1,6 +1,29 @@
 
 # Changelog
 
+## next version v0.0.11
+
+-
+
+
+
+### backlog
+
+- ~~integrate fiber in modext.webserv~~
+- ~~integrate fiber in modcore~~
+- ~~tls/ssl support~~
+- ~~WindUp security hardening, user module, secure router with redirect/bad request response~~
+- Bluetooth®
+- MQTT
+- fiber and fiber call stack, fiber api change
+- fiber stream integration
+- WindUp configuration rework
+- code review, coding standards
+- package structure
+- testing, automatic testing
+- documentation
+
+
 ## version v0.0.10
 
 - added experimental template engine under
@@ -21,24 +44,6 @@
 - added events `break` and `exit` to `moddev.control`
 - moved loop from boot to `modext.misc.main` as generic optional module
 -
-
-
-### backlog
-
-- ~~integrate fiber in modext.webserv~~
-- ~~integrate fiber in modcore~~
-- ~~tls/ssl support~~
-- ~~WindUp security hardening, user module, secure router with redirect/bad request response~~
-- Bluetooth®
-- MQTT
-- fiber and fiber call stack, fiber api change
-- fiber stream integration
-- WindUp configuration rework
-- code review, coding standards
-- package structure
-- testing, automatic testing
-- documentation
-
 
 
 ## version v0.0.9
