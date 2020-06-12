@@ -7,6 +7,7 @@
 import micropython
 import machine
 import gc
+import sys
 
 
 from modcore import modc, Module, LifeCycle
@@ -29,17 +30,22 @@ SERV_MEM_FREE="memfree"
 LOGLEVEL="loglevel" ##todo
 
 GC="gc"
-
 PIN="pin"
-
+EXIT="exit"
+BREAK="break"
 
 class ControlServer(Module):
 
     def watching_events(self):
-        return [RESTART,GC,STATUS,PIN,] 
+        return [RESTART,GC,STATUS,PIN,EXIT,BREAK,] 
+    
+    def start(self):
+        self.breaksignal = False
     
     def loop(self,config=None,event=None):
-        
+
+        self.breaksignal = False # throw away last capture
+
         if event == None:
             return
 
@@ -48,6 +54,12 @@ class ControlServer(Module):
             val = val.lower()
         self.info( "received service call", event.name, val )
 
+        if self.is_event(event,EXIT):            
+            sys.exit(0)
+                
+        if self.is_event(event,BREAK):            
+            self.breaksignal = True
+                
         if self.is_event(event,RESTART):
             
             if val==SERV_HARD:
