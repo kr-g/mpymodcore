@@ -76,7 +76,12 @@ class ControlServer(Module):
         if self.is_event(event,PIN):
             try:
                 pinno, mode = val.split(":")
-                pinno = int(pinno)
+                try:
+                    pinno = int(pinno)
+                except:
+                    # not an integer
+                    # load pin no from config
+                    pinno = int(config[pinno])
                 pin = machine.Pin( pinno, machine.Pin.OUT )
                 mode = mode.lower()
                 if mode not in ["on","off","toggle",]:
@@ -89,7 +94,8 @@ class ControlServer(Module):
                     pin.value( not pin.value() )
             except Exception as ex:
                 self.warn( ex, "failed", val )
-    
+
+
 control_serv = ControlServer("watchdog")
 modc.add( control_serv )
 
