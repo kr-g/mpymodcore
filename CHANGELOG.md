@@ -16,7 +16,11 @@
 - fiber version 1 is marked as deprecated, will be slowly replaced by fiber worker
  (rename of fiber worker to fiber, and fiber loop resp.)
 - addded `modext.config.Config` for json based configuration values
-- 
+- added `modext.config.ReprDict` mixin which creates dict from __repr__ method,
+ common usage is ReprDict -> dict -> json.dumps()
+- added events `break` and `exit` to `moddev.control`
+- moved loop from boot to `modext.misc.main` as generic optional module
+-
 
 
 ### backlog
