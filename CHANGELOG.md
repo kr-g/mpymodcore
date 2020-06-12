@@ -1,7 +1,7 @@
 
 # Changelog
 
-## next version v0.0.10
+## version v0.0.10
 
 - added experimental template engine under
  [`mod3rd`](https://github.com/kr-g/mpymodcore/tree/master/mod3rd)
