@@ -29,7 +29,7 @@ class NTP(Module):
         
     def conf(self,config=None):
         if config!=None:
-            self.set_tz_ofset( config.get("TZ"), fire_event=False ) # dont fire extra event
+            self.set_tz_offset( config.get("TZ"), fire_event=False ) # dont fire extra event
         
     def watching_events(self):
         return [WLAN,TZ,NTP_SYNC,] 
@@ -86,7 +86,15 @@ class NTP(Module):
     def utctime(self):
         return time.localtime( self.utc() )
 
+    # todo spelling
     def set_tz_ofset(self,offset,fire_event=True):
+        try:
+            raise Exception("deprecated, use set_tz_offset")
+        except Exception as ex:
+            self.excep( ex )
+        self.set_tz_offset( offset,fire_event )
+
+    def set_tz_offset(self,offset,fire_event=True):
         try:
             offset = int(offset)
         except:
