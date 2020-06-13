@@ -3,10 +3,12 @@
 
 ## next version v0.0.11
 
+- added __contains__ to Namespace. -> fix destorying windup session at the
+ end of the request
 -
 
 
-
+ 
 ### backlog
 
 - ~~integrate fiber in modext.webserv~~

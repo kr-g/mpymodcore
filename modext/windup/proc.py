@@ -81,7 +81,11 @@ class Namespace(object):
     def __iter__(self):
         for attr in self.__dict__:
             yield attr, self.__dict__[attr]
-         
+
+    def __contains__(self,key):
+        return key in self.__dict__
+
+
     ##todo refactor with ReprDict
     def __repr__(self):
         s = "{ "

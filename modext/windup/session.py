@@ -72,6 +72,7 @@ class SessionSave(Filter):
     def filterRequest( self, request ):
         
         xargs = request.xargs
+        self.info( "xargs", xargs )
         
         if request.xsession==None or ("session" not in xargs) or xargs.session==None:
             if request.xsession_id!=None:
@@ -123,7 +124,10 @@ class SessionStore(LogSupport):
         now = time.ticks_ms()
         self.info( now, exp )
         diff = time.ticks_diff( exp, now )
-        return diff<0        
+        expired = diff<0
+        if expired:
+            self.info("expired", session.SID, exp, now, diff )
+        return expired        
     
     def purge_expired(self):
         for sid in self.sessions.keys():
