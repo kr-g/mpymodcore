@@ -17,6 +17,9 @@ WLAN="wlan"
 TZ="tz"
 NTP_SYNC="ntp-sync"
 
+FNAM = "timezone.cfg.txt"
+
+
 class NTP(Module):
          
     def on_add(self):
@@ -28,9 +31,21 @@ class NTP(Module):
         self.retry_after = Timeout( 5 ) ## todo config
         
     def conf(self,config=None):
-        if config!=None:
-            self.set_tz_offset( config.get("TZ"), fire_event=False ) # dont fire extra event
+        found = True
+        try:
+            self.info("load tz info")
+            with open(FNAM,"r") as f:
+                cont = f.read()
+                tz_offset = int(cont)
+                self.set_tz_offset( tz_offset, fire_event=False, persist=False ) 
+        except:
+            self.warn("not found, tz info")
+            found = False
         
+        if config!=None and not found:
+            # dont fire extra event and persist
+            self.set_tz_offset( config.get("TZ"), fire_event=False, persist=False ) 
+                
     def watching_events(self):
         return [WLAN,TZ,NTP_SYNC,] 
 
@@ -87,14 +102,14 @@ class NTP(Module):
         return time.localtime( self.utc() )
 
     # todo spelling
-    def set_tz_ofset(self,offset,fire_event=True):
+    def set_tz_ofset(self,offset,fire_event=True,persist=True):
         try:
             raise Exception("deprecated, use set_tz_offset")
         except Exception as ex:
             self.excep( ex )
-        self.set_tz_offset( offset,fire_event )
+        self.set_tz_offset( offset,fire_event,persist )
 
-    def set_tz_offset(self,offset,fire_event=True):
+    def set_tz_offset(self,offset,fire_event=True,persist=True):
         try:
             offset = int(offset)
         except:
@@ -105,7 +120,14 @@ class NTP(Module):
             if fire_event:
                 self.fire_event( "ntp", True )
             self.offset = offset
-    
+            if persist:
+                self._save()
+
+    def _save(self):
+        self.info("write tz info")
+        with open(FNAM,"w") as f:
+            f.write( str(self.offset) )
+
     def time(self):
         return self.utc() + self.offset
         
