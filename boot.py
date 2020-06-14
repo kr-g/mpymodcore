@@ -40,7 +40,7 @@ def gc_print_stat():
 from modcore import modc, Module, LifeCycle
 from modcore import DEBUG, INFO, NOTSET, logger
 
-import moddev.control
+from moddev.control import control_serv
 
 from moddev import wlan
 from moddev.wlan import wlan_ap
@@ -148,7 +148,11 @@ cfg = {
         "SD_SLOT" : 3, # default for esp32 with psram / TTGO
         "SD_PATH" : "/sd",
         
+        # led pin for ttgo board
+        "led" : 21,
+        
         "int1" : 5, # timeout in sec, default timebase 1000
+        "int1:event" : ["pin:led:toggle"], # access led parameter from cfg
         
         "int2" : 130,
         "int2:timebase" : 100, # 1/100 sec timebase
@@ -177,7 +181,7 @@ cfg = {
         "boot_btn:fire_on_up" : True, # default, fires when releasing
         #"boot_btn:event" : "status:mem_1", # event to fire
         #"boot_btn:event" : "pin:21:toggle", # toggle led on pin 21
-        "boot_btn:event" : ["pin:21:toggle","gc",], # raise 2 events
+        "boot_btn:event" : ["pin:21:toggle","break",], # raise 2 events
 
         "alarm_counter" : None, # not configured
         "alarm_counter:delta_period" : 5,
@@ -185,7 +189,6 @@ cfg = {
         "alarm_counter:above" : 10, # alarm_count counts state changes 0->1, and 1->0 
         
     }
-
 
 fancy_stuff_i_have_a_sd_card = True
 
@@ -206,6 +209,15 @@ if fancy_stuff_i_have_a_sd_card:
     
 # enable winup session manager module
 import modext.windup.session_mod 
+
+generators = []
+
+
+logger.info("loading apps")
+from modapp.watering import app_config, load_config, load_generators, mod_valves
+APPNAME, watering_conf = app_config
+cfg[APPNAME] = watering_conf
+generators.extend( load_generators() )
 
 
 # add all modules to start automatically before this call
@@ -282,45 +294,29 @@ import mod3rd
 from mod3rd.admin_esp.wlan import router as router_wlan
 from mod3rd.admin_user.login import router as router_login
 
+
 logger.info("config done. start windup.")
 
 run_not_in_sample_mode = True
 
 if run_not_in_sample_mode:
-    serv.start( generators = [
+    
+    generators.extend( [
             router_wlan,
             router_login,
             status,
             secured_router,
-        ])
+        ] )
 
-debug_mode = True
+    serv.start( generators = generators )
 
-def loop():    
+import modext.misc.main as mod_main
 
-    # turn debug level on for more detailed log info
-    #modc.change_log_level( DEBUG if debug_mode else None )
+mod_main.debug_mode = True
 
-    while True:
-
-        try:
-            # modules
-            modc.run_loop( cfg )
-            # web server
-            serv.loop()
-            
-        except KeyboardInterrupt:
-            logger.info( "\ncntrl+c, auto shutdown=", not debug_mode)
-            if not debug_mode:
-                modc.shutdown()                
-            if not debug_mode:
-                logger.info("call first")
-                logger.info("modc.startup(config=cfg)")
-            logger.info( "call loop() to continue" )
-            break
-        except Exception as ex:
-            logger.excep( ex )
-
+def loop():
+    mod_main.loop( cfg, serv.loop )
+    
 
 print()
 gc_print_stat()

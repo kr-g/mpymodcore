@@ -136,6 +136,7 @@ class NTP(Module):
         if cron_dow==True:
             local = list(local)
             local[6] += 1
+            local[6] %= 7
         return local
     
     def cron_dow(self):
@@ -143,6 +144,7 @@ class NTP(Module):
             unix cron day of week
         """
         dow = time.localtime( self.time() )[6] + 1
+        dow %= 7
         return dow
     
     
