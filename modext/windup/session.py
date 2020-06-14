@@ -120,13 +120,14 @@ class SessionStore(LogSupport):
         return sid
     
     def is_expired(self,session):
+        sid = session.get(SID, None ) 
         exp = session.get(EXPIRES, 0 ) 
         now = time.ticks_ms()
         self.info( now, exp )
         diff = time.ticks_diff( exp, now )
         expired = diff<0
         if expired:
-            self.info("expired", session.SID, exp, now, diff )
+            self.info("expired", sid, exp, now, diff )
         return expired        
     
     def purge_expired(self):

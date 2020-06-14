@@ -213,13 +213,6 @@ import modext.windup.session_mod
 generators = []
 
 
-logger.info("loading apps")
-from modapp.watering import app_config, load_config, load_generators, mod_valves
-APPNAME, watering_conf = app_config
-cfg[APPNAME] = watering_conf
-generators.extend( load_generators() )
-
-
 # add all modules to start automatically before this call
 modc.startup(config=cfg)
 
