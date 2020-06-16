@@ -5,7 +5,8 @@
 
 - added __contains__ to Namespace. -> fix destorying windup session at the
  end of the request
--
+- added `modext.irq` module for Interrupt and Counter handling
+- 
 
 
  
