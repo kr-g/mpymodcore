@@ -7,6 +7,36 @@
 from modcore.log import LogSupport
 
 
+##todo
+# refactor with ReprDict
+
+class _ReprListIter(object):
+
+    def __init__(self,el):
+        self.el = el
+    
+    def __iter__(self):
+        for el in self.el:
+            if type(el)==Namespace:
+                yield dict(el)
+            else:
+                yield el
+
+
+class _ReprDictIter(object):
+    
+    def __init__(self,dic):
+        self.dic = dict(dic)
+    
+    def __iter__(self):
+        for attr in self.dic:
+            val = self.dic[attr]
+            if type(val)==list:
+                yield attr, list(_ReprListIter(val))
+            else:
+                yield attr, val
+
+
 class Namespace(object):
     
     def update(self, val_dict ):
@@ -78,37 +108,17 @@ class Namespace(object):
     def items(self):
         return self.__dict__.items()
 
-    def __iter__(self):
+    """
+    def __iter2__(self):
         for attr in self.__dict__:
             yield attr, self.__dict__[attr]
+    """
+    
+    def __iter__(self):
+        return iter(_ReprDictIter( self.__dict__ ))
 
     def __contains__(self,key):
         return key in self.__dict__
-
-
-    ##todo refactor with ReprDict
-    def __repr__(self):
-        s = "{ "
-        deli = ""
-        for attr, _ in self:
-            s += deli
-            s += '"' + attr + '" : '
-            val = getattr( self, attr )
-            if type(val)==str:
-                s += '"' + str(val) + '"'
-            elif type(val)==list:
-                s += '['
-                dell = ""
-                for el in val:
-                    s += dell
-                    s += str(el)
-                    dell =", "
-                s += ']'
-            else:                
-                s += str(val) 
-            deli = ", "
-        s += "}"
-        return s
 
 
 class Processor(LogSupport):

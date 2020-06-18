@@ -1,5 +1,18 @@
 
 
+class _ReprListIter(object):
+
+    def __init__(self,el):
+        self.el = el
+    
+    def __iter__(self):
+        for el in self.el:
+            if type(el)==ReprDict:
+                yield dict(el)
+            else:
+                yield el
+
+
 class _ReprDictIter(object):
     
     def __init__(self,dic):
@@ -7,7 +20,11 @@ class _ReprDictIter(object):
     
     def __iter__(self):
         for attr in self.dic:
-            yield attr, self.dic[attr]
+            val = self.dic[attr]
+            if type(val)==list:
+                yield attr, list(_ReprListIter(val))
+            else:
+                yield attr, val
            
    
 class ReprDict(object):

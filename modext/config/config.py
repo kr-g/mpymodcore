@@ -47,6 +47,6 @@ class Config(Namespace):
     def save(self):
         ensure_path(self._fnam)
         with open(self._fnam,"w") as f:
-            f.write( json.dumps( self ))
+            f.write( json.dumps( dict(self) ))
     
  
