@@ -6,8 +6,8 @@
 - added __contains__ to Namespace. -> fix destorying windup session at the
  end of the request
 - added `modext.irq` module for Interrupt and Counter handling
+- base for [`mpymodcore_watering`](https://github.com/kr-g/mpymodcore_watering)
 - 
-
 
  
 ### backlog
