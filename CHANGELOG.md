@@ -1,15 +1,11 @@
 
 # Changelog
 
-## version v0.0.11
+## next version v0.0.12
 
-- added __contains__ to Namespace. -> fix destorying windup session at the
- end of the request
-- added `modext.irq` module for Interrupt and Counter handling
-- base for [`mpymodcore_watering`](https://github.com/kr-g/mpymodcore_watering)
-- 
+-
 
- 
+
 ### backlog
 
 - ~~integrate fiber in modext.webserv~~
@@ -25,6 +21,16 @@
 - package structure
 - testing, automatic testing
 - documentation
+
+
+
+## version v0.0.11
+
+- added __contains__ to Namespace. -> fix destorying windup session at the
+ end of the request
+- added `modext.irq` module for Interrupt and Counter handling
+- base for [`mpymodcore_watering`](https://github.com/kr-g/mpymodcore_watering)
+- 
 
 
 ## version v0.0.10
