@@ -7,10 +7,13 @@
 import uos
 import network
 
+import machine
+import binascii
+
 from modcore import modc, Module, LifeCycle
 
 SOFTAP_CFG = "softap.cfg"
-
+ID_SPEC = "$id$"
 
 class SoftAP(Module):
         
@@ -77,8 +80,18 @@ class SoftAP(Module):
             
             if active:
                 self.ap.active(active)
-                self.ap.config(essid=credits[0].strip())
-                self.ap.config(authmode=3, password = credits[1].strip() )
+                
+                ssid = credits[0].strip()
+                passw = credits[1].strip()
+                
+                pos = ssid.find(ID_SPEC)
+                if pos>=0:
+                    uid = binascii.hexlify( machine.unique_id() ).decode()
+                    ssid = ssid.replace(ID_SPEC, uid )
+                    self.info("unique ssid", ssid )
+                
+                self.ap.config(essid=ssid)
+                self.ap.config(authmode=3, password = passw )
                 self.info( "network info", self.ap.ifconfig() )
                 
         except Exception as ex:
