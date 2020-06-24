@@ -16,6 +16,7 @@ netw = {}
 def my_form( req, args ):
     
     networks = wlan_ap.scan()
+    wlan_info = wlan_ap.ifconfig()
     
     netwdiv = ""
     
@@ -42,6 +43,8 @@ def my_form( req, args ):
             <div> &nbsp; </div>
             <div> Currently connected to: '%s' </div>
             <div> &nbsp; </div>
+            <div> IfConfig: '%s' </div>
+            <div> &nbsp; </div>
 
             <form action="/admin/wlan" method="POST">
             
@@ -61,7 +64,7 @@ def my_form( req, args ):
 
             </body>
             </html>            
-            """ % ( str(wlan_ap.ssid), netwdiv )
+            """ % ( str(wlan_ap.ssid), str(wlan_info),netwdiv )
     
     logger.info(data)
     req.send_response( response=data )
