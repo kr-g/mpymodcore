@@ -1,4 +1,5 @@
 
+import sys
 import ubinascii
 
 from modcore.log import logger
@@ -77,21 +78,32 @@ def my_form( req, args ):
     
     form = args.form
     
-    # namespace     
-    ssid = netw[ form.fwifi ]
-    passwd = form.fpasswd
-    
-    data = """
-            <h1>WLAN configuration saved</h1>
-            <div> &nbsp; </div>
-            <div> Networkname: '%s' </div>
-            """ % ( ssid )
-    
-    wlan_ap.wlan_config( ssid, passwd )
-    
-    # restart in next loop, otherwise connection breaks and response fails
-    modc.fire_event(WLAN_RESTART)
-    
+    try:
+        # namespace     
+        ssid = netw[ form.fwifi ]
+        passwd = form.fpasswd
+        
+        data = """
+                <h1>WLAN configuration saved</h1>
+                <div> &nbsp; </div>
+                <div> Networkname: '%s' </div>
+                """ % ( ssid )
+        
+        wlan_ap.wlan_config( ssid, passwd )
+        
+        # restart in next loop, otherwise connection breaks and response fails
+        modc.fire_event(WLAN_RESTART)
+        
+    except Exception as ex:
+        
+        data = """
+                <h1>WLAN configuration failed</h1>
+                <div> &nbsp; </div>
+                <div> Info: '%s' </div>
+                <div> &nbsp; </div>
+                <div> Go back to choose <a href="/admin/wlan">WLAN</a> </div>
+                """ % ( ex )
+        
     logger.info(data)
     req.send_response( response=data )
 
