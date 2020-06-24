@@ -57,6 +57,8 @@ class WLAN(Module):
             self.fire_event("wlan", status)
             if status == False:
                 self.timeout.restart()
+            else:
+                self.info( "connected", self.ifconfig() )
             
         if status == False and self.timeout!=None and self.timeout.elapsed():
             self.info("reconnect after timeout elpased")
