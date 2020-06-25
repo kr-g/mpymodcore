@@ -35,6 +35,8 @@ class ReprDict(object):
     def reprlist(self,it):
         return list(map( lambda x : dict(x), it ))
 
+    ## todo rename and refactor 
+    ##  e.g. __conv_dict__, or __to_dict__
     def __repr__(self):
         raise Exception("implementation missing")
     
