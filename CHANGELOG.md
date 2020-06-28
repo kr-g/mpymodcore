@@ -1,7 +1,7 @@
 
 # Changelog
 
-## next version v0.0.12
+## version v0.0.12
 
 - variable `$id$` as part of ssid name in `softap.cfg` will be expanded to machine unique id
 - intr Counter rework
