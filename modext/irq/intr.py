@@ -50,10 +50,13 @@ class Counter(Interrupt):
 
     def callb(self):
         self.debug( "íntr" )
+        if self.do_reset==True:
+            self.reset()
         self.count += 1
            
     def reset(self):
         self.count = 0
+        self.do_reset = False
 
     def __repr__(self):
         return { 'count' : self.count }
