@@ -113,6 +113,8 @@ e.g. when your device has the following IP address:
 For configuration of automatic startup of WLAN, SoftAP, and WebRepl refer to the 
 source/ sample code also there
 
+Search GitHub for other projects with topic [`mpy-modcore`](https://github.com/topics/mpy-modcore).
+
 
 # Installation
 
