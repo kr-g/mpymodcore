@@ -1,10 +1,13 @@
 
 # Changelog
 
-## version v0.0.12
 
-- variable `$id$` as part of ssid name in `softap.cfg` will be expanded to machine unique id
-- intr Counter rework
+
+
+## next version v0.0.13
+
+- fix: alarm clock exeption if not configured
+- refactored Namespace from `modext.winup.proc` to `modext.config` module
 - 
 
 
@@ -24,6 +27,12 @@
 - testing, automatic testing
 - documentation
 
+
+## version v0.0.12
+
+- variable `$id$` as part of ssid name in `softap.cfg` will be expanded to machine unique id
+- intr Counter rework
+- 
 
 
 ## version v0.0.11
