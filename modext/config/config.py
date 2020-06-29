@@ -2,7 +2,7 @@
 import os
 import json
 
-from modext.windup.proc import Namespace
+from .namespace import Namespace
 
 
 def ensure_path( fnam ):
