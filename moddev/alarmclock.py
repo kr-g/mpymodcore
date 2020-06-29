@@ -82,6 +82,9 @@ class AlarmClock(EventEmitter):
     def recalc(self,offset=0):
         self.info( "recalc", offset )
         self.alarm_time = None
+        if self.conf_alarm_time==None:
+            self.warn("no alarm configured" )
+            return
         try:
             h, m = self.conf_alarm_time.split(":")
             h = int(h)
