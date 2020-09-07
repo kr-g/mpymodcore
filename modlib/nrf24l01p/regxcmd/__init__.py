@@ -1,6 +1,6 @@
 
-from const import *
-from cmd import Command, RegRead, RegWrite
+from ..const import *
+from ..cmd import Command, RegRead, RegWrite
 
 class RegUpdate(Command):
 
@@ -21,3 +21,5 @@ class RegUpdate(Command):
         #print( "after", val )
         rc = hal.exe( RegWrite( self.reg_adr(), val ) )
         return rc
+
+print("loading supporting commands")

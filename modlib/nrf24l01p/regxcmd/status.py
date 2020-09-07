@@ -1,5 +1,5 @@
 
-from regxcmd import *
+from . import *
 
 # detail commands for register manipulation
 

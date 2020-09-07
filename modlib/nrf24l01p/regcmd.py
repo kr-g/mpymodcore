@@ -5,8 +5,8 @@
 """
 
 
-from const import *
-from cmd import RegRead, RegWrite
+from .const import *
+from .cmd import RegRead, RegWrite
 
 # bulk commands for register manipulation
 
