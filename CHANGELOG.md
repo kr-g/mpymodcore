@@ -2,14 +2,14 @@
 # Changelog
 
 
-
-
 ## next version v0.0.13
 
 - fix: alarm clock exeption if not configured
 - refactored Namespace from `modext.winup.proc` to `modext.config` module
+- added nRF24L01+ HAL with IRQ support and sample master/slave driver under 
+ [`modlib/nrf24l01p`](https://github.com/kr-g/mpymodcore/tree/master/modlib/nrf24l01p)
+ sample code under samples folder
 - 
-
 
 ### backlog
 
