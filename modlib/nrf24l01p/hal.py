@@ -4,6 +4,11 @@
     legal: https://github.com/kr-g/mpymodcore/blob/master/LICENSE
 """
 
+#
+# specification under
+# https://www.nordicsemi.com/Products/Low-power-short-range-wireless/nRF24-series
+#
+
 import time
 from machine import Pin
 
