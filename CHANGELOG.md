@@ -9,7 +9,15 @@
 - added nRF24L01+ HAL with IRQ support and sample master/slave driver under 
  [`modlib/nrf24l01p`](https://github.com/kr-g/mpymodcore/tree/master/modlib/nrf24l01p)
  sample code under samples folder
+-
+
+### known issues
+
+- with lastest update of chrome (sep. 2020) web server response might get shorten/cut
+ when connection is closed at the end of the request. seams to be an issue with chrom only.
+ use firefox instead. here timing problem dont occur.
 - 
+
 
 ### backlog
 
