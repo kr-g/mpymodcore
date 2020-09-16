@@ -8,6 +8,12 @@ from modext.fiber import FiberLoop, Fiber
 
 from .proc import Processor
 
+print("\n"*3)
+print("-"*37)
+print("ProcessorFiber version 1 is deprecated.")
+print("-"*37)
+print("\n"*3)
+
 
 class ProcessorFiber(Processor):
     

@@ -26,6 +26,7 @@ class FiberWorkerLoop(LogSupport,TimerSupport):
         self.react_time = react_time_ms/1000 if react_time_ms!=None else None
         
     def append(self, worker ):
+        worker.floop = self
         self.worker.append(worker)
         
     def remove(self, worker ):
@@ -38,7 +39,18 @@ class FiberWorkerLoop(LogSupport,TimerSupport):
     def close(self):
         for w in self.worker:
             w.kill("close")
+
+    def release(self):
         
+        if len(self.worker)==0:
+            return
+        
+        for w in self.worker:
+            if w.done!=None:
+                w.close()
+        
+        self.worker = list(filter( lambda x : x.done==None, self.worker ))
+
     def _schedule(self,react_time=None,max=None):
         react_time = self.react_time if react_time==None else react_time
         try:
@@ -63,7 +75,8 @@ class FiberWorkerLoop(LogSupport,TimerSupport):
         
         for w in self.worker:
             
-            trfts = tpf + unused_tpf # this round fiber time slot
+            if tpf!=None:
+                trfts = tpf + unused_tpf # this round fiber time slot
 
             #unused_tpf>0 and self.debug and print( "!-", "tpf", tpf, "unused", unused_tpf )
                 
@@ -85,9 +98,10 @@ class FiberWorkerLoop(LogSupport,TimerSupport):
             finally:
                 if self.timer:
                     self.measure_timer(False)
-                    diff = trfts - self.lastcall_time
-                    if diff>0:
-                        unused_tpf = diff 
+                    if tpf!=None:
+                        diff = trfts - self.lastcall_time
+                        if diff>0:
+                            unused_tpf = diff 
                 
         self.timer and self.stop_timer()
             
@@ -105,11 +119,18 @@ class FiberWorker(LogSupport):
         self._run = False
         self.kwargs = kwargs
         self._switch_time = None
+
+        if self.floop:
+            self.floop.append(self)
+
         self.reset("init")
-        
+
+    def _floop_name(self):
+        return "" if self.floop==None else self.floop.name
+
     def reset(self, reason="reset" ):
         self.kill(reason)
-        self.info("reset", reason, repr(self), self.floop.name)
+        self.info("reset", reason, repr(self), self._floop_name() )
         self.rc = None
         self.err = None
         self.done = None
@@ -128,7 +149,7 @@ class FiberWorker(LogSupport):
         self.resume("start")
         
     def resume(self,reason="resume"):
-        self.info( "resume", reason, repr(self), self.floop.name)
+        self.info( "resume", reason, repr(self), self._floop_name() )
         try:
             if self._run or self.floop==None:
                 return
@@ -137,7 +158,7 @@ class FiberWorker(LogSupport):
             self._run = True            
         
     def suspend(self,reason="suspend"):
-        self.info("suspend", reason, repr(self), self.floop.name)
+        self.info("suspend", reason, repr(self), self._floop_name() )
         try:
             if not self._run or self.floop==None:
                 return
@@ -146,7 +167,7 @@ class FiberWorker(LogSupport):
             self._run = False            
 
     def kill(self, reason="kill" ):
-        self.info( "kill", reason, repr(self), self.floop.name)
+        self.info( "kill", reason, repr(self), self._floop_name() )
         self.suspend(reason)
         self._inner = None
         #untested

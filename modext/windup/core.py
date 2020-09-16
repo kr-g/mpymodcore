@@ -7,6 +7,7 @@
 from modcore.log import LogSupport, logger
 try:
     from modext.fiber import FiberLoop, Fiber
+    from modext.fiber.fiber_worker import FiberWorkerLoop, FiberWorker
 except:
     logger.warn("fiber module not loaded")
 
@@ -39,9 +40,15 @@ class WindUp(LogSupport):
         self.html404 = None
         
         self.exec_class = Processor
+        self.exec_close_delay = 250
 
         self.calls = 0
         self.exec = []
+        
+        #self.send_buffer_size = 512
+        
+        # outbound processing fiber loop
+        self._outbound = FiberWorkerLoop()
         
     def start(self, generators=None ):        
         self.ws.start()
@@ -135,6 +142,16 @@ class WindUp(LogSupport):
             else:
                 req.close()
             return
+        
+        # fiber loop
+        try:
+            self._outbound.release()
+            if len(self._outbound)>0:
+                #self.info("fiber start")
+                next(self._outbound)
+                #self.info("fiber done")
+        except Exception as ex:
+            self.excep( ex, "fiber outbound" )
 
         for e in self.exec:
             try:
@@ -151,9 +168,20 @@ class WindUp(LogSupport):
                     except Exception as ex:
                         self.excep( ex, "filter post-proc")
 
-                    e.close()
+                    delay = self.exec_close_delay
 
-                    self.info("exec done", e.callid, type(e))
+                    def close_func(self):
+                        # delay closing the socket
+                        yield from self.sleep_ms( delay )
+                        #self.info("processor close init")
+                        e.close()
+                        self.info("exec processor closed")
+                        yield
+
+                    fbr = FiberWorker( func= close_func   )
+                    self._outbound.append( fbr )
+
+                    self.info("exec scheduled for done", e.callid, type(e))
 
                 else:
                     self.info("pending exec", e.callid, "total", len(self.exec))

@@ -82,18 +82,19 @@ class RequestHandler(LogSupport):
     
     # send a complete response
     def send_response(self, status=200, header=None, response=None, \
-                      type="text/html", response_i=None ):
+                      type_="text/html", response_i=None ):
         header = self._add_server_header(header)        
         self._add_session_cookie(header)
         
-        send_http_response( self.client_file, status, header, response, type, response_i )
+        ## todo fiber here
+        send_http_response( self.client_file, status, header, response, type_, response_i )
 
     # send portions: header part
-    def send_head(self, status=200, header=None, type="text/html" ):
+    def send_head(self, status=200, header=None, type_="text/html" ):
         header = self._add_server_header(header)        
         self._add_session_cookie(header)
         # send empty response -> just send header
-        send_http_response_header( self.client_file, status, header, type )
+        send_http_response_header( self.client_file, status, header, type_ )
         
     # send portions: data part
     def send_data(self, response ):
@@ -101,11 +102,19 @@ class RequestHandler(LogSupport):
 
     # json
     def send_json( self, obj, header=None, status=200, \
-                   type='application/json' ):
+                   type_='application/json', send_buffer=64 ):
         
         response = json.dumps( obj )
         
-        self.send_response( status=status, header=header, response=response, type=type )
+        def _iter():          
+            l = len(response)
+            chk = min( l, send_buffer )
+            for p in range( 0, l, chk ):
+                yield response[p:p+chk]
+        
+        return self.send_response( status=status, header=header, \
+                                   response=None, type_=type_, \
+                                   response_i=_iter )
         
 
     # fiber

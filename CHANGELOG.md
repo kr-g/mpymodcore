@@ -9,7 +9,10 @@
 - added nRF24L01+ HAL with IRQ support and sample master/slave driver under 
  [`modlib/nrf24l01p`](https://github.com/kr-g/mpymodcore/tree/master/modlib/nrf24l01p)
  sample code under samples folder
--
+- added IRQSuspendCxt context manager class under `modext/irq`
+- added simple fiber worker support to windup during closing the connection (250ms delay)
+- 
+
 
 ### known issues
 
