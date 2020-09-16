@@ -139,7 +139,7 @@ def send_http_data( client_file, data=None, data_i=None, data_len=None ):
         send_http_header( client_file, "Content-Length", data_len )
     client_file.send( HTTP_CRLF )  
     if data != None and len(data)>0:
-        client_file.send( data )
+        client_file.send( data )        
     if data_i != None:
         for chunk in data_i():
             if chunk==None:
@@ -147,7 +147,25 @@ def send_http_data( client_file, data=None, data_i=None, data_len=None ):
             if len(chunk)==0:
                 continue
             client_file.send( chunk )
-
+    
+def send_http_data_g( client_file, data=None, data_i=None, data_len=None ):
+    if data_len!=None:
+        send_http_header( client_file, "Content-Length", data_len )
+        yield
+    client_file.send( HTTP_CRLF )
+    yield
+    if data != None and len(data)>0:
+        client_file.send( data )
+        yield
+    if data_i != None:
+        for chunk in data_i():
+            yield
+            if chunk==None:
+                continue
+            if len(chunk)==0:
+                continue
+            client_file.send( chunk )
+    
 def send_http_response_header( client_file, status=200, header=None, type="text/html" ):
     send_http_status( client_file, status )
     if header != None:
@@ -157,6 +175,17 @@ def send_http_response_header( client_file, status=200, header=None, type="text/
     if type != None:
         send_http_header( client_file, "Content-Type", type )
     
+def send_http_response_header_g( client_file, status=200, header=None, type="text/html" ):
+    send_http_status( client_file, status )
+    yield
+    if header != None:
+        for h,v in header:
+            #print("header",h,v)
+            send_http_header( client_file, h, v )
+            yield
+    if type != None:
+        send_http_header( client_file, "Content-Type", type )        
+    
 def send_http_response( client_file, status=200, header=None, \
                         response=None, type="text/html", response_i=None ):
     send_http_response_header( client_file, status, header, type )
@@ -165,5 +194,19 @@ def send_http_response( client_file, status=200, header=None, \
     if response!=None:
         if response_i==None:
             data_len = len(response)
-    send_http_data( client_file, data=response, data_i=response_i, data_len=data_len )
+            
+    return send_http_data( client_file, data=response, data_i=response_i, data_len=data_len )
+
+def send_http_response_g( client_file, status=200, header=None, \
+                        response=None, type="text/html", response_i=None ):
+    
+    yield from send_http_response_header_g( client_file, status, header, type )
+
+    data_len = None
+    if response!=None:
+        if response_i==None:
+            data_len = len(response)
+            
+    yield from send_http_data_g( client_file, data=response, data_i=response_i, \
+                                 data_len=data_len )
 

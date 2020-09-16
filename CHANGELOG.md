@@ -11,7 +11,8 @@
  sample code under samples folder
 - added IRQSuspendCxt context manager class under `modext/irq`
 - added simple fiber worker support to windup during closing the connection (250ms delay)
-- 
+- added basic http functions as generator functions
+-
 
 
 ### known issues

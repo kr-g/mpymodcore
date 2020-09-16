@@ -86,8 +86,11 @@ class RequestHandler(LogSupport):
         header = self._add_server_header(header)        
         self._add_session_cookie(header)
         
-        ## todo fiber here
-        send_http_response( self.client_file, status, header, response, type_, response_i )
+        # call the generator func until done
+        for rc in send_http_response_g( self.client_file, status, header, \
+                                      response, type_, response_i ):
+            pass
+            self.info("response generator loop")
 
     # send portions: header part
     def send_head(self, status=200, header=None, type_="text/html" ):
@@ -102,7 +105,7 @@ class RequestHandler(LogSupport):
 
     # json
     def send_json( self, obj, header=None, status=200, \
-                   type_='application/json', send_buffer=64 ):
+                   type_='application/json', send_buffer=512 ):
         
         response = json.dumps( obj )
         
