@@ -17,7 +17,7 @@
 
 ### known issues
 
-- with lastest update of chrome (sep. 2020) web server response might get shorten/cut
+- with latest update of chrome (sep. 2020) web server response might get shorten/cut
  when connection is closed at the end of the request. seams to be an issue with chrom only.
  use firefox instead. here timing problem dont occur.
 - with chrome it might happen that main loop freezes at accept new connection.
