@@ -24,7 +24,7 @@
  this is not predictable, or reproducable. it seams that chrome opens a new connection
  to be used for the next upcoming request.
  use firefox instead. here performance optimisation
- (reducing time for opening http socket) it handled different.
+ (reducing time for opening http socket) is handled different.
 - 
 
 
