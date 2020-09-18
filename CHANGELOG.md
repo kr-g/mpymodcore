@@ -2,7 +2,7 @@
 # Changelog
 
 
-## next version v0.0.13
+## version v0.0.13
 
 - fix: alarm clock exeption if not configured
 - refactored Namespace from `modext.winup.proc` to `modext.config` module
