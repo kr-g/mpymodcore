@@ -12,7 +12,8 @@
 - added IRQSuspendCxt context manager class under `modext/irq`
 - added simple fiber worker support to windup during closing the connection (250ms delay)
 - added basic http functions as generator functions
--
+- added `send_buffer` size parameter to `webserver.send_json` method
+- 
 
 
 ### known issues

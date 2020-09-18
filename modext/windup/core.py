@@ -40,7 +40,7 @@ class WindUp(LogSupport):
         self.html404 = None
         
         self.exec_class = Processor
-        self.exec_close_delay = 250
+        self.exec_close_delay = None
 
         self.calls = 0
         self.exec = []
@@ -172,8 +172,8 @@ class WindUp(LogSupport):
 
                     def close_func(self):
                         # delay closing the socket
-                        yield from self.sleep_ms( delay )
-                        #self.info("processor close init")
+                        if delay != None and delay > 0:
+                            yield from self.sleep_ms( delay )
                         e.close()
                         self.info("exec processor closed")
                         yield

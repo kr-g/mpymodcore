@@ -110,7 +110,7 @@ class RequestHandler(LogSupport):
 
     # json
     def send_json( self, obj, header=None, status=200, \
-                   type_='application/json', send_buffer=None ):
+                   type_='application/json', send_buffer=512 ):
         
         response = json.dumps( obj )
         
