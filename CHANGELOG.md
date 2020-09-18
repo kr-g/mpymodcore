@@ -2,18 +2,10 @@
 # Changelog
 
 
-## version v0.0.13
+## next version v0.0.14
 
-- fix: alarm clock exeption if not configured
-- refactored Namespace from `modext.winup.proc` to `modext.config` module
-- added nRF24L01+ HAL with IRQ support and sample master/slave driver under 
- [`modlib/nrf24l01p`](https://github.com/kr-g/mpymodcore/tree/master/modlib/nrf24l01p)
- sample code under samples folder
-- added IRQSuspendCxt context manager class under `modext/irq`
-- added simple fiber worker support to windup during closing the connection (250ms delay)
-- added basic http functions as generator functions
-- added `send_buffer` size parameter to `webserver.send_json` method
-- 
+-
+
 
 
 ### known issues
@@ -44,6 +36,21 @@
 - package structure
 - testing, automatic testing
 - documentation
+
+
+
+## version v0.0.13
+
+- fix: alarm clock exeption if not configured
+- refactored Namespace from `modext.winup.proc` to `modext.config` module
+- added nRF24L01+ HAL with IRQ support and sample master/slave driver under 
+ [`modlib/nrf24l01p`](https://github.com/kr-g/mpymodcore/tree/master/modlib/nrf24l01p)
+ sample code under samples folder
+- added IRQSuspendCxt context manager class under `modext/irq`
+- added simple fiber worker support to windup during closing the connection (250ms delay)
+- added basic http functions as generator functions
+- added `send_buffer` size parameter to `webserver.send_json` method
+- 
 
 
 ## version v0.0.12
