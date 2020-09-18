@@ -86,11 +86,16 @@ class RequestHandler(LogSupport):
         header = self._add_server_header(header)        
         self._add_session_cookie(header)
         
-        # call the generator func until done
-        for rc in send_http_response_g( self.client_file, status, header, \
-                                      response, type_, response_i ):
-            pass
-            self.info("response generator loop")
+        if response_i != None:
+            # call the generator func until done
+            for rc in send_http_response_g( self.client_file, status, header, \
+                                          response, type_, response_i ):
+                pass
+                self.info("response generator loop")
+                pass
+        else:
+            send_http_response( self.client_file, status, header, \
+                                          response, type_, response_i )
 
     # send portions: header part
     def send_head(self, status=200, header=None, type_="text/html" ):
@@ -105,21 +110,24 @@ class RequestHandler(LogSupport):
 
     # json
     def send_json( self, obj, header=None, status=200, \
-                   type_='application/json', send_buffer=512 ):
+                   type_='application/json', send_buffer=None ):
         
         response = json.dumps( obj )
         
-        def _iter():          
-            l = len(response)
-            chk = min( l, send_buffer )
-            for p in range( 0, l, chk ):
-                yield response[p:p+chk]
+        if send_buffer == None:
+            return self.send_response( status=status, header=header, \
+                                       response=response, type_=type_, \
+                                       response_i=None )
+        else:
+            def _iter():          
+                l = len(response)
+                chk = min( l, send_buffer )
+                for p in range( 0, l, chk ):
+                    yield response[p:p+chk]
+            return self.send_response( status=status, header=header, \
+                                       response=None, type_=type_, \
+                                       response_i=_iter )
         
-        return self.send_response( status=status, header=header, \
-                                   response=None, type_=type_, \
-                                   response_i=_iter )
-        
-
     # fiber
     def send_fiber( self, fbr ):
         try:
