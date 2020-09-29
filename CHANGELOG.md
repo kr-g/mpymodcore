@@ -24,7 +24,7 @@
  to be used for the next upcoming request.
  use firefox instead. here performance optimisation
  (reducing time for opening http socket) is handled different.
-- new_request might cause system to hang if opened by browser without sending a request
+- new_request might cause system to hang if opened by browser without sending request data
  (not an issues with firefox)
 - 
 
