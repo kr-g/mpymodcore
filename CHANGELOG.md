@@ -4,8 +4,13 @@
 
 ## next version v0.0.14
 
+- reworked WindUp fiber processing
+- added `fibered` parameter to `send_json`, and `send_response` methods
+- following objects are served fibered by default now, the total response time
+ increased - in favor to overall reaction time of the system (default send_buffer size = 512 )
+  - static files  
+  - json responses 
 -
-
 
 
 ### known issues
@@ -18,6 +23,8 @@
  to be used for the next upcoming request.
  use firefox instead. here performance optimisation
  (reducing time for opening http socket) is handled different.
+- new_request might cause system to hang if opened by browser without sending a request
+ (not an issues with firefox)
 - 
 
 

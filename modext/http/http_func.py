@@ -184,7 +184,8 @@ def send_http_response_header_g( client_file, status=200, header=None, type="tex
             send_http_header( client_file, h, v )
             yield
     if type != None:
-        send_http_header( client_file, "Content-Type", type )        
+        send_http_header( client_file, "Content-Type", type )
+        yield
     
 def send_http_response( client_file, status=200, header=None, \
                         response=None, type="text/html", response_i=None ):

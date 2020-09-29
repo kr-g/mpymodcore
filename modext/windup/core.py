@@ -143,7 +143,33 @@ class WindUp(LogSupport):
                 req.close()
             return
         
-        # fiber loop
+        # prepare the outbound fiber exec
+        
+        if req != None and req.outbound != None:
+            
+            # req_done indicates at this point that an handler was found
+            # reset done status to allow further processing
+            exec.req_done = False
+            
+            winup = self
+            def g_func(self):
+                while True:
+                    try:
+                        next(req.outbound)
+                        self.info("exec generator loop")                        
+                        yield
+                    except StopIteration:
+                        break
+                    except Exception as ex:
+                        self.excep( ex, "exec generator loop" )
+                        break
+                yield
+                exec.req_done = True
+                
+            _fbr = FiberWorker( func= g_func   )
+            self._outbound.append( _fbr )
+        
+        # exec fiber loop
         try:
             self._outbound.release()
             if len(self._outbound)>0:

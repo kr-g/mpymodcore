@@ -47,6 +47,8 @@ class RequestHandler(LogSupport):
         self.request = None
         ## todo, move floop out ? see winup
         self.fiberloop = None
+        # outbound generator
+        self.outbound = None
         
     def __len__(self):
         # this can return None
@@ -82,17 +84,24 @@ class RequestHandler(LogSupport):
     
     # send a complete response
     def send_response(self, status=200, header=None, response=None, \
-                      type_="text/html", response_i=None ):
+                      type_="text/html", response_i=None, fibered=False ):
         header = self._add_server_header(header)        
         self._add_session_cookie(header)
         
         if response_i != None:
-            # call the generator func until done
-            for rc in send_http_response_g( self.client_file, status, header, \
-                                          response, type_, response_i ):
-                pass
-                self.info("response generator loop")
-                pass
+            
+            gfunc = send_http_response_g( self.client_file, status, header, \
+                                          response, type_, response_i )
+
+            if fibered==True:
+                self.outbound = gfunc
+            else:
+                # call the generator func until done
+                for rc in gfunc:
+                    pass
+                    self.info("response generator loop")
+                    pass
+                
         else:
             send_http_response( self.client_file, status, header, \
                                           response, type_, response_i )
@@ -110,7 +119,7 @@ class RequestHandler(LogSupport):
 
     # json
     def send_json( self, obj, header=None, status=200, \
-                   type_='application/json', send_buffer=512 ):
+                   type_='application/json', send_buffer=512, fibered=True ):
         
         response = json.dumps( obj )
         
@@ -126,10 +135,11 @@ class RequestHandler(LogSupport):
                     yield response[p:p+chk]
             return self.send_response( status=status, header=header, \
                                        response=None, type_=type_, \
-                                       response_i=_iter )
+                                       response_i=_iter, fibered=fibered )
         
     # fiber
     def send_fiber( self, fbr ):
+        raise NotImplemented
         try:
             self.fiberloop.add( Fiber( fbr ) )
         except:
