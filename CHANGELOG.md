@@ -12,11 +12,17 @@
   - json responses 
 - disabled fiber version 1 in windup
 - changed `can_accept` timeout handling
-- 
+- removed `proc_fiber.py` - old fiber windup processor
+- fixed browser warning. added support for [same site cookie]
+ (https://developer.mozilla.org/de/docs/Web/HTTP/Headers/Set-Cookie/SameSite)
+ this defaults to `LAX` 
 
 
 ### known issues
-
+- upcoming soon: cookie "sessionid" and [same site cookie]
+ (https://developer.mozilla.org/de/docs/Web/HTTP/Headers/Set-Cookie/SameSite)
+ 
+### pending issues (in-work)
 - with latest update of chrome (sep. 2020) web server response might get shorten/cut
  when connection is closed at the end of the request. seams to be an issue with chrom only.
  use firefox instead. here timing problem dont occur.
