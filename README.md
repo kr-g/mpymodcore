@@ -31,7 +31,7 @@ JSON processing, Query parameter extraction, Cookies,
 Session handling (in-memory), REST stlye URL parameter parser, and extraction, etc.
 
 Multi-tasking processing support of HTTP requests based on fiber 
-([`source`](https://github.com/kr-g/mpymodcore/blob/master/modext/fiber/core.py)).
+([`source`](https://github.com/kr-g/mpymodcore/blob/master/modext/fiber/fiber_worker.py)).
 
 Static Files and JSON response data is processed in fibered mode.
 Anyway user code is free to redefine this behaviour by setting the `fibered`
