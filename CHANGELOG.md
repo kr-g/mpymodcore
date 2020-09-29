@@ -11,6 +11,7 @@
   - static files  
   - json responses 
 - disabled fiber version 1 in windup
+- changed `can_accept` timeout handling
 - 
 
 

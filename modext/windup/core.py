@@ -140,7 +140,8 @@ class WindUp(LogSupport):
                 exec.close()
                 self.exec.remove(exec)
             else:
-                req.close()
+                if req!=None:
+                    req.close()
             return
         
         # prepare the outbound fiber exec

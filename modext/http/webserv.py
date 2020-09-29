@@ -211,11 +211,11 @@ class WebServer(LogSupport):
         self.poll = uselect.poll()
         self.poll.register( self.socket, uselect.POLLIN )
   
-    def can_accept(self,timeout=153):        
+    def can_accept(self,timeout=0):        
         res = self.poll.poll(timeout)
         return res != None and len(res)>0           
             
-    def accept(self):        
+    def accept(self,timeout=153):        
         client, addr = self.socket.accept()
         self.debug( 'client connected from', addr )
         
@@ -224,6 +224,14 @@ class WebServer(LogSupport):
                 client = self.wrap_socket( client )
         except Exception as ex:
             self.excep(ex, "SSL failed" )
+        
+        poll = uselect.poll()
+        poll.register( client, uselect.POLLIN )
+        res = poll.poll(timeout)
+        poll.unregister( client )
+        if res == None or len(res)==0:
+            client.close()
+            raise Exception("socket timeout")
         
         client_file = client.makefile( 'rwb', 0 )
         return RequestHandler( self, addr, client, client_file, suppress_id=self.suppress_id )
