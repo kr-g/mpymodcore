@@ -11,7 +11,7 @@
   - static files  
   - json responses 
 - disabled fiber version 1 in windup
-- changed `can_accept` timeout handling
+- changed `can_accept` timeout handling. the loop now executes faster.
 - removed `proc_fiber.py` - old fiber windup processor
 - fixed browser warning. added support for [same site cookie]
  (https://developer.mozilla.org/de/docs/Web/HTTP/Headers/Set-Cookie/SameSite)
@@ -20,8 +20,9 @@
 
 
 ### known issues
-- upcoming soon: cookie "sessionid" and [same site cookie]
- (https://developer.mozilla.org/de/docs/Web/HTTP/Headers/Set-Cookie/SameSite)
+~~- upcoming soon: cookie "sessionid" and [same site cookie]
+ (https://developer.mozilla.org/de/docs/Web/HTTP/Headers/Set-Cookie/SameSite)~~
+-
  
 ### pending issues (in-work)
 - with latest update of chrome (sep. 2020) web server response might get shorten/cut
