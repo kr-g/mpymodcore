@@ -19,10 +19,9 @@
 - 
 
 
-### known issues
-~~- upcoming soon: cookie "sessionid" and [same site cookie]
- (https://developer.mozilla.org/de/docs/Web/HTTP/Headers/Set-Cookie/SameSite)~~
+### known issues 
 -
+
  
 ### pending issues (in-work)
 - with latest update of chrome (sep. 2020) web server response might get shorten/cut
