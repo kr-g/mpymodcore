@@ -33,7 +33,7 @@ class ContentGenerator(LogSupport):
 
 class StaticFiles(ContentGenerator):
 
-    def __init__( self, static_paths, root=None, send_buffer=64, fibered=True ):
+    def __init__( self, static_paths, root=None, send_buffer=512, fibered=True ):
         ContentGenerator.__init__(self,root)
         self.static_paths = static_paths
         self.send_buffer = send_buffer
