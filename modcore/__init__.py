@@ -12,7 +12,7 @@ https://github.com/kr-g/mpymodcore/blob/master/LICENSE
 from .cntrl import modc
 from .mod import Module
 from .lifecycle import LifeCycle
-from .log import DEBUG, INFO, NOTSET, logger
+from .log import DEBUG, INFO, NOTSET, WARNING, ERROR, CRITICAL, logger
 
 VERSION = "v0.0.14a"
 
