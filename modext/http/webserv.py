@@ -39,8 +39,6 @@ class RequestHandler(LogSupport):
         self.client = client
         self.client_file = client_file
         self.request = None
-        ## todo, move floop out ? see winup
-        self.fiberloop = None
         # outbound generator
         self.outbound = None
         
@@ -131,13 +129,9 @@ class RequestHandler(LogSupport):
                                        response=None, type_=type_, \
                                        response_i=_iter, fibered=fibered )
         
-    # fiber
+    # fiber, deprecated
     def send_fiber( self, fbr ):
         raise NotImplemented
-        try:
-            self.fiberloop.add( Fiber( fbr ) )
-        except:
-            self.warn("fiber modul not loaded. discard.")
 
     def close(self):
         self.info("close socket")
