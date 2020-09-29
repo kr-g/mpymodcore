@@ -16,12 +16,6 @@ import json
 from modcore import VERSION
 from modcore.log import LogSupport, logger
 
-try:
-    from modext.fiber import Fiber
-    print("fiber module loaded")
-except:
-    print("fiber module not loaded")
-
 from .http_func import *
 
 

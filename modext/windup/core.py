@@ -6,7 +6,7 @@
 
 from modcore.log import LogSupport, logger
 try:
-    from modext.fiber import FiberLoop, Fiber
+    #from modext.fiber import FiberLoop, Fiber
     from modext.fiber.fiber_worker import FiberWorkerLoop, FiberWorker
 except:
     logger.warn("fiber module not loaded")

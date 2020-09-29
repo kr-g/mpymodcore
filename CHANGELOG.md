@@ -10,7 +10,8 @@
  increased - in favor to overall reaction time of the system (default send_buffer size = 512 )
   - static files  
   - json responses 
--
+- disabled fiber version 1 in windup
+- 
 
 
 ### known issues
