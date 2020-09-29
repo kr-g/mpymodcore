@@ -65,12 +65,20 @@ def parse_header(line):
         return line.strip(), None
     return line[0:pos].strip(), line[pos+1:].strip()
 
-def get_http_request(client_file,client_addr, allowed=None):
+
+def get_http_read(client_file,toread,tout=None):
+    return client_file.read( toread )
+
+def get_http_readline(client_file,tout=None):
+    return client_file.readline()
+
+
+def get_http_request(client_file,client_addr, allowed=None, tout=None):
     
     if allowed==None:
         allowed = ALLOWED_DEFAULT
     
-    line = client_file.readline()
+    line = get_http_readline(client_file,tout=tout)
     
     if len(line)==0:
         raise ConnectionClosedException()
@@ -90,7 +98,7 @@ def get_http_request(client_file,client_addr, allowed=None):
     request_header = {}    
     last_header = None
     while True:
-        line = client_file.readline()
+        line = get_http_readline(client_file,tout=tout)
         if not line  or line == b'\r\n':
             break
         # support for multiple line spawning/ folding headers
@@ -107,19 +115,19 @@ def get_http_request(client_file,client_addr, allowed=None):
 
     return HTTPRequest( client_addr, method, path, proto, request_header )
 
-def get_http_content(client_file,req,max_size=4096):
+def get_http_content(client_file,req,max_size=4096,tout=None):
     toread = req.content_len()
     if toread != None:
         logger.info("toread", str(toread) )
         if toread < max_size:            
-            content = client_file.read( toread )
+            content = get_http_read( client_file, toread, tout=tout )
             req.body = content
         else:
             req.overflow = True
     return req
 
-def get_http_chunk(client_file,req,chunk_size=256):
-    content = client_file.read( toread )
+def get_http_chunk(client_file,req,chunk_size=256, tout=None ):
+    content = get_http_read( client_file, toread, tout=tout )
     return content
     
 
