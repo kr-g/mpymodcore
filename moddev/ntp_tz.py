@@ -58,13 +58,14 @@ class tz_mez(object):
 
     def __repr__(self):
         
+        now = time.time()
         offset = self.get_current_tz()
         
         return {
-            "now_utc" : time.time(),
-            "now_utc_tm" : time.localtime(time.time()),
+            "now_utc" : now,
+            "now_utc_tm" : time.localtime(now),
             "tz_offset" : offset,
-            "now_tz_tm" : time.localtime( time.time() + offset ),
+            "now_tz_tm" : time.localtime( now + offset ),
             "summer" : self.summer,
             "summer_tm" : self.summer_tm,
             "winter" : self.winter,
