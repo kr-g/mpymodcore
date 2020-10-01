@@ -1,8 +1,9 @@
 
 import time
 
+# https://en.wikipedia.org/wiki/Central_European_Time
 
-class tz_mez(object):
+class tz_cet(object):
     
     def __init__(self):
         n = self._utc_time()
