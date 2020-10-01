@@ -40,7 +40,7 @@ def gc_print_stat():
 from modcore import modc, Module, LifeCycle
 from modcore import DEBUG, INFO, NOTSET, logger
 
-from moddev.control import control_serv
+from moddev.control import control_serv, BREAK
 
 from moddev import wlan
 from moddev.wlan import wlan_ap
@@ -225,6 +225,12 @@ serv = WindUp()
 #serv.exec_class = ProcessorFiber
 
 status = Router()
+
+@status.get("/break")
+def get_break(req,args):
+    modc.fire_event( BREAK )
+    req.send_response( )
+
 @status.get("/status")
 def get_status(req,args):
     
@@ -319,6 +325,9 @@ print( "current time ->", ntp_serv.localtime() )
 print()
 print( "call loop() to start :-)" )
 print()
+
+
+from moddev.ntp_tz import tz_mez
 
 
 #from samples.windup_fiber import serve
