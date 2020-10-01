@@ -2,6 +2,7 @@
 import time
 
 # https://en.wikipedia.org/wiki/Central_European_Time
+# https://en.wikipedia.org/wiki/Daylight_saving_time
 
 class tz_cet(object):
     
@@ -29,6 +30,8 @@ class tz_cet(object):
         return tm
         
     def _find_last_sunday( self, t ):
+        # this is official across europe
+        # refer wiki article above
         tm = list(time.localtime( time.mktime(t) ))
         dow = tm[6]
         if dow != 6:
@@ -52,6 +55,7 @@ class tz_cet(object):
         return 10,31,1
 
     def _utc_tz_offset(self):
+        # berlin, rome, warsaw
         return 3600
     
     def _summer_tz_offset(self):
