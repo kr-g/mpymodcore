@@ -29,11 +29,11 @@
 - with latest update of chrome (sep. 2020) web server response might get shorten/cut
  when connection is closed at the end of the request. seams to be an issue with chrom only.
  use firefox instead. here timing problem dont occur.
-- with chrome it might happen that main loop freezes at accept new connection.
+- ~~with chrome it might happen that main loop freezes at accept new connection.
  this is not predictable, or reproducable. it seams that chrome opens a new connection
  to be used for the next upcoming request.
  use firefox instead. here performance optimisation
- (reducing time for opening http socket) is handled different.
+ (reducing time for opening http socket) is handled different.~~
 - ~~new_request might cause system to hang if opened by browser without sending request data
  (not an issues with firefox)~~
 - 
