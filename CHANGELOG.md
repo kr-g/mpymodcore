@@ -16,6 +16,8 @@
 - fixed browser warning. added support for
  [same site cookie](https://developer.mozilla.org/de/docs/Web/HTTP/Headers/Set-Cookie/SameSite)
  this defaults to `LAX`
+- improved fault tolerant connection handling due to fiberworker
+ rework in windup outbound part
 - 
 
 
