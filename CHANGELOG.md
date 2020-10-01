@@ -1,24 +1,9 @@
 
 # Changelog
 
+## next version v0.0.15
 
-## version v0.0.14
-
-- reworked WindUp fiber processing in request outboud part
-- added `fibered` parameter to `send_json`, and `send_response` methods
-- following objects are served fibered by default now, the total response time
- increased - in favor to overall reaction time of the system (default send_buffer size = 512 )
-  - static files  
-  - json responses 
-- disabled fiber version 1 in windup
-- changed `can_accept` timeout handling. the loop now executes faster.
-- removed `proc_fiber.py` - old fiber windup processor
-- fixed browser warning. added support for
- [same site cookie](https://developer.mozilla.org/de/docs/Web/HTTP/Headers/Set-Cookie/SameSite)
- this defaults to `LAX`
-- improved fault tolerant connection handling due to fiberworker
- rework in windup outbound part
-- 
+-
 
 
 ### known issues 
@@ -55,6 +40,25 @@
 - testing, automatic testing
 - documentation
 
+
+
+## version v0.0.14
+
+- reworked WindUp fiber processing in request outboud part
+- added `fibered` parameter to `send_json`, and `send_response` methods
+- following objects are served fibered by default now, the total response time
+ increased - in favor to overall reaction time of the system (default send_buffer size = 512 )
+  - static files  
+  - json responses 
+- disabled fiber version 1 in windup
+- changed `can_accept` timeout handling. the loop now executes faster.
+- removed `proc_fiber.py` - old fiber windup processor
+- fixed browser warning. added support for
+ [same site cookie](https://developer.mozilla.org/de/docs/Web/HTTP/Headers/Set-Cookie/SameSite)
+ this defaults to `LAX`
+- improved fault tolerant connection handling due to fiberworker
+ rework in windup outbound part
+- 
 
 
 ## version v0.0.13

@@ -14,7 +14,7 @@ from .mod import Module
 from .lifecycle import LifeCycle
 from .log import DEBUG, INFO, NOTSET, WARNING, ERROR, CRITICAL, logger
 
-VERSION = "v0.0.14"
+VERSION = "v0.0.15a"
 
 print( "-"*41 )
 print( "mpy modcore" )
