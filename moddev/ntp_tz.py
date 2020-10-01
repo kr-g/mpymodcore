@@ -5,7 +5,7 @@ import time
 class tz_mez(object):
     
     def __init__(self):
-        n = time.time()
+        n = self._utc_time()
         tn = time.localtime( n )       
         year_tm = (tn[0], 0, 0, 0, 0, 0, 0, 0)
         
@@ -18,20 +18,15 @@ class tz_mez(object):
         self.summer = time.mktime( self.summer_tm )
         self.winter = time.mktime( self.winter_tm )
     
+    def _utc_time(self):
+        return time.time()
+    
     def _patch(self,tm,tp):
         tm = list(tm)
         for i in range(0,3):
             tm[i+1] = tp[i]
         return tm
         
-    def _summer_start(self):
-        # 31 march, 1am utc
-        return 3,31,1
-    
-    def _winter_start(self):
-        # 31 oct, 1am utc
-        return 10,31,1
-
     def _find_last_sunday( self, t ):
         tm = list(time.localtime( time.mktime(t) ))
         dow = tm[6]
@@ -40,9 +35,36 @@ class tz_mez(object):
             tm[6] = 6
         return tm
 
+    def get_current_tz(self):
+        n = self._utc_time()
+        offset = self._utc_tz_offset()
+        if n >= self.summer and n < self.winter:
+            offset += self._summer_tz_offset()
+        return offset
+
+    def _summer_start(self):
+        # 31 march, 1am utc
+        return 3,31,1
+    
+    def _winter_start(self):
+        # 31 oct, 1am utc
+        return 10,31,1
+
+    def _utc_tz_offset(self):
+        return 3600
+    
+    def _summer_tz_offset(self):
+        return 3600
+
     def __repr__(self):
+        
+        offset = self.get_current_tz()
+        
         return {
             "now_utc" : time.time(),
+            "now_utc_tm" : time.localtime(time.time()),
+            "tz_offset" : offset,
+            "now_tz_tm" : time.localtime( time.time() + offset ),
             "summer" : self.summer,
             "summer_tm" : self.summer_tm,
             "winter" : self.winter,
