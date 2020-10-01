@@ -7,10 +7,6 @@
 
 
 ### known issues 
--
-
- 
-### pending issues (in-work)
 - with latest update of chrome (sep. 2020) web server response might get shorten/cut
  when connection is closed at the end of the request. seams to be an issue with chrom only.
  use firefox instead. here timing problem dont occur.
