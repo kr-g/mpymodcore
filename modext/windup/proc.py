@@ -86,7 +86,8 @@ class Processor(LogSupport):
         pass
     
     def close(self):
-        self.req.close()
-        self.req=None
+        if self.req != None:
+            self.req.close()
+            self.req=None
     
     
