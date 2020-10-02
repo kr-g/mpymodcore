@@ -11,10 +11,12 @@ from .log import LogSupport
 
 class Module(LifeCycle,LogSupport):
     
-    def __init__( self, id, config=None, max_events=5 ):
+    def __init__( self, id=None, config=None, max_events=5 ):
         LifeCycle.__init__(self)
         LogSupport.__init__(self)
         self._controller = None
+        if id==None:
+            id = self.__class__.__name__.lower()
         self.id = id
         self.max_events = max_events
 #        self.conf( config )

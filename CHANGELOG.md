@@ -3,7 +3,11 @@
 
 ## next version v0.0.15
 
--
+- modcore.module id is derived from class name when not set
+- added `moddev.ntp.TZ_Support` for timezone handling with `ntp_serv`
+- added `moddev.ntp_tz_cet.TZ_cet` for central european time support
+- added `moddev.ntp_tz_serv` module for automatic timezone reloading
+- 
 
 
 ### known issues 

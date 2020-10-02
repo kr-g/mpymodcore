@@ -53,6 +53,13 @@ from moddev.ntp import ntp_serv, set_log_time
 # modc.fire_event("tz", 3600*2 ) # 2 hours offset
 # modc.fire_event("tz" ) # utc
 
+from moddev.ntp_tz import ntp_tz_serv
+from moddev.ntp_tz_cet import TZ_cet
+# do this after moddev.ntp was loaded
+# and before modc.run was called
+ntp_tz_serv.set_tz_handler( TZ_cet )
+
+
 from moddev import softap
 
 from moddev import webrepl

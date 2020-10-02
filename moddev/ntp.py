@@ -16,14 +16,25 @@ from .timeout import Timeout
 WLAN="wlan"
 TZ="tz"
 NTP_SYNC="ntp-sync"
+NTP_EVENT="ntp"
 
 FNAM = "timezone.cfg.txt"
 
+
+class TZ_Support(object):
+
+    def get_current_tz(self):
+        raise NotImplemented
+    
+    def expires(self,cur_time):
+        pass
+    
 
 class NTP(Module):
          
     def on_add(self):
         self.init()
+        self.tz_handler_cls = None
         
     def init(self):
         self.offset = 0
@@ -31,6 +42,12 @@ class NTP(Module):
         self.retry_after = Timeout( 5 ) ## todo config
         
     def conf(self,config=None):
+        
+        if self.tz_handler_cls != None:
+            # ignore other setting options
+            self.info("found tz handler")
+            return
+        
         found = True
         try:
             self.info("load tz info")
@@ -60,8 +77,15 @@ class NTP(Module):
             ntptime.settime()
             self._timeout = False
             #self.retry_after.reset() ##todo config
+            
+            if self.tz_handler_cls != None:
+                tz_offset = self.tz_handler_cls().get_current_tz()
+                self.info("ntp tz handler offset=",tz_offset)
+                self.set_tz_offset( tz_offset, fire_event=False, persist=False )
+
             self.info( "ntp time", self.localtime() )
-            self.fire_event( "ntp", True )
+            self.fire_event( NTP_EVENT, True )
+            
         except Exception as ex:
             self._timeout = True
             self.retry_after.restart()
@@ -84,12 +108,13 @@ class NTP(Module):
                 self._settime()
             else:
                 # ntp lost
-                self.fire_event( "ntp", False )
+                self.fire_event( NTP_EVENT, False )
                 
         if self.is_event( event, NTP_SYNC ):
             self._settime()
                 
         if self.is_event( event, TZ ):
+            ## todo tz handler
             if val:
                 self.set_tz_ofset( val )
             else:
@@ -101,14 +126,6 @@ class NTP(Module):
     def utctime(self):
         return time.localtime( self.utc() )
 
-    # todo spelling
-    def set_tz_ofset(self,offset,fire_event=True,persist=True):
-        try:
-            raise Exception("deprecated, use set_tz_offset")
-        except Exception as ex:
-            self.excep( ex )
-        self.set_tz_offset( offset,fire_event,persist )
-
     def set_tz_offset(self,offset,fire_event=True,persist=True):
         try:
             offset = int(offset)
@@ -118,7 +135,7 @@ class NTP(Module):
         if self.offset != offset:
             self.info( "timezone", offset )
             if fire_event:
-                self.fire_event( "ntp", True )
+                self.fire_event( NTP_EVENT, True )
             self.offset = offset
             if persist:
                 self._save()
