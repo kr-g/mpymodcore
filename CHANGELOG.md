@@ -7,6 +7,7 @@
 - new ntp timezone handling and reloading
   - added `moddev.ntp.TZ_Support` for timezone handling with `ntp_serv`
   - added `moddev.ntp_tz_cet.TZ_cet` for central european time support
+    - use this as a base for implementing other timezones
   - added `moddev.ntp_tz_serv` module for automatic timezone reloading
   - added sample code in `boot.py`
 -
