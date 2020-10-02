@@ -33,7 +33,7 @@
 - ~~tls/ssl support~~
 - ~~WindUp security hardening, user module, secure router with redirect/bad request response~~
 - wlan / wifi roaming support, save more than more credential and connect when better connection available
-- better ntp timezone support
+- ~~better ntp timezone support~~
 - Bluetooth®
 - MQTT
 - fiber and fiber call stack, fiber api change
