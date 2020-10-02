@@ -12,7 +12,8 @@
     - use this as a base for implementing other timezones
   - added `moddev.ntp_tz_serv` module for automatic timezone reloading
   - added sample code in `boot.py`
--
+- `mod3rd.admin_esp.wlan` shows now more wifi information
+- 
 
 
 ### known issues 

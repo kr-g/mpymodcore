@@ -7,34 +7,46 @@ from modcore import modc
 from moddev.wlan import wlan_ap, WLAN_RESTART
 from modext.windup import Router
 
+from mod3rd.simplicity import *
+from modext.windup import Namespace
+
+
 router = Router( root="/admin" )
 
 # get request
 
-netw = {}
+netw = []
 
 @router.get("/wlan")
 def my_form( req, args ):
+
+    data = netw_data()
     
+    logger.info(data)
+    req.send_response( response=data )
+
+
+def netw_data(debug=False):
     networks = wlan_ap.scan()
     wlan_info = wlan_ap.ifconfig()
     
-    netwdiv = ""
-    
-    for nam, mac, _, _, _, _ in networks:
+    global netw
+    netw = []
+
+    for nam, mac, channel, dbm, auth, hidden in networks:
         
         nam = nam.decode() 
         mac = ubinascii.hexlify(mac).decode()
         
-        global netw
-        netw[mac]=nam
+        obj = Namespace().update( {
+            "mac" : mac, "nam" : nam, "dbm" : dbm,
+            "channel" : channel, "auth" : auth, "hidden" : hidden,
+            } )         
+        netw.append( obj )
         
-        netwdiv += "<div>"
-        netwdiv += '<input type="radio" id="f_'+mac+'" name="fwifi" value="'+mac+'" >'
-        netwdiv += '<label for="f_'+mac+'">'+nam+'</label>'
-        netwdiv += "</div>"
-    
-    data = """
+        debug and print( mac, nam )
+            
+    t = """
             <!DOCTYPE html>
             <html>
             <body>
@@ -42,16 +54,42 @@ def my_form( req, args ):
             <h2>WLAN configuration</h2>
 
             <div> &nbsp; </div>
-            <div> Currently connected to: '%s' </div>
+            <div> Currently connected to: '{ssid}' </div>
             <div> &nbsp; </div>
-            <div> IfConfig: '%s' </div>
+            <div> IfConfig: '{ifconfig}' </div>
             <div> &nbsp; </div>
 
             <form action="/admin/wlan" method="POST">
             
                 <div> Available Networks nearby </div>
                 <div> &nbsp; </div>
-                <div> %s </div>
+                
+                <div>
+                
+                <table>
+                <tr>
+                    <td></td>
+                    <td>Name</td>
+                    <td>Mac</td>
+                    <td>Signal (dbm)</td>
+                    <td>Authmode</td>
+                    <td>Hidden</td>
+                    <td>Channel</td>
+                </tr>
+                    {*netw}
+                    <tr>
+                        <td><input type="radio" id="f_{_.mac}" name="fwifi" value="{_.mac}" ></td>
+                        <td><label for="f_{_.mac}">{_.nam}</label></td>
+                        <td><span>{_.mac}</span></td>
+                        <td><span>{_.dbm}</span></td>
+                        <td>{authmode(_.auth)}</td>
+                        <td>{hidden(_.hidden)}</td>
+                        <td>{_.channel}</td>
+                    </tr>
+                    {}
+                </table>
+                
+                </div>
 
                 <div> &nbsp; </div>
                 <label for="f_passwd">Password:</label><br>
@@ -65,10 +103,40 @@ def my_form( req, args ):
 
             </body>
             </html>            
-            """ % ( str(wlan_ap.ssid), str(wlan_info),netwdiv )
+        """
+
+    def authmode(auth):
+        if auth == 0:
+            return "open"
+        if auth == 1:
+            return "WEP"
+        if auth == 2:
+            return "WPA-PSK"
+        if auth == 3:
+            return "WPA2-PSK"
+        if auth == 4:
+            return "WPA/WPA2-PSK"
+        
+    def hidden(hid):
+        if hid:
+            return "yes"
+        return "no"
+
+    smpl = Simplicity( t, esc_func=simple_esc_html )
+    ctx = Namespace()
+    ctx.update({
+        "ssid" : str(wlan_ap.ssid),
+        "ifconfig" : str(wlan_info),
+        "netw" : netw,
+        "hidden" : hidden,
+        "authmode" : authmode,
+    })
     
-    logger.info(data)
-    req.send_response( response=data )
+    debug and print( netw )
+    debug and print( ctx )
+    
+    data = smpl.print(ctx)
+    return data
 
 
 # post request
@@ -80,14 +148,19 @@ def my_form( req, args ):
     
     try:
         # namespace     
-        ssid = netw[ form.fwifi ]
+        con = list(filter( lambda x : x.mac == form.fwifi, netw ))[0]
+        ssid = con.nam
+        mac = con.mac
         passwd = form.fpasswd
         
         data = """
                 <h1>WLAN configuration saved</h1>
                 <div> &nbsp; </div>
                 <div> Networkname: '%s' </div>
-                """ % ( ssid )
+                <div> Mac: '%s' </div>
+                <div> &nbsp; </div>
+                <div> Go back to choose <a href="/admin/wlan">WLAN</a> </div>
+                """ % ( ssid, mac )
         
         wlan_ap.wlan_config( ssid, passwd )
         
