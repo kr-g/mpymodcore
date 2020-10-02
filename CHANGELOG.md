@@ -4,8 +4,8 @@
 ## next version v0.0.15
 
 - `modcore.mod.Module` id is derived from class name when not set
-- new ntp timezone handling and reloading
- hint: time aware modules need to register event `"ntp"` in `watching_events`
+- new ntp timezone handling and reloading.
+ **important:** time aware modules need to register to event `"ntp"` in `Module.watching_events`
  and recalculate their schedule after new time was set
   - added `moddev.ntp.TZ_Support` for timezone handling with `ntp_serv`
   - added `moddev.ntp_tz_cet.TZ_cet` for central european time support
