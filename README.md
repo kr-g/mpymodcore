@@ -5,7 +5,7 @@ An approach to modularize MicroPython projects.
 
 Introduce a defined lifecycle and eventing model
 for modules / devices for convenient handling
-of loose coupled modules/ device
+of loose coupled modules/ devices
 
 # What's new ?
 
