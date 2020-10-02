@@ -57,6 +57,7 @@ from moddev.ntp_tz import ntp_tz_serv
 from moddev.ntp_tz_cet import TZ_cet
 # do this after moddev.ntp was loaded
 # and before modc.run was called
+# pass class _not_ instance, will be created when needed on the fly
 ntp_tz_serv.set_tz_handler( TZ_cet )
 
 
