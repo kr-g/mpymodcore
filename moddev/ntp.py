@@ -26,7 +26,7 @@ class TZ_Support(object):
     def get_current_tz(self):
         raise NotImplemented
     
-    def expires(self,cur_time):
+    def expires(self):
         pass
     
 
