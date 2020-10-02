@@ -1,7 +1,7 @@
 
 import time
 
-from .ntp import ntp_serv, NTP_EVENT, NTP_SYNC, TZ_Support
+from .ntp import ntp_serv, TZ_Support
 
 # https://en.wikipedia.org/wiki/Central_European_Time
 # https://en.wikipedia.org/wiki/Daylight_saving_time

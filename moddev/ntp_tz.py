@@ -4,7 +4,7 @@ import time
 from modcore import modc, Module, LifeCycle
 from modcore.log import LogSupport
 
-from .ntp import ntp_serv, NTP_EVENT, NTP_SYNC, TZ_Support
+from .ntp import ntp_serv, NTP_EVENT, NTP_SYNC
 from .timeout import Timeout
     
 
