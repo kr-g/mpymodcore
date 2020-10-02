@@ -40,6 +40,7 @@
 - ~~better ntp timezone support~~
 - Bluetooth®
 - MQTT
+- `modext.config.namespace` rework
 - fiber and fiber call stack, fiber api change
 - fiber stream integration
 - WindUp configuration rework
