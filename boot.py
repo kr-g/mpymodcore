@@ -335,9 +335,6 @@ print( "call loop() to start :-)" )
 print()
 
 
-from moddev.ntp_tz import *
-
-
 #from samples.windup_fiber import serve
 
 #end 
