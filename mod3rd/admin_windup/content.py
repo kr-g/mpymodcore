@@ -14,10 +14,6 @@ router = Router( root="/admin" )
 @router.get("/generators")
 def list_generators( req, args ):
     
-    logger.info(req)
-    logger.info(req.webserver)
-    logger.info(req.windup)
-    
     gen = []
     
     for g in req.windup.generators:
