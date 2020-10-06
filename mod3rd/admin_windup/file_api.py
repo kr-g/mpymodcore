@@ -25,8 +25,43 @@ def get_file( req, args ):
     rest = args.rest
     fnam = _conv(rest.filename)
     req.send_json(_get_file_info(fnam))
+
+
+@router.xget("/mkdir/:path")
+def get_file( req, args ):
+    rest = args.rest
+    path = _conv(rest.path)
     
-        
+    path = path.split("/")
+    
+    fp = ""
+    for p in path:
+        fp += p
+        try:
+            os.mkdir(fp)
+        except:
+            pass
+        fp += "/"
+
+    req.send_response( )
+
+
+@router.xget("/remove/:path/:recur_level")
+def get_file( req, args ):
+    rest = args.rest
+    path = _conv(rest.path)
+    recur_level = int(rest.recur_level)
+    
+    fi = _get_file_info(path)
+    folders = [fi]
+    if fi["mode"]==16384:
+        folders.extend( _get_folder_info(path,recur_level) )
+    
+    _remove(folders)
+    
+    req.send_response( )
+
+
 @router.xget("/listdir/:path/:recur_level")
 def get_file( req, args ):
     rest = args.rest
@@ -36,10 +71,19 @@ def get_file( req, args ):
     logger.info(path,recur_level)
     
     folders = []
-
     folders.extend( _get_folder_info(path,recur_level) )
     
     req.send_json( folders )
+    
+
+def _remove(folders):
+    for fp in folders:
+        if "children" in fp:
+            _remove(fp["children"])
+        if fp["mode"]==16384:
+            os.rmdir(fp["name"])
+        else:
+            os.remove(fp["name"])
     
 
 def _get_folder_info(path,recur_level):
