@@ -2,6 +2,7 @@
 from modext.http.webserv import WebServer
 
 from .router import Router
+from .content import StaticFiles
 from .core import WindUp
 from .proc import Namespace
 

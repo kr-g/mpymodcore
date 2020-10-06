@@ -13,6 +13,8 @@
   - added `moddev.ntp_tz_serv` module for automatic timezone reloading
   - added sample code in `boot.py`
 - `mod3rd.admin_esp.wlan` shows now more wifi information
+- added module `mod3rd.admin_windup.content` which adds a new route
+ `/admin/generators`. returns a json with all WindUp Routers listed
 - 
 
 

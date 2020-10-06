@@ -118,6 +118,9 @@ class WindUp(LogSupport):
                 exec.callid = self.calls
                 
                 self.exec.append(exec)
+                
+                req.windup = self
+                
                 req_done = exec.run(req)
                 self.info( "req_done", req_done, exec.callid )
                 

@@ -29,7 +29,6 @@ class Processor(LogSupport):
         self.info( "request content len", len( req ) )
                 
         request = req.request
-        
         request.xargs = Namespace()
         
         for f in self.windup.headerfilter:

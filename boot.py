@@ -300,6 +300,7 @@ def tops(req,args):
 import mod3rd
 from mod3rd.admin_esp.wlan import router as router_wlan
 from mod3rd.admin_user.login import router as router_login
+from mod3rd.admin_windup.content import router as router_generators
 
 
 logger.info("config done. start windup.")
@@ -311,6 +312,7 @@ if run_not_in_sample_mode:
     generators.extend( [
             router_wlan,
             router_login,
+            router_generators,
             status,
             secured_router,
         ] )
