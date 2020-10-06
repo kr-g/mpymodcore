@@ -34,6 +34,8 @@
 
 ### backlog
 
+- rework `ReprDict` to support list, tupels, ...
+- alternative `json.dumps()` implementation as fiber worker based on `ReprDict`
 - ~~integrate fiber in modext.webserv~~
 - ~~integrate fiber in modcore~~
 - ~~tls/ssl support~~
