@@ -105,19 +105,26 @@ class StaticFiles(ContentGenerator):
             pass
             #self.excep( ex )
         return False
-    
+
     def send_file( self, request, path ):
+        return StaticFiles._send_chunked_file( request, path,
+                                               send_buffer=self.send_buffer,
+                                               fibered=self.fibered,
+                                               log_base=self )
+    
+    # class static scope
+    def _send_chunked_file( request, path, send_buffer=512, fibered=True, log_base=None ):
 
         def _send_chunk():
             with open(path) as f:
                 while True:
-                    c = f.read(self.send_buffer)
-                    self.info("send bytes", len(c))
+                    c = f.read(send_buffer)
+                    if log_base!=None:
+                        log_base.info("send bytes", len(c))
                     if len(c)==0:
                         break
                     yield c
 
-        request.send_response( response_i=_send_chunk, fibered=self.fibered )
-          
+        request.send_response( response_i=_send_chunk, fibered=fibered )
+              
         
-
