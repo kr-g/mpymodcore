@@ -19,6 +19,33 @@ def get_file( req, args ):
     fnam = _conv(rest.filename)
     StaticFiles._send_chunked_file( req, fnam )
     
+@router.xpost("/file/:filename")
+def post_file( req, args ):
+    
+    rest = args.rest
+    fnam = _conv(rest.filename)
+    
+    request = req.request
+    data = request.body
+    
+    logger.info("overflow",req.overflow)
+    logger.info("content_len",request.content_len())
+    logger.info(fnam)
+    logger.info(data)
+
+    if req.overflow == True:
+        logger.info("file to big")
+        ## todo handle files > 4096 bytes
+        # 403 forbidden
+        req.send_response( status= 403 )
+        return
+    
+    with open( fnam, "wb" ) as f:
+        f.write( data )
+        f.flush()
+
+    req.send_response( )
+    
     
 @router.xget("/fstat/:filename")
 def get_fstat( req, args ):
@@ -144,3 +171,11 @@ def _conv(val):
         else:
             break
     return val
+
+
+print()
+print("*"*37)
+print( "loading file api rest modules!!!" )
+print("*"*37)
+print()
+

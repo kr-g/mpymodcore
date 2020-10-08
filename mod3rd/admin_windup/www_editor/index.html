@@ -65,6 +65,8 @@
 <select id="edit_mode" onchange="on_mode_change()">
     <option value="txt">default</option>
     <option value="python">Python</option>
+    <option value="javascript">JavaScript</option>
+    <option value="json">JSON</option>
     <option value="html">HTML</option>
     <option value="css">CSS</option>
     <option value="md">MarkDown</option>
@@ -101,8 +103,70 @@ def hello():
 
 <script type="text/javascript">
 
-var inp_term_last = ""
+async function get(url,as_json){
+  console.log("get", url);
+  var response
+  try {
+      response = await fetch(url, {
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        mode: 'no-cors', // no-cors, *cors, same-origin
+        redirect: 'error', // manual, *follow, error
+      })
+  }
+  catch( ex ) {
+    console.log( ex );
+    throw ex;
+  }
+  finally {
+    
+  }
+  console.log("get done", url, response.status );
+    try{
+        if( as_json == true ){
+            jsn = await response.json()
+            return jsn
+        }
+        jsn = await response.text()
+        return jsn
+    } 
+    catch( ex ){
+        console.log( response, ex );
+        throw ex;
+    }
+}
 
+async function post(url = '', data = {}, content='application/json') {
+  //url = urlmock(url)
+  console.log("post", url, data);
+  // Default options are marked with *
+  try {
+      const response = await fetch(url, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+            //'Content-Length': todo len content,
+            'Content-Type': content,
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'error', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: data, // body data type must match "Content-Type" header
+      });
+      console.log("post done", url, data);
+      return response; 
+  }
+  catch(ex){
+    console.log("post failed", url, data, ex )
+    return; 
+  }
+  finally {
+      
+  }
+}
+
+var inp_term_last = ""
 
 function on_new(){
     console.log("on_new")
@@ -110,6 +174,11 @@ function on_new(){
 }
 function on_save(){
     console.log("on_save")
+    src = editor.getValue()
+    console.log(src)
+    fnam = inp_file.value
+    url = "/admin/file/" + fnam 
+    post( url, data = src, content="plain/text" ).then( x=> console.log(x) )
 }
 function on_save_as(){
     console.log("on_save_as")
@@ -119,6 +188,10 @@ function on_close(){
 }
 function on_reload(){
      console.log("on_reload")
+     fnam = inp_file.value
+     url = "/admin/file/" + fnam
+     set_mode_from_file( fnam )
+     get( url ).then( src => { editor.setValue(src); editor.gotoLine(1); })
 }
 
 function on_undo(){
@@ -281,7 +354,7 @@ $(document).ready(function(){
         name: 'save',
         bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
         exec: function(editor) {
-            console.log("save")
+            on_save()
         },
         //readOnly: true // false if this command should not apply in readOnly mode
     });
