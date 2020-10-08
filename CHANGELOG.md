@@ -15,8 +15,8 @@
 - `mod3rd.admin_esp.wlan` shows now more wifi information
 - added module `mod3rd.admin_windup.content` which adds a new route
  `/admin/generators`. returns a json with all WindUp Routers listed
-- added module `mod3rd.admin_windup.file_api`. rest services for accessing remote
- files and folders
+- added module `mod3rd.admin_windup.file_api`. rest services for remote OS operations 
+ regarding files and folders
 -
 
 
