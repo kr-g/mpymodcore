@@ -19,6 +19,9 @@
  regarding files and folders
 - integrated [ace editor](https://ace.c9.io/) under `mod3rd.admin_windup.editor`,
  limitation: max edit file size 4096 bytes
+  - sample code in `boot.py`, url is e.g.
+  http://your-ip/admin/editor/#?file=/mod3rd/README.md
+  - ace integration is EXPERIMENTAL and not tested
 - 
 
 
