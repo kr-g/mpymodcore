@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>edit file</title>
+
+<style type="text/css" media="screen">
+
+    .ace_editor, .toolbar {
+        border: 1px solid lightgray;
+        margin: auto;
+        width: 70%;
+    } 
+    .ace_editor {
+        height: 531px;
+        position: relative;
+        /*top: 85px;
+        right: 0;
+        bottom: 20px;
+        left: 0;*/
+    }
+
+</style>
+
+<!-- ace editor
+    https://ace.c9.io/#nav=embedding
+    https://cdnjs.com/libraries/ace
+-->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.min.js" integrity="sha512-GoORoNnxst42zE3rYPj4bNBm0Q6ZRXKNH2D9nEmNvVF/z24ywVnijAWVi/09iBiVDQVf3UlZHpzhAJIdd9BXqw==" crossorigin="anonymous"></script>  
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/theme-twilight.min.js" integrity="sha512-2IqbT6swyxY2XnBLoAIUYyxu2Oj1XoS7AafJE/5q3vl0mmXyKxIIyKqh1jZNqZeNsp8uP8JRNtG2Z6sgoadXOA==" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-python.min.js" integrity="sha512-2Ke4vMGrMfYRM55pT1aA5bw7Pl82Sc7K5Hg8XZYZu+EQrb0AO1mNYTagwZm+MFVAImYS9Mlnm73zcgc01wPXxA==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-javascript.min.js" integrity="sha512-ZxMbXDxB0Whct+zt+DeW/RZaBv33N5D7myNFtBGiqpDSFRLxn2CNp6An0A1zUAJU/+bl8CMVrwxwnFcpFi3yTQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-html.min.js" integrity="sha512-qyse7v2aBOxbbQxKhaDcI+XKKBDL3CPR5xsipXPUX3GwzE6lcteLkFsTS7emYQcDtTqY/nsq99FztWBXzmfFAA==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-css.min.js" integrity="sha512-OO15QRsOOnspJ9FhjdJbbR9Sz12ZuxmXWuJBvOjHOHWY8pLqaunG9paVeoO4glkxyJJyQsM166QeA7uLkIdbyA==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-markdown.min.js" integrity="sha512-8euv05RhbuOcZWj/kpF+KtKN7g1CPx7buTZjIBf/rZQz47cduH3DERWoqJFrIYE0TzaIlptz+Ir2BodrmLT8kQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-json.min.js" integrity="sha512-VZZMcLUCIF2nfbd/WddhQvF0/K/hWtKLTMEEc3/ouKX3ceCgEEPJR/c1buV/XDm1lMJrP9ZZ4izN+3VUZxCGHA==" crossorigin="anonymous"></script>
+
+<!-- jquery
+-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+
+
+<!-- jstree
+    https://github.com/vakata/jstree
+    https://cdnjs.com/libraries/jstree
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.10/jstree.min.js" integrity="sha512-fgHQj3Fsk5TtG3XglZ/JkE06lx/gJdBZ+Lll785gf5RW3NWcGsyTBwauFtwrlZvpsuv6XSjzB97fBNagkT6uDg==" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.10/themes/default-dark/style.min.css" integrity="sha512-WXJRkkdEPD+ELJ8Q/Wlbob6an44EFSIzz8+IAZKIpDzUr5ft20F310lnW8qaqP9bCconQq+ukILgrO1lJDAQvg==" crossorigin="anonymous" />
+-->
+
+
+</head>
+<body class="">
+
+<div class="toolbar">
+    <button onclick="on_new()">new</button>
+    <label for="inp_file">file:</label>
+    <input id="inp_file" value=""></input>
+    <button onclick="on_reload()">re/load</button>
+    <button onclick="on_save()">save</button>
+    
+<select id="edit_mode" onchange="on_mode_change()">
+    <option value="txt">default</option>
+    <option value="python">Python</option>
+    <option value="html">HTML</option>
+    <option value="css">CSS</option>
+    <option value="md">MarkDown</option>
+</select>
+
+</div>
+<div class="toolbar">
+    <input id="line_nr" size="3" value="1"></input>
+    <button onclick="on_go_nr()">goto line</button>
+    <button onclick="on_undo()">undo</button>
+    <button onclick="on_redo()">redo</button>
+</div>
+<div class="toolbar">
+    <label for="inp_term">search:</label>
+    <input id="inp_term" size="7" value="world"></input>
+    <button onclick="on_next()">next</button>
+    <button onclick="on_prev()">prev</button>
+    <input id="replace_term" size="7" value="world!"></input>
+    <button onclick="on_replace()">replace</button>
+    <button onclick="on_replace_all()">replace all</button>
+    
+</div>
+
+<div id="folder_view"></div>
+
+<div id="editor" class="ace_editor">
+def hello():
+    print("hello world")
+    print("hello world")
+    print("hello world")
+</div>
+  
+
+
+<script type="text/javascript">
+
+var inp_term_last = ""
+
+
+function on_new(){
+    console.log("on_new")
+    editor.setValue("");
+}
+function on_save(){
+    console.log("on_save")
+}
+function on_save_as(){
+    console.log("on_save_as")
+}
+function on_close(){
+     console.log("on_close")
+}
+function on_reload(){
+     console.log("on_reload")
+}
+
+function on_undo(){
+     console.log("on_undo")
+     editor.undo()
+}
+function on_redo(){
+     console.log("on_redo")
+     editor.redo()
+}
+
+function on_go_nr(){
+    console.log("on_go_nr",line_nr.value)
+    line = parseInt(line_nr.value)
+    if( line <= 0 ) return
+    editor.gotoLine(line)
+}
+
+function on_search(){
+    if( inp_term_last != inp_term.value ){
+        inp_term_last = inp_term.value
+        editor.find(inp_term_last)
+        return true
+    }
+    return false    
+}
+
+function on_next(){
+    console.log("on_next",inp_term.value)  
+    if( on_search() ) return    
+    editor.findNext()    
+}
+
+function on_prev(){
+    console.log("on_prev",inp_term.value)  
+    if( on_search() ) return    
+    editor.findPrevious()    
+}
+
+function on_replace(){
+    console.log("on_replace",inp_term.value,replace_term.value )
+    editor.replace(replace_term.value)
+    editor.find(inp_term_last)
+}
+
+function on_replace_all(){
+    console.log("on_replace_all",inp_term.value,replace_term.value )
+    editor.replaceAll(replace_term.value)
+}
+
+function reset_tab(){
+    editor.session.setTabSize(4);
+    editor.session.setUseSoftTabs(true);    
+}
+
+modes = {
+    "txt" : function(){
+        editor.session.setMode("");
+        },    
+    "python" : function(){
+        editor.session.setMode("ace/mode/python");
+        editor.session.setTabSize(4);
+        editor.session.setUseSoftTabs(false);
+        },    
+    "javascript" : function(){
+        editor.session.setMode("ace/mode/javascript");
+        },    
+    "json" : function(){
+        editor.session.setMode("ace/mode/json");
+        },    
+    "html" : function(){
+        editor.session.setMode("ace/mode/html");
+        },    
+    "css" : function(){
+        editor.session.setMode("ace/mode/css");
+        },    
+    "md" : function(){
+        editor.session.setMode("ace/mode/markdown");
+        },    
+}
+
+function set_mode(m){
+    for( i in edit_mode.children ){
+        x = edit_mode.children[i]
+        if(x.value==m){
+            x.selected=true            
+        }
+    }
+    reset_tab()
+    modes[m]()
+}
+
+function on_mode_change(){
+    i = edit_mode.selectedIndex
+    set_mode( edit_mode.children[i].value )
+}
+
+function set_mode_from_file(fnam){
+    fpos = fnam.lastIndexOf(".")
+    if( fpos>0 ){
+        ext = fnam.substr(fpos+1)
+        switch(ext){
+            case "py":
+                set_mode("python")
+                break
+            case "htm":
+            case "html":
+                set_mode("html")
+                break
+            case "css":
+                set_mode("css")
+                break
+            case "js":
+            case "jsm":
+                set_mode("javascript")
+                break
+            case "json":
+                set_mode("json")
+                break
+            case "md":
+                set_mode("md")
+                break
+            default:
+                set_mode("txt")
+        }
+    }
+}
+
+
+$(document).ready(function(){
+
+/*
+    folder = $('#folder_view').jstree({ 'core' : {
+            'data' : [
+               'Simple root node',
+               {
+                 'text' : 'Root node 2',
+                 'state' : {
+                   'opened' : true,
+                   'selected' : true
+                 },
+                 'children' : [
+                   { 'text' : 'Child 1' },
+                   'Child 2'
+                 ]
+              }
+            ]
+        } });
+*/
+
+    /* https://ace.c9.io/#nav=howto */
+    editor = ace.edit("editor");
+    
+    //editor.setTheme("ace/theme/twilight");
+    set_mode("python")
+    
+    editor.resize()
+
+    editor.commands.addCommand({
+        name: 'save',
+        bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
+        exec: function(editor) {
+            console.log("save")
+        },
+        //readOnly: true // false if this command should not apply in readOnly mode
+    });
+
+    url = document.location.toString()
+    fpos = url.indexOf("?")
+    if( fpos>0 ){
+        query = url.substr(fpos+1)
+        sp = new URLSearchParams(query)
+        fnam = sp.get("file")
+        
+        inp_file.value = fnam
+        set_mode_from_file( fnam )
+    }
+
+})
+
+</script>
+</body>
+</html>
