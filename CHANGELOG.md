@@ -17,7 +17,9 @@
  `/admin/generators`. returns a json with all WindUp Routers listed
 - added module `mod3rd.admin_windup.file_api`. rest services for remote OS operations 
  regarding files and folders
--
+- integrated ace editor under `mod3rd.admin_windup.editor`,
+ limitation: max edit file size 4096 bytes
+- 
 
 
 ### known issues 
