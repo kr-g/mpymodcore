@@ -17,6 +17,16 @@ router = Router( root="/admin" )
 def get_file( req, args ):
     rest = args.rest
     fnam = _conv(rest.filename)
+
+    try:
+        fi = _get_file_info(fnam)
+        if fi["mode"]==16384:
+            raise Exception("file is directory")
+    except Exception as ex:
+        logger.excep(ex,"bad file",fnam)
+        req.send_response(status=404)
+        return
+    
     StaticFiles._send_chunked_file( req, fnam )
     
 @router.xpost("/file/:filename")
