@@ -21,14 +21,14 @@ def get_file( req, args ):
     
     
 @router.xget("/fstat/:filename")
-def get_file( req, args ):
+def get_fstat( req, args ):
     rest = args.rest
     fnam = _conv(rest.filename)
     req.send_json(_get_file_info(fnam))
 
 
 @router.xget("/mkdir/:path")
-def get_file( req, args ):
+def get_mkdir( req, args ):
     rest = args.rest
     path = _conv(rest.path)
     
@@ -47,7 +47,7 @@ def get_file( req, args ):
 
 
 @router.xget("/remove/:path/:recur_level")
-def get_file( req, args ):
+def get_remove( req, args ):
     rest = args.rest
     path = _conv(rest.path)
     recur_level = int(rest.recur_level)
@@ -63,7 +63,7 @@ def get_file( req, args ):
 
 
 @router.xget("/listdir/:path/:recur_level")
-def get_file( req, args ):
+def get_listdir( req, args ):
     rest = args.rest
     path = _conv(rest.path)
     recur_level = int(rest.recur_level)
@@ -74,6 +74,15 @@ def get_file( req, args ):
     folders.extend( _get_folder_info(path,recur_level) )
     
     req.send_json( folders )
+    
+
+@router.post("/rename")
+def post_rename( req, args ):
+    json = args.json
+    fnam = json.filename
+    new_fnam = json.filename_new
+    os.rename(fnam,new_fnam)
+    req.send_response( )
     
 
 def _remove(folders):
