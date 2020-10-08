@@ -42,6 +42,8 @@ class WindUp(LogSupport):
         self.exec_class = Processor
         self.exec_close_delay = None
 
+        self.accept_timeout = 153
+
         self.calls = 0
         self.exec = []
         
@@ -110,7 +112,7 @@ class WindUp(LogSupport):
             if self.ws.can_accept():
                 
                 self.info("new request")
-                req = self.ws.accept()                                                 
+                req = self.ws.accept( timeout=self.accept_timeout )                                                 
                 self.calls += 1
                 
                 # create processor
