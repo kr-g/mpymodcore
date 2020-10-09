@@ -38,12 +38,12 @@ def post_file( req, args ):
     request = req.request
     data = request.body
     
-    logger.info("overflow",req.overflow)
+    logger.info("overflow",req.overflow())
     logger.info("content_len",request.content_len())
     logger.info(fnam)
     logger.info(data)
 
-    if req.overflow == True:
+    if req.overflow() == True:
         logger.info("file to big")
         ## todo handle files > 4096 bytes
         # 403 forbidden
