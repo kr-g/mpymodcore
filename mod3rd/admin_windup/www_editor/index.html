@@ -168,15 +168,22 @@ async function post(url = '', data = {}, content='application/json') {
 
 var inp_term_last = ""
 
+function set_file_name(fnam=""){
+     document.title = "edit: '"+fnam+"'"
+}
+
 function on_new(){
     console.log("on_new")
     editor.setValue("");
+    set_file_name()
+    inp_file.value = ""
 }
 function on_save(){
     console.log("on_save")
     src = editor.getValue()
     console.log(src)
     fnam = inp_file.value
+    set_file_name(fnam)
     url = "/admin/file/" + fnam 
     post( url, data = src, content="plain/text" ).then( x=> console.log(x) )
 }
@@ -189,6 +196,7 @@ function on_close(){
 function on_reload(){
      console.log("on_reload")
      fnam = inp_file.value
+     set_file_name(fnam)
      url = "/admin/file/" + fnam
      set_mode_from_file( fnam )
      get( url ).then( src => { editor.setValue(src); editor.gotoLine(1); })
