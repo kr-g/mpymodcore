@@ -22,6 +22,9 @@ class ConnectionClosedException(HTTPRequestException):
 class BadRequestException(HTTPRequestException):
     pass
 
+class NotAllowedException(HTTPRequestException):
+    pass
+
 class InternalErrorException(HTTPRequestException):
     pass
 
@@ -90,7 +93,7 @@ def get_http_request(client_file,client_addr, allowed=None, tout=None):
     
     method = method.upper()
     if method not in allowed:
-        raise BadRequestException(line)
+        raise NotAllowedException(line)
     
     if path[0]!="/":
         raise BadRequestException(line)

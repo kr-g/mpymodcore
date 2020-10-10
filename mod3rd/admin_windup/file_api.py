@@ -162,6 +162,17 @@ def _get_file_info(f):
     return fi
 
 
+def _get_file_hash(fnam,blk_size=512):
+    sha = uhashlib.sha256()
+    with open(fnam) as f:
+        while True:
+            cb = _f.read(blk_size)
+            if len(cb)==0:
+                break
+            sha.update(cb)
+    return sha
+
+
 ## todo refactor with FormDataDecodeFilter
 def _conv(val):
     

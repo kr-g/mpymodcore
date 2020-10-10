@@ -11,6 +11,7 @@ try:
 except:
     logger.warn("fiber module not loaded")
 
+from modext.http.http_func import NotAllowedException
 from modext.http.webserv import WebServer, COOKIE_HEADER, SET_COOKIE_HEADER
 
 from .filter import *
@@ -133,6 +134,9 @@ class WindUp(LogSupport):
                     
         except Exception as ex:
             self.excep( ex )
+            
+            if req!=None and isinstance(ex,NotAllowedException):
+                req.send_response(status=405) # not allowed http status
             
             if req!=None and isinstance(ex,FilterException):
                 # failed in early stage
