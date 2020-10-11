@@ -83,4 +83,10 @@ class Router(ContentGenerator):
     def __call__(self,to="/index",method=None,xtract=False):
         return self._decor(to,method,xtract)
 
-
+    def supported_methods(self):
+        allowed = set()
+        for r in self.route:
+            meth = r[1] if r[1]!=None else "*"
+            allowed.add( meth )
+        return list(allowed)
+    

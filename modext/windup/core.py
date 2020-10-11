@@ -105,6 +105,14 @@ class WindUp(LogSupport):
             ]
         return post_proc
     
+    def supported_methods(self):
+        allowed = set()
+        for g in self.generators:
+            if isinstance( g, Router ):
+                mlist = g.supported_methods()
+                allowed.update(mlist)
+        return list(allowed)
+    
     def loop(self):
 
         req = None
