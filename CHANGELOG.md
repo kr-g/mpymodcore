@@ -45,6 +45,7 @@
 
 - rework `ReprDict` to support list, tupels, ...
 - alternative `json.dumps()` implementation as fiber worker based on `ReprDict`
+- wlan time-to-live (ttl) awareness, and reconfig
 - ~~integrate fiber in modext.webserv~~
 - ~~integrate fiber in modcore~~
 - ~~tls/ssl support~~
