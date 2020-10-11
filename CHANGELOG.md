@@ -18,7 +18,8 @@
 - added module `mod3rd.admin_windup.file_api`. rest services for remote OS operations 
  regarding files and folders
 - integrated [ace editor](https://ace.c9.io/) under `mod3rd.admin_windup.editor`,
- limitation: max edit file size 4096 bytes
+ limitation: max edit file size 4096 bytes, no status or error information provided
+  use browser console to view log info
   - sample code in `boot.py`, url is e.g.
   http://your-ip/admin/editor/#?file=/mod3rd/README.md
   - ace integration is EXPERIMENTAL and not tested
