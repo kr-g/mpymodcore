@@ -75,7 +75,7 @@ class RequestHandler(LogSupport):
         self.send_response( status=status, header=header )
     
     # send a complete response
-    def send_response(self, status=200, header=None, response=None, \
+    def send_response(self, status=200, header=None, response=None, send_buffer=512,\
                       type_="text/html", response_i=None, fibered=False ):
         header = self._add_server_header(header)        
         self._add_session_cookie(header)
@@ -95,8 +95,22 @@ class RequestHandler(LogSupport):
                     pass
                 
         else:
-            send_http_response( self.client_file, status, header, \
-                                          response, type_, response_i )
+            
+            if fibered==True:
+                
+                def _iter():          
+                    l = len(response)
+                    chk = min( l, send_buffer )
+                    for p in range( 0, l, chk ):
+                        yield response[p:p+chk]
+                        
+                return self.send_response( status=status, header=header, \
+                                           response=None, type_=type_, \
+                                           response_i=_iter, fibered=fibered )
+                
+            else:                
+                send_http_response( self.client_file, status, header, \
+                                              response, type_, response_i )
 
     # send portions: header part
     def send_head(self, status=200, header=None, type_="text/html" ):
@@ -115,19 +129,10 @@ class RequestHandler(LogSupport):
         
         response = json.dumps( obj )
         
-        if send_buffer == None or fibered == False:
-            return self.send_response( status=status, header=header, \
-                                       response=response, type_=type_, \
-                                       response_i=None )
-        else:
-            def _iter():          
-                l = len(response)
-                chk = min( l, send_buffer )
-                for p in range( 0, l, chk ):
-                    yield response[p:p+chk]
-            return self.send_response( status=status, header=header, \
-                                       response=None, type_=type_, \
-                                       response_i=_iter, fibered=fibered )
+        return self.send_response( status=status, header=header, \
+                                   response=response, type_=type_, \
+                                   send_buffer=send_buffer,\
+                                   response_i=None, fibered=fibered )
         
     # fiber, deprecated
     def send_fiber( self, fbr ):

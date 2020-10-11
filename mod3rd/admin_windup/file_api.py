@@ -150,7 +150,7 @@ def get_browse(req,args):
 
     data = _browse_html( path, folder )
 
-    req.send_response( response=data )
+    req.send_response( response=data, fibered=True )
 
 
 
