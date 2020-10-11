@@ -115,7 +115,7 @@ class RequestHandler(LogSupport):
         
         response = json.dumps( obj )
         
-        if send_buffer == None:
+        if send_buffer == None or fibered == False:
             return self.send_response( status=status, header=header, \
                                        response=response, type_=type_, \
                                        response_i=None )
