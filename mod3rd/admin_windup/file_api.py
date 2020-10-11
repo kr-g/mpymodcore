@@ -131,7 +131,83 @@ def post_rename( req, args ):
     new_fnam = json.filename_new
     os.rename(fnam,new_fnam)
     req.send_response( )
+ 
+ 
+@router.get("/browse")
+def get_browse(req,args):
+    #rest = args.rest
+    path = "/"
+    try:
+        path = _conv(args.param.path)
+        if len(path)==0:
+            path = "/"
+    except:
+        pass
+    logger.info(path)
+
+    folder = _get_folder_info(path,0)
+    logger.info(path,folder)
+
+    data = _browse_html( path, folder )
+
+    req.send_response( response=data )
+
+
+
+def _browse_html(path,folder):
+    t = """
+        <!DOCTYPE html>
+        <html>
+        <title>browse {path}</title>
+        <body>
+
+        <h2>Content: {path}</h2>
+
+        {!notroot}<div><a href='./browse?path={parent}'>.. up ..</a></div><div>&nbsp;</div>{}
+
+        <table>
+        {*folder}        
+        <tr>
+            <td>
+            {!isfile(_)}
+                {name(_)} </td><td> {_.size} </td><td>
+                    <a target="_blank" href='./editor/#?file={_.name}'>open in editor</a></td>
+            {}
+            {!isdir(_)}
+                <a href='./browse?path={_.name}'>{name(_)}</a>
+            {}
+            </td>
+        </tr>
+        {}
+        </table>
+
+        </body>
+        </html>            
+    """
+
+    smpl = Simplicity( t, esc_func=simple_esc_html )
+    ctx = Namespace()
     
+    def _is_no_dir(fi):
+        return fi.mode!=16384
+    def _is_dir(fi):
+        return fi.mode==16384
+    def _chop_path(fi):
+        return fi.name[len(path):]
+    
+    ctx.update({
+        "notroot" : path!="/",
+        "isfile" : _is_no_dir,
+        "isdir" : _is_dir,
+        "parent" : path[:path.rindex("/")],
+        "path" : path,
+        "name" : _chop_path,
+        "folder" : folder,
+    })
+    
+    data = smpl.print(ctx)
+    return data
+
 
 def _remove(folders):
     for fp in folders:
@@ -152,6 +228,8 @@ def _get_folder_info(path,recur_level):
     for f in fli:
         #logger.info(f)
         fnam = path+"/"+f
+        if fnam[0:2]=="//":
+            fnam = fnam[1:]
         fi = _get_file_info(fnam)
         if recur_level>0 and fi["mode"]==16384:
             fi["children"] = _get_folder_info( fnam, recur_level-1 )
@@ -208,9 +286,11 @@ def _conv(val):
     return val
 
 
+
 print()
 print("*"*37)
 print( "loading file api rest modules!!!" )
 print("*"*37)
 print()
+
 

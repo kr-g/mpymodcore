@@ -122,7 +122,7 @@ class Simplicity(object):
             var = ast.var[1:]
             if self._eval(var,context)==True:
                 for a in ast.children:
-                    rc += self._print( a, context )
+                    rc += str(self._print( a, context ))
         elif ast.var[0]=="*":
             var = ast.var[1:]
             iter = self._eval(var,context)

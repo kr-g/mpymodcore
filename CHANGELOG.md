@@ -23,7 +23,8 @@
   http://your-ip/admin/editor/#?file=/mod3rd/README.md
   - ace integration is EXPERIMENTAL and not tested
 - windup sends http status 405 when request method is not supported
--
+- simple file and folder browser with http://your-ip/admin/browser?path=...
+- 
 
 
 ### known issues 
