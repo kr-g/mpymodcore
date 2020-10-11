@@ -1,5 +1,7 @@
 
 import os
+import hashlib
+import binascii
 
 from modcore.log import logger
 from modcore import modc
@@ -62,6 +64,15 @@ def get_fstat( req, args ):
     rest = args.rest
     fnam = _conv(rest.filename)
     req.send_json(_get_file_info(fnam))
+
+
+@router.xget("/hash/:filename")
+def get_hash( req, args ):
+    rest = args.rest
+    fnam = _conv(rest.filename)
+    digest = _get_file_hash(fnam)
+    hash = binascii.hexlify(digest).decode()
+    req.send_json({ "file": fnam, "hash" : hash, })
 
 
 @router.xget("/mkdir/:path")
@@ -149,7 +160,7 @@ def _get_folder_info(path,recur_level):
     return info
 
 
-def _get_file_info(f):
+def _get_file_info(f,include_hash=False):
     fs = os.stat( f )
     fi = {
             "name" : f,
@@ -158,19 +169,22 @@ def _get_file_info(f):
             "atime" : fs[7],
             "mtime" : fs[8],
             "ctime" : fs[9],
+            "hash" : None,
         }
+    if include_hash:
+        fi["hash"]=_get_file_hash(f)
     return fi
 
 
 def _get_file_hash(fnam,blk_size=512):
-    sha = uhashlib.sha256()
+    sha = hashlib.sha256()
     with open(fnam) as f:
         while True:
-            cb = _f.read(blk_size)
+            cb = f.read(blk_size)
             if len(cb)==0:
                 break
             sha.update(cb)
-    return sha
+    return sha.digest()
 
 
 ## todo refactor with FormDataDecodeFilter
