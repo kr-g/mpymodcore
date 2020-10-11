@@ -22,7 +22,7 @@
   use browser console to view log info
   - sample code in `boot.py`, url is e.g.
   http://your-ip/admin/editor/#?file=/mod3rd/README.md
-  - ace integration is EXPERIMENTAL and not tested
+  - ace integration is EXPERIMENTAL and not tested in deep
 - windup sends http status 405 when request method is not supported
 - simple file and folder browser with http://your-ip/admin/browser?path=...
 - 
