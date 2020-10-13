@@ -3,7 +3,11 @@
 
 ## next version v0.0.16
 
--
+- [ace editor](https://ace.c9.io/) under `mod3rd.admin_windup.editor` can handle now
+ also large files > 4 kb. limitation: no status or error information provided
+  use browser console to view log info
+- fix `get_http_chunk` reading portions of data chunks from current socket stream
+- 
 
 
 ### known issues 

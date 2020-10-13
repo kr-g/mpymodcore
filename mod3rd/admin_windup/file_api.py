@@ -41,15 +41,32 @@ def post_file( req, args ):
     data = request.body
     
     logger.info("overflow",req.overflow())
-    logger.info("content_len",request.content_len())
+    content_len = request.content_len()
+    logger.info("content_len",content_len)
     logger.info(fnam)
     logger.info(data)
 
     if req.overflow() == True:
-        logger.info("file to big")
-        ## todo handle files > 4096 bytes
-        # 403 forbidden
-        req.send_response( status= 403 )
+        logger.info("file to big, processing chunks")
+        # handle files > 4096 bytes
+        
+        with open( fnam, "wb" ) as f:
+
+            while content_len>0:
+                ## todo timeout error handling
+                data = req.load_chunk(chunk_size=min( content_len, 512 ))
+                if len(data)==0:
+                    ## todo, never reached currently => fiber socket stream
+                    logger.info("end of transmission")
+                    break
+                logger.info(content_len,data)
+                content_len -= len(data)
+                
+                f.write( data )
+                f.flush()
+        
+        ## todo error handling
+        req.send_response( )
         return
     
     with open( fnam, "wb" ) as f:

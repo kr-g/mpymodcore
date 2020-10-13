@@ -143,9 +143,8 @@ async function post(url = '', data = {}, content='application/json') {
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
         credentials: 'same-origin', // include, *same-origin, omit
         headers: {
-            //'Content-Length': todo len content,
+            'Content-Length': content.length,
             'Content-Type': content,
-          // 'Content-Type': 'application/x-www-form-urlencoded',
         },
         redirect: 'error', // manual, *follow, error
         referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url

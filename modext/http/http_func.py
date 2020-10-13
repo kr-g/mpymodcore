@@ -130,7 +130,7 @@ def get_http_content(client_file,req,max_size=4096,tout=None):
     return req
 
 def get_http_chunk(client_file,req,chunk_size=256, tout=None ):
-    content = get_http_read( client_file, toread, tout=tout )
+    content = get_http_read( client_file, toread=chunk_size, tout=tout )
     return content
     
 
