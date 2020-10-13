@@ -2,3 +2,9 @@
 include LICENSE
 include README.md
 include CHANGELOG.md
+
+#include boot.py
+
+recursive-include mod3rd *.html
+#include mod3rd/admin_windup/www_editor/index.html
+

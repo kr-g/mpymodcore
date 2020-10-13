@@ -1,7 +1,7 @@
 
 # Changelog
 
-## next version v0.0.15
+## version v0.0.15
 
 - `modcore.mod.Module` id is derived from class name when not set
 - new ntp timezone handling and reloading.
@@ -14,7 +14,7 @@
   - added sample code in `boot.py`
 - `mod3rd.admin_esp.wlan` shows now more wifi information
 - added module `mod3rd.admin_windup.content` which adds a new route
- `/admin/generators`. returns a json with all WindUp Routers listed
+ `/admin/generators`. returns a json with all WindUp Routers, and url endpoints listed
 - added module `mod3rd.admin_windup.file_api`. rest services for remote OS operations 
  regarding files and folders
 - integrated [ace editor](https://ace.c9.io/) under `mod3rd.admin_windup.editor`,
@@ -24,7 +24,7 @@
   http://your-ip/admin/editor/#?file=/mod3rd/README.md
   - ace integration is EXPERIMENTAL and not tested in deep
 - windup sends http status 405 when request method is not supported
-- simple file and folder browser with http://your-ip/admin/browser?path=...
+- simple file and folder browser (in `file_api` module) with http://your-ip/admin/browser?path=...
 - 
 
 
