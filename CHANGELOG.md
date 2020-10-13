@@ -1,31 +1,9 @@
 
 # Changelog
 
-## version v0.0.15
+## next version v0.0.16
 
-- `modcore.mod.Module` id is derived from class name when not set
-- new ntp timezone handling and reloading.
- **important:** time aware modules need to register to event `"ntp"` in `Module.watching_events`
- and recalculate their schedule after new time was set
-  - added `moddev.ntp.TZ_Support` for timezone handling with `ntp_serv`
-  - added `moddev.ntp_tz_cet.TZ_cet` for central european time support
-    - use this as a base for implementing other timezones
-  - added `moddev.ntp_tz_serv` module for automatic timezone reloading
-  - added sample code in `boot.py`
-- `mod3rd.admin_esp.wlan` shows now more wifi information
-- added module `mod3rd.admin_windup.content` which adds a new route
- `/admin/generators`. returns a json with all WindUp Routers, and url endpoints listed
-- added module `mod3rd.admin_windup.file_api`. rest services for remote OS operations 
- regarding files and folders
-- integrated [ace editor](https://ace.c9.io/) under `mod3rd.admin_windup.editor`,
- limitation: max edit file size 4096 bytes, no status or error information provided
-  use browser console to view log info
-  - sample code in `boot.py`, url is e.g.
-  http://your-ip/admin/editor/#?file=/mod3rd/README.md
-  - ace integration is EXPERIMENTAL and not tested in deep
-- windup sends http status 405 when request method is not supported
-- simple file and folder browser (in `file_api` module) with http://your-ip/admin/browser?path=...
-- 
+-
 
 
 ### known issues 
@@ -63,6 +41,33 @@
 - testing, automatic testing
 - documentation
 
+
+
+## version v0.0.15
+
+- `modcore.mod.Module` id is derived from class name when not set
+- new ntp timezone handling and reloading.
+ **important:** time aware modules need to register to event `"ntp"` in `Module.watching_events`
+ and recalculate their schedule after new time was set
+  - added `moddev.ntp.TZ_Support` for timezone handling with `ntp_serv`
+  - added `moddev.ntp_tz_cet.TZ_cet` for central european time support
+    - use this as a base for implementing other timezones
+  - added `moddev.ntp_tz_serv` module for automatic timezone reloading
+  - added sample code in `boot.py`
+- `mod3rd.admin_esp.wlan` shows now more wifi information
+- added module `mod3rd.admin_windup.content` which adds a new route
+ `/admin/generators`. returns a json with all WindUp Routers, and url endpoints listed
+- added module `mod3rd.admin_windup.file_api`. rest services for remote OS operations 
+ regarding files and folders
+- integrated [ace editor](https://ace.c9.io/) under `mod3rd.admin_windup.editor`,
+ limitation: max edit file size 4096 bytes, no status or error information provided
+  use browser console to view log info
+  - sample code in `boot.py`, url is e.g.
+  http://your-ip/admin/editor/#?file=/mod3rd/README.md
+  - ace integration is EXPERIMENTAL and not tested in deep
+- windup sends http status 405 when request method is not supported
+- simple file and folder browser (in `file_api` module) with http://your-ip/admin/browser?path=...
+- 
 
 
 ## version v0.0.14
