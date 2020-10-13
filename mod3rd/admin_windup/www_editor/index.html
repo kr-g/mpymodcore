@@ -268,11 +268,11 @@
 
         modes = {
             "txt": function() {
-                btn_beautify.disabled = false;
+                btn_beautify.disabled = true;
                 editor.session.setMode("");
             },
             "python": function() {
-                btn_beautify.disabled = false;
+                btn_beautify.disabled = true;
                 editor.session.setTabSize(4);
                 editor.session.setUseSoftTabs(false);
                 editor.session.setMode("ace/mode/python");
