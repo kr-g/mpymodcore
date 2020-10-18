@@ -106,6 +106,21 @@ e.g. when your device has the following IP address:
     192.168.178.26    your-ip
     
 
+# Reference proof-of-concept project 
+
+the garden watering project [`mpymodcore_watering`](https://github.com/kr-g/mpymodcore_watering)
+is the reference proof-of-concept project for `mpy-modcode`.
+
+it covers in detail:
+    
+- usage of modcore modules
+- modcore eventing modell
+- REST / ajax based application development
+- HTML / javascript  user interface devlopment
+- single page app devlopment with 3rd party tools:
+  - [`vue.js`](https://vuejs.org/)
+  - [`bootstrap`](https://getbootstrap.com/)
+  - [`fontawesome`](https://fontawesome.com/)
 
 
 # Related project

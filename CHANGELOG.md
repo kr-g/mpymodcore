@@ -27,6 +27,8 @@
 
 ### backlog
 
+- asyncio support for `modcore`
+- asyncio support for `WindUp`
 - rework `ReprDict` to support list, tupels, ...
 - alternative `json.dumps()` implementation as fiber worker based on `ReprDict`
 - ~~integrate fiber in modext.webserv~~
