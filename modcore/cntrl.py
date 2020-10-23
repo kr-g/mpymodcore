@@ -85,7 +85,27 @@ class ModuleController(LogSupport):
                 
         if len(aws)>0:
             return aws
-        
+
+    def run_loop_g(self,config=None,ha_mode=True):
+
+        while True:
+            aws = []
+            for m in self._modules:
+                try:
+                    aw = m.run(config)
+                    if aw != None:
+                        aws.append( aw )
+                        self.debug( aw )
+                    if ha_mode==True:
+                        yield
+                except Exception as ex:
+                    self.excep( ex, "run", m.id )
+
+            if len(aws)>0:
+                yield aws
+            else:
+                yield
+
     def startup(self,config=None):
         for m in self._modules:
             try:

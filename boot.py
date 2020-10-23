@@ -327,8 +327,21 @@ import modext.misc.main as mod_main
 mod_main.debug_mode = True
 
 def loop():
-    mod_main.loop( cfg, serv.loop )
+    serv.run_outbound_loop = True
+    mod_main.loop( cfg, add_loop=serv.loop, ha_mode=False )
+
+def loop_ha():
+    serv.run_outbound_loop = False
+    mod_main.loop( cfg, add_loop=[serv.loop,serv.run_outbound], ha_mode=True )
     
+    
+import modext.misc.main_async as mod_main_async
+
+def run_loop():
+    # bring up windup as async task
+    # serve outbound in a seperate async endless_loop
+    serv.run_outbound_loop = False
+    mod_main_async.run_loop( cfg, add_loop=[serv.loop,serv.run_outbound], ha_mode=True )
 
 print()
 gc_print_stat()
@@ -336,7 +349,10 @@ gc_print_stat()
 print( "ip ->", wlan_ap.ifconfig() )
 print( "current time ->", ntp_serv.localtime() )
 print()
-print( "call loop() to start :-)" )
+print("to start :-)")
+print( "call loop() - looping mode" )
+print( "call loop_ha() - high available mode where outbound is processed seperately" )
+print( "call run_loop() - run in async mode " )
 print()
 
 

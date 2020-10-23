@@ -52,6 +52,10 @@ class WindUp(LogSupport):
         
         # outbound processing fiber loop
         self._outbound = FiberWorkerLoop()
+        # windup serves the outbound loop within his own loop
+        self.run_outbound_loop = True
+        ## todo
+        #self.run_outbound_loop_ha = False
         
     def start(self, generators=None ):        
         self.ws.start()
@@ -187,16 +191,12 @@ class WindUp(LogSupport):
             _fbr = FiberWorker( func= g_func   )
             self._outbound.append( _fbr )
         
-        # exec fiber loop
-        try:
-            self._outbound.release()
-            if len(self._outbound)>0:
-                #self.info("fiber start")
-                #next(self._outbound)
-                self._outbound()
-                #self.info("fiber done")
-        except Exception as ex:
-            self.excep( ex, "fiber outbound" )
+        if self.run_outbound_loop:
+            # exec fiber loop
+            try:
+                self.run_outbound()
+            except Exception as ex:
+                self.excep( ex, "fiber outbound" )
 
         for e in self.exec:
             try:
@@ -237,7 +237,16 @@ class WindUp(LogSupport):
                 e.kill("post-proc-fail",)
                 e.close()
                 self.exec.remove(e)
-                  
+
+    def run_outbound(self):
+        self._outbound.release()
+        if len(self._outbound)>0:
+            #self.info("fiber start")
+            #next(self._outbound)
+            self._outbound()
+                
+            #self.info("fiber done")
+        
     def call404(self,req):
         self.warn("not found 404", req.request.xpath )
         if self.html404==None:
