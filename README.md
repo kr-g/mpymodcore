@@ -77,7 +77,7 @@ information first before creating a ticket / issue on github. thanks.
 
 # Limitations
 
-- no asyncio integration as of now 
+- ~~no asyncio integration as of now~~
 - with all mod's enabled as shown here in the sample
  it will not run on ESP8266 due to memory limit.
  but wlan, softap, and ntp should work 
