@@ -31,7 +31,10 @@ async def endless_loop(func,tout=None):
             await asyncio.sleep_ms(tout)
             
         except KeyboardInterrupt:
-            logger.excep("stop endless_loop",func.__name__)
+            try:
+                logger.warn("stop endless_loop",func.__name__)
+            except:
+                logger.warn("stop endless_loop")
             break
 
 
@@ -47,6 +50,8 @@ def run_loop(cfg, add_loop=None, ha_mode=False):
 
     global keyboard_c
     keyboard_c.clear()
+    global control_serv
+    control_serv.breaksignal = False
 
     if add_loop:
         add_loop = conv_to_list(add_loop)

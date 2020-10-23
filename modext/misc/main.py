@@ -19,6 +19,9 @@ def loop( cfg, add_loop=None, ha_mode=False ):
     # turn debug level on for more detailed log info
     #modc.change_log_level( DEBUG if debug_mode else None )
 
+    global control_serv
+    control_serv.breaksignal = False
+
     while True:
         try:
             loop_core( cfg, add_loop=add_loop, ha_mode=ha_mode )
