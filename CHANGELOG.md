@@ -9,7 +9,8 @@
 - fix `get_http_chunk` reading portions of data chunks from current socket stream
 - ace editor support for code beautify for html, css, js, json file types
 - fiber worker and fiber worker loop are callable, can be written not as next(fbr) or fbr()
-- [modext.misc.main_async]() asyncio integration for (!!!)
+- [modext.misc.main_async](https://github.com/kr-g/mpymodcore/blob/master/modext/misc/main_async.py) 
+ asyncio integration for (!!!)
   - modcore / modc
   - windup web server
 - sample async startup code in
