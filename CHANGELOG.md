@@ -8,6 +8,7 @@
   use browser console to view log info
 - fix `get_http_chunk` reading portions of data chunks from current socket stream
 - ace editor support for code beautify for html, css, js, json file types
+- fiber worker and fiber worker loop are callable, can be written not as next(fbr) or fbr()
 - 
 
 
