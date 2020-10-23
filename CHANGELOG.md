@@ -1,7 +1,12 @@
 
 # Changelog
 
-## next version v0.0.16
+## next version v0.0.17
+
+-
+
+
+## version v0.0.16
 
 - [ace editor](https://ace.c9.io/) under `mod3rd.admin_windup.editor` can handle now
  also large files > 4 kb. limitation: save blocks the global loop until save completed, no status or error information provided
