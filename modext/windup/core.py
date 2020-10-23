@@ -192,7 +192,8 @@ class WindUp(LogSupport):
             self._outbound.release()
             if len(self._outbound)>0:
                 #self.info("fiber start")
-                next(self._outbound)
+                #next(self._outbound)
+                self._outbound()
                 #self.info("fiber done")
         except Exception as ex:
             self.excep( ex, "fiber outbound" )

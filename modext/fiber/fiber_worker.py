@@ -66,6 +66,9 @@ class FiberWorkerLoop(LogSupport,TimerSupport):
     def __iter__(self):
         return self
     
+    def __call__(self):
+        next(self)
+
     def __next__(self):
                 
         tpf = self._schedule() # time per fiber
@@ -85,7 +88,8 @@ class FiberWorkerLoop(LogSupport,TimerSupport):
             
             try:
                 self.timer and self.measure_timer()
-                next(w)
+                #next(w)
+                w()
                 
             except StopIteration as ex:
                 self.debug( repr(w), ex )                
@@ -243,6 +247,9 @@ class FiberWorker(LogSupport):
         self.suspend(reason)
         if self.parent!=None:
             self.parent.resume("spawn-return")        
+
+    def __call__(self):
+        next(self)
 
     def __next__(self):
         
