@@ -60,6 +60,9 @@
 - fiber and fiber call stack, fiber api change
 - fiber stream integration
 - WindUp configuration rework
+- ace editor remove limitation that save blocks the global loop until save completed
+- ace editor provide status and error information 
+  use browser console to view log info
 - code review, coding standards
 - package structure
 - testing, automatic testing
