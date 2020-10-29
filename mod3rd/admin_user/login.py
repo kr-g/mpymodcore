@@ -1,20 +1,20 @@
-
 from modcore.log import logger
 
 from modext.windup import WindUp, Router
 from modext.windup_auth import security_store
 
 
-router = Router( )
+router = Router()
+
 
 @router.get("/login")
-def my_form( req, args ):
+def my_form(req, args):
 
     session = args.session
-    
+
     notify = ""
     user = ""
-    
+
     try:
         user = session.user
         notify = session.notify
@@ -26,7 +26,7 @@ def my_form( req, args ):
             del session.notify
         except:
             pass
-    
+
     data = """
             <!DOCTYPE html>
             <html>
@@ -64,63 +64,67 @@ def my_form( req, args ):
 
             </body>
             </html>            
-            """ % ( user, notify )
-    
+            """ % (
+        user,
+        notify,
+    )
+
     logger.info(data)
-    req.send_response( response=data )
+    req.send_response(response=data)
 
 
 # post request
 
+
 @router.post("/login")
-def my_form( req, args ):
-    
+def my_form(req, args):
+
     # get the form data
     username = args.form.username
     password = args.form.passwd
 
     session = args.session
     login_ok = False
-    
+
     user = security_store.find_user(username)
-    
+
     try:
-        login_ok = security_store.check_password( user, password )
+        login_ok = security_store.check_password(user, password)
     except:
         pass
-        
+
     session["user"] = username
-    
+
     if login_ok:
         # set the user, use this rather then session.user
-        session.update({ "auth_user" : user } )
-        req.send_redirect( url="/" )
+        session.update({"auth_user": user})
+        req.send_redirect(url="/")
         return
-   
+
     try:
         # in case a already valid user returned ...
         del session.auth_user
     except:
         pass
-    
+
     session["notify"] = "Login failed."
-    
-    logger.info("failed login",username)
-    req.send_redirect( url="/login" )
+
+    logger.info("failed login", username)
+    req.send_redirect(url="/login")
 
 
-# get and post 
+# get and post
+
 
 @router("/logout")
-def my_form( req, args ):
+def my_form(req, args):
 
     try:
-        logger.info( "logging out", args.session.user, args.session.auth_user )
+        logger.info("logging out", args.session.user, args.session.auth_user)
     except:
-        logger.info( "logging out from empty session" )
-    
-    # set the session to destory 
-    args.session = None
-    
-    req.send_redirect( url="/" )
+        logger.info("logging out from empty session")
 
+    # set the session to destory
+    args.session = None
+
+    req.send_redirect(url="/")

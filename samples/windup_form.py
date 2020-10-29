@@ -1,4 +1,3 @@
-
 """
 
 form data
@@ -11,13 +10,14 @@ from modcore.log import logger
 from modext.windup import WindUp, Router
 
 
-router = Router( )
+router = Router()
 
 # get request
 
+
 @router.get("/form")
-def my_form( req, args ):
-    
+def my_form(req, args):
+
     data = """
             <!DOCTYPE html>
             <html>
@@ -38,35 +38,42 @@ def my_form( req, args ):
             </body>
             </html>            
             """
-    
+
     logger.info(data)
-    req.send_response( response=data )
+    req.send_response(response=data)
 
 
 # post request
 
+
 @router.post("/form")
-def my_form( req, args ):
-    
+def my_form(req, args):
+
     body = args.form
-    
+
     data = """
             <h1>form data from the router </h1>
             <div> query parameter = %s </div>
             <div> post data = %s </div>
             <div> post type = %s </div>
-            """ % ( repr( args.param ), repr( body ), type( body ) )
-    
+            """ % (
+        repr(args.param),
+        repr(body),
+        type(body),
+    )
+
     logger.info(data)
-    req.send_response( response=data )
+    req.send_response(response=data)
 
 
 def serve():
     serv = WindUp()
 
-    serv.start(generators=[
+    serv.start(
+        generators=[
             router,
-        ])
+        ]
+    )
 
     try:
         while True:
@@ -75,5 +82,3 @@ def serve():
         logger.info("cntrl+c")
     finally:
         serv.stop()
-
-

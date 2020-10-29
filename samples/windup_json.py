@@ -1,4 +1,3 @@
-
 """
 
 json needs doule-quotes !
@@ -11,56 +10,60 @@ from modcore.log import logger
 from modext.windup import WindUp, Router
 
 
-router = Router( )
+router = Router()
 
 
 # get request
 
-@router.get("/json")
-def my_json_get( req, args ):
 
-    data = {
-        "args" : args.param
-        }
-    
+@router.get("/json")
+def my_json_get(req, args):
+
+    data = {"args": args.param}
+
     logger.info(data)
-    req.send_json( obj=data )
+    req.send_json(obj=data)
 
 
 # post request
 
+
 @router.post("/json")
-def my_json_post( req, args ):
-    
+def my_json_post(req, args):
+
     body = args.json
-    
+
     data = """
             <h1>json from the router </h1>
             <div> query parameter = %s </div>
             <div> post data = %s </div>
             <div> post type = %s </div>
-            """ % ( repr( args.param ), repr( body ), type( body ) )
+            """ % (
+        repr(args.param),
+        repr(body),
+        type(body),
+    )
     logger.info(data)
-    req.send_response( response=data )
+    req.send_response(response=data)
 
 
 @router.post("/echo")
-def my_json_get( req, args ):
+def my_json_get(req, args):
 
-    data = {
-        "echo" : args.json
-        }
-    
+    data = {"echo": args.json}
+
     logger.info(data)
-    req.send_json( obj=data )
+    req.send_json(obj=data)
 
 
 def serve():
     serv = WindUp()
 
-    serv.start(generators=[
+    serv.start(
+        generators=[
             router,
-        ])
+        ]
+    )
 
     try:
         while True:

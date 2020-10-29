@@ -1,4 +1,3 @@
-
 import sys
 import ubinascii
 
@@ -11,57 +10,65 @@ from mod3rd.simplicity import *
 from modext.windup import Namespace
 
 
-router = Router( root="/admin" )
+router = Router(root="/admin")
 
 # get request
 
 netw = []
 
+
 @router.get("/wlan")
-def my_form( req, args ):
+def my_form(req, args):
 
     data = netw_data()
-    
-    #logger.info(data)
-    req.send_response( response=data, fibered=True )
+
+    # logger.info(data)
+    req.send_response(response=data, fibered=True)
 
 
 def scan_networks(debug=False):
-    
+
     global netw
     netw = []
 
     networks = wlan_ap.scan()
-    
+
     for nam, mac, channel, dbm, auth, hidden in networks:
-        
-        nam = nam.decode() 
+
+        nam = nam.decode()
         mac = ubinascii.hexlify(mac).decode()
-        
-        obj = Namespace().update( {
-            "mac" : mac, "nam" : nam, "dbm" : dbm,
-            "channel" : channel, "auth" : auth, "hidden" : hidden,
-            } )         
-        netw.append( obj )
-        
-        debug and print( mac, nam )
-        
+
+        obj = Namespace().update(
+            {
+                "mac": mac,
+                "nam": nam,
+                "dbm": dbm,
+                "channel": channel,
+                "auth": auth,
+                "hidden": hidden,
+            }
+        )
+        netw.append(obj)
+
+        debug and print(mac, nam)
+
     sort_name()
-      
+
 
 def sort_name():
     global netw
-    netw = sorted( netw, key=lambda x : x.nam.lower() )
+    netw = sorted(netw, key=lambda x: x.nam.lower())
 
-def sort_signal():      
+
+def sort_signal():
     global netw
-    netw = sorted( netw, key=lambda x : x.dbm )
+    netw = sorted(netw, key=lambda x: x.dbm)
 
 
 def netw_data(debug=False):
-    
-    scan_networks( debug=debug )
-            
+
+    scan_networks(debug=debug)
+
     t = """
             <!DOCTYPE html>
             <html>
@@ -132,7 +139,7 @@ def netw_data(debug=False):
             return "WPA2-PSK"
         if auth == 4:
             return "WPA/WPA2-PSK"
-        
+
     def hidden(hid):
         if hid:
             return "yes"
@@ -140,37 +147,40 @@ def netw_data(debug=False):
 
     wlan_info = wlan_ap.ifconfig()
 
-    smpl = Simplicity( t, esc_func=simple_esc_html )
+    smpl = Simplicity(t, esc_func=simple_esc_html)
     ctx = Namespace()
-    ctx.update({
-        "ssid" : str(wlan_ap.ssid),
-        "ifconfig" : str(wlan_info),
-        "netw" : netw,
-        "hidden" : hidden,
-        "authmode" : authmode,
-    })
-    
-    debug and print( netw )
-    debug and print( ctx )
-    
+    ctx.update(
+        {
+            "ssid": str(wlan_ap.ssid),
+            "ifconfig": str(wlan_info),
+            "netw": netw,
+            "hidden": hidden,
+            "authmode": authmode,
+        }
+    )
+
+    debug and print(netw)
+    debug and print(ctx)
+
     data = smpl.print(ctx)
     return data
 
 
 # post request
 
+
 @router.post("/wlan")
-def my_form( req, args ):
-    
+def my_form(req, args):
+
     form = args.form
-    
+
     try:
-        # namespace     
-        con = list(filter( lambda x : x.mac == form.fwifi, netw ))[0]
+        # namespace
+        con = list(filter(lambda x: x.mac == form.fwifi, netw))[0]
         ssid = con.nam
         mac = con.mac
         passwd = form.fpasswd
-        
+
         data = """
                 <h1>WLAN configuration saved</h1>
                 <div> &nbsp; </div>
@@ -178,27 +188,27 @@ def my_form( req, args ):
                 <div> Mac: '%s' </div>
                 <div> &nbsp; </div>
                 <div> Go back to choose <a href="/admin/wlan">WLAN</a> </div>
-                """ % ( ssid, mac )
-        
-        wlan_ap.wlan_config( ssid, passwd )
-        
+                """ % (
+            ssid,
+            mac,
+        )
+
+        wlan_ap.wlan_config(ssid, passwd)
+
         # restart in next loop, otherwise connection breaks and response fails
         modc.fire_event(WLAN_RESTART)
-        
+
     except Exception as ex:
-        
+
         data = """
                 <h1>WLAN configuration failed</h1>
                 <div> &nbsp; </div>
                 <div> Info: '%s' </div>
                 <div> &nbsp; </div>
                 <div> Go back to choose <a href="/admin/wlan">WLAN</a> </div>
-                """ % ( ex )
-        
+                """ % (
+            ex
+        )
+
     logger.info(data)
-    req.send_response( response=data )
-
-
-
-
-
+    req.send_response(response=data)

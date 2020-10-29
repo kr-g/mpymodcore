@@ -1,4 +1,3 @@
-
 """
     (c)2020 K. Goger (k.r.goger@gmail.com)
     legal: https://github.com/kr-g/mpymodcore/blob/master/LICENSE
@@ -18,15 +17,14 @@ from .log import LogSupport
 
 
 class ModuleController(LogSupport):
-    
     def __init__(self):
         LogSupport.__init__(self)
         self.modules = {}
         self._modules = []
         self.events = {}
         self.config = {}
-    
-    def _reg_event_listener(self,mod,remove=False):
+
+    def _reg_event_listener(self, mod, remove=False):
         watching = mod.watching_events()
         if watching != None:
             for e in watching:
@@ -42,51 +40,51 @@ class ModuleController(LogSupport):
                     self.events[e].remove(mod)
                 else:
                     self.events[e].add(mod)
-        
-    def add( self, mod ):
+
+    def add(self, mod):
         if mod.id in self.modules:
-            raise Exception("module id already registered.", mod.id )
+            raise Exception("module id already registered.", mod.id)
         mod._controller = self
-        self.modules[mod.id]=mod
-        self._modules.append( mod )
-        self._reg_event_listener( mod )
+        self.modules[mod.id] = mod
+        self._modules.append(mod)
+        self._reg_event_listener(mod)
         mod.on_add()
-        self.info( "add", mod.id )
+        self.info("add", mod.id)
         return self
-        
-    def remove( self, mod ):
+
+    def remove(self, mod):
         del self.modules[mod.id]
-        self._reg_event_listener( mod, remove=True )
+        self._reg_event_listener(mod, remove=True)
         mod.on_remove()
-    
-    def fire_event( self, event, data=None, src=None ):
+
+    def fire_event(self, event, data=None, src=None):
         event = event.strip().lower()
         if event not in self.events:
-            self.warn( "unknown", event, src )
+            self.warn("unknown", event, src)
             return
-        
-        for m in self.events[event]:            
+
+        for m in self.events[event]:
             if m == src:
                 continue
-            
-            ed = EventData( event, data, sender=src )
-            m._add_event( ed )
 
-    def run_loop(self,config=None):
+            ed = EventData(event, data, sender=src)
+            m._add_event(ed)
+
+    def run_loop(self, config=None):
         aws = []
         for m in self._modules:
             try:
                 aw = m.run(config)
                 if aw != None:
-                    aws.append( aw )
-                    self.debug( aw )
+                    aws.append(aw)
+                    self.debug(aw)
             except Exception as ex:
-                self.excep( ex, "run", m.id )
-                
-        if len(aws)>0:
+                self.excep(ex, "run", m.id)
+
+        if len(aws) > 0:
             return aws
 
-    def run_loop_g(self,config=None,ha_mode=True):
+    def run_loop_g(self, config=None, ha_mode=True):
 
         while True:
             aws = []
@@ -94,42 +92,41 @@ class ModuleController(LogSupport):
                 try:
                     aw = m.run(config)
                     if aw != None:
-                        aws.append( aw )
-                        self.debug( aw )
-                    if ha_mode==True:
+                        aws.append(aw)
+                        self.debug(aw)
+                    if ha_mode == True:
                         yield
                 except Exception as ex:
-                    self.excep( ex, "run", m.id )
+                    self.excep(ex, "run", m.id)
 
-            if len(aws)>0:
+            if len(aws) > 0:
                 yield aws
             else:
                 yield
 
-    def startup(self,config=None):
+    def startup(self, config=None):
         for m in self._modules:
             try:
-                m.startup( config )
+                m.startup(config)
             except Exception as ex:
-                self.excep( ex )
+                self.excep(ex)
 
     def shutdown(self):
         for m in reversed(self._modules):
             try:
-                m.shutdown( )
+                m.shutdown()
                 m._events.reset()
             except Exception as ex:
-                self.excep( ex )
+                self.excep(ex)
 
-    def reconfigure(self,config=None):
+    def reconfigure(self, config=None):
         self.shutdown()
         self.startup(config=config)
-        
-    def change_log_level(self,level=None):
+
+    def change_log_level(self, level=None):
         self.log_level(level)
         for m in self._modules:
             m.log_level(level)
-    
-modc = ModuleController()
 
-   
+
+modc = ModuleController()

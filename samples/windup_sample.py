@@ -1,4 +1,3 @@
-
 from modcore.log import logger
 
 from modext.windup import WindUp, Router
@@ -16,5 +15,3 @@ def serve():
         logger.info("cntrl+c")
     finally:
         serv.stop()
-
-

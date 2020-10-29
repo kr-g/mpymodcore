@@ -1,4 +1,3 @@
-
 from modcore.log import logger
 
 from modext.windup import WindUp, Router
@@ -16,9 +15,9 @@ def _html404(req):
             so sorry ...
         </body>
     </html>
-    """ 
-    
-    req.send_response( status=404, response=data )
+    """
+
+    req.send_response(status=404, response=data)
 
 
 def serve():
@@ -34,6 +33,3 @@ def serve():
         logger.info("cntrl+c")
     finally:
         serv.stop()
-
-
-

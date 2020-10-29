@@ -1,4 +1,3 @@
-
 from modext.http.webserv import WebServer
 
 from .router import Router
@@ -24,4 +23,3 @@ HTTP_TEAPOT = 418
 HTTP_INTERNAL = 500
 HTTP_INSUFFICIENT_STORAGE = 507
 HTTP_AUTH_REQUIRED = 511
-

@@ -1,11 +1,11 @@
-
 # This file is executed on every boot (including wake-boot from deepsleep)
-#import esp
-#esp.osdebug(None)
+# import esp
+# esp.osdebug(None)
 import uos as os
 import machine
 import time
-#uos.dupterm(None, 1) # disable REPL on UART(0)
+
+# uos.dupterm(None, 1) # disable REPL on UART(0)
 
 import micropython
 
@@ -15,26 +15,30 @@ if interrupts_enabled:
     micropython.alloc_emergency_exception_buf(128)
 
 import gc
-gc.collect() 
 
-def mem_info(verbose=True,auto_free=True):
+gc.collect()
+
+
+def mem_info(verbose=True, auto_free=True):
     if auto_free:
-       gc.collect()
+        gc.collect()
     if verbose:
         micropython.mem_info(1)
     else:
         micropython.mem_info()
     return gc.mem_free()
 
+
 def hardreset():
     machine.reset()
-    
+
+
 def gc_print_stat():
     before = gc.mem_free(), gc.mem_alloc()
-    gc.collect() 
+    gc.collect()
     after = gc.mem_free(), gc.mem_alloc()
-    print( "(free,alloc)", "before", before )
-    print( "(free,alloc)", "after", after )
+    print("(free,alloc)", "before", before)
+    print("(free,alloc)", "after", after)
 
 
 from modcore import modc, Module, LifeCycle
@@ -55,10 +59,11 @@ from moddev.ntp import ntp_serv, set_log_time
 
 from moddev.ntp_tz import ntp_tz_serv
 from moddev.ntp_tz_cet import TZ_cet
+
 # do this after moddev.ntp was loaded
 # and before modc.run was called
 # pass class _not_ instance, will be created when needed on the fly
-ntp_tz_serv.set_tz_handler( TZ_cet )
+ntp_tz_serv.set_tz_handler(TZ_cet)
 
 
 from moddev import softap
@@ -68,24 +73,24 @@ from moddev.webrepl import webrepl_serv
 
 # some sample test classes ...
 
+
 class Consumer(Module):
-        
     def watching_events(self):
-        return ["ntp","wlan"]
+        return ["ntp", "wlan"]
+
 
 class ConsumerNetw(Module):
-        
     def watching_events(self):
-        return ["WLAN","softap"] # case does not matter
+        return ["WLAN", "softap"]  # case does not matter
+
 
 class ConsumerNTP(Module):
-        
     def watching_events(self):
         return ["ntp"]
-    
-    def __loop__(self,config=None,event=None,data=None):
-        if event!=None:
-            self.info( "recv:", event, "data:", data )
+
+    def __loop__(self, config=None, event=None, data=None):
+        if event != None:
+            self.info("recv:", event, "data:", data)
             # data can contain True or False
             # setting ntp from server can have timeout ...
             # micropython ntp module throws then exceptions
@@ -95,116 +100,107 @@ class ConsumerNTP(Module):
                 self.info("recalc schedule...")
             else:
                 self.warn("lost ntp connection")
-            
-    
+
 
 c1 = Consumer("c1")
-modc.add( c1 )
+modc.add(c1)
 
 c2 = ConsumerNetw("c2")
-modc.add( c2 )
+modc.add(c2)
 
 c3 = ConsumerNTP("c3")
-modc.add( c3 )
+modc.add(c3)
 
 
 from moddev.interval import Interval
 
+
 class MyInterval(Interval):
-    
-    def __timeout__(self,config=None):
+    def __timeout__(self, config=None):
         self.info("timeout")
-    
 
-int1 = MyInterval( "int1" )
-modc.add( int1 )
-int2 = MyInterval( "int2" )
-modc.add( int2 )
-int3 = MyInterval( "int3" )
-modc.add( int3 )
 
-int_ntp = Interval( "int_ntp" )
-modc.add( int_ntp )
+int1 = MyInterval("int1")
+modc.add(int1)
+int2 = MyInterval("int2")
+modc.add(int2)
+int3 = MyInterval("int3")
+modc.add(int3)
 
-session_purge = Interval( "session_purge" )
-modc.add( session_purge )
+int_ntp = Interval("int_ntp")
+modc.add(int_ntp)
+
+session_purge = Interval("session_purge")
+modc.add(session_purge)
 
 from moddev.alarmclock import AlarmClock
 
 alarm1 = AlarmClock("alarm1")
-modc.add( alarm1 )
+modc.add(alarm1)
 
 alarm2 = AlarmClock("alarm2")
-modc.add( alarm2 )
+modc.add(alarm2)
 
 from moddev.button import Button
 
 boot_btn = Button("boot_btn")
-modc.add( boot_btn )
+modc.add(boot_btn)
 
 from moddev.alarmcounter import AlarmCounter
 
-alarm_counter=AlarmCounter("alarm_counter")
-modc.add( alarm_counter )
+alarm_counter = AlarmCounter("alarm_counter")
+modc.add(alarm_counter)
 
 
 # configuration data
 
 cfg = {
-        "TZ" : 60*60*2,
-        
-        "SD_SLOT" : 3, # default for esp32 with psram / TTGO
-        "SD_PATH" : "/sd",
-        
-        # led pin for ttgo board
-        "led" : 21,
-        
-        "int1" : 5, # timeout in sec, default timebase 1000
-        "int1:event" : ["pin:led:toggle"], # access led parameter from cfg
-        
-        "int2" : 130,
-        "int2:timebase" : 100, # 1/100 sec timebase
-        
-        "int3" : 1,
-        "int3:timebase" : 1000*60, # 1 min timebase
-        
-        "int_ntp" : 5,
-        "int_ntp:timebase" : 1000*60, # 1 min timebase
-        "int_ntp:event" : "ntp-sync", # event to fire
-        
-        "session_purge" : 30,
-        "session_purge:timebase" : 1000*60, # 1 min timebase
-        "session_purge:event" : "session-man", # event to fire
-        
-        "alarm1" : "11:11",
-        "alarm1:utc" : False, # default, can be obmitted
-        "alarm1:event" : "gc",
-        
-        "alarm2" : "11:13",
-        "alarm2:event" : "status:mem_0", # event, and data to send
-
-        "boot_btn" : 0, # pin no -> gpio 0
-        "boot_btn:debounce" : 100, # 100ms - default, can be obmitted
-        "boot_btn:neg_logic" : True, # boot button gpio0 becomes signaled with value 0 by pressing
-        "boot_btn:fire_on_up" : True, # default, fires when releasing
-        #"boot_btn:event" : "status:mem_1", # event to fire
-        #"boot_btn:event" : "pin:21:toggle", # toggle led on pin 21
-        "boot_btn:event" : ["pin:21:toggle","break",], # raise 2 events
-
-        "alarm_counter" : None, # not configured
-        "alarm_counter:delta_period" : 5,
-        "alarm_counter:under" : 1,
-        "alarm_counter:above" : 10, # alarm_count counts state changes 0->1, and 1->0 
-        
-    }
+    "TZ": 60 * 60 * 2,
+    "SD_SLOT": 3,  # default for esp32 with psram / TTGO
+    "SD_PATH": "/sd",
+    # led pin for ttgo board
+    "led": 21,
+    "int1": 5,  # timeout in sec, default timebase 1000
+    "int1:event": ["pin:led:toggle"],  # access led parameter from cfg
+    "int2": 130,
+    "int2:timebase": 100,  # 1/100 sec timebase
+    "int3": 1,
+    "int3:timebase": 1000 * 60,  # 1 min timebase
+    "int_ntp": 5,
+    "int_ntp:timebase": 1000 * 60,  # 1 min timebase
+    "int_ntp:event": "ntp-sync",  # event to fire
+    "session_purge": 30,
+    "session_purge:timebase": 1000 * 60,  # 1 min timebase
+    "session_purge:event": "session-man",  # event to fire
+    "alarm1": "11:11",
+    "alarm1:utc": False,  # default, can be obmitted
+    "alarm1:event": "gc",
+    "alarm2": "11:13",
+    "alarm2:event": "status:mem_0",  # event, and data to send
+    "boot_btn": 0,  # pin no -> gpio 0
+    "boot_btn:debounce": 100,  # 100ms - default, can be obmitted
+    "boot_btn:neg_logic": True,  # boot button gpio0 becomes signaled with value 0 by pressing
+    "boot_btn:fire_on_up": True,  # default, fires when releasing
+    # "boot_btn:event" : "status:mem_1", # event to fire
+    # "boot_btn:event" : "pin:21:toggle", # toggle led on pin 21
+    "boot_btn:event": [
+        "pin:21:toggle",
+        "break",
+    ],  # raise 2 events
+    "alarm_counter": None,  # not configured
+    "alarm_counter:delta_period": 5,
+    "alarm_counter:under": 1,
+    "alarm_counter:above": 10,  # alarm_count counts state changes 0->1, and 1->0
+}
 
 fancy_stuff_i_have_a_sd_card = True
 
 if fancy_stuff_i_have_a_sd_card:
     from moddev.sdcard import SDCard
+
     sdc = SDCard("sdc")
-    modc.add( sdc )
-    
+    modc.add(sdc)
+
     # try
     #
     # for securely removal
@@ -213,79 +209,85 @@ if fancy_stuff_i_have_a_sd_card:
     #
     # use again (no auto detection!)
     # sdc.change_level(LifeCycle.MOUNT)
-    
-    
+
+
 # enable winup session manager module
-import modext.windup.session_mod 
+import modext.windup.session_mod
 
 generators = []
 
 
 # replace standard executor with fiber executor
-#serv.exec_class = ProcessorFiber
+# serv.exec_class = ProcessorFiber
 
 status = Router()
 
+
 @status.get("/break")
-def get_break(req,args):
-    modc.fire_event( BREAK )
-    req.send_response( )
+def get_break(req, args):
+    modc.fire_event(BREAK)
+    req.send_response()
+
 
 @status.get("/status")
-def get_status(req,args):
-    
+def get_status(req, args):
+
     obj = {
-        "mem_alloc" : gc.mem_alloc(),
-        "mem_free" : gc.mem_free(),
-        }
-    
-    req.send_json( obj )
+        "mem_alloc": gc.mem_alloc(),
+        "mem_free": gc.mem_free(),
+    }
+
+    req.send_json(obj)
+
 
 @status.get("/gc")
-def get_gc(req,args):
-    
+def get_gc(req, args):
+
     before = gc.mem_free(), gc.mem_alloc()
-    gc.collect() 
+    gc.collect()
     after = gc.mem_free(), gc.mem_alloc()
 
     obj = {
-        "order" : "(free,alloc)",
-        "before" : before,
-        "after" : after,
-        "free_delta" : after[0]-before[0],
-        }
-    
-    req.send_json( obj )
+        "order": "(free,alloc)",
+        "before": before,
+        "after": after,
+        "free_delta": after[0] - before[0],
+    }
+
+    req.send_json(obj)
+
 
 @status.xget("/pin/:pin/:mode")
-def get_pin(req,args):
-    
+def get_pin(req, args):
+
     # namespaced objects
-    logger.info( "sid cookie", args.cookies.sessionid )
-    
-    logger.info("session_id", args.session.xsession_id )
-    logger.info("rest parameter", args.rest )
-    
+    logger.info("sid cookie", args.cookies.sessionid)
+
+    logger.info("session_id", args.session.xsession_id)
+    logger.info("rest parameter", args.rest)
+
     # keep the variable to avoid dict lookups -> performance
     rest = args.rest
-    logger.info("pin", rest.pin )
+    logger.info("pin", rest.pin)
     # avoid this -> dict lookup
-    logger.info("mode", args.rest.mode )
-    
-    req.send_response( response="ok" )
+    logger.info("mode", args.rest.mode)
+
+    req.send_response(response="ok")
 
 
 from modext.windup_auth import AuthRouter
 
 secured_router = AuthRouter()
 
-@secured_router("/top-secret",groups=["admin"])
-def tops(req,args):
-    req.send_response( response="ok, admin. you have permission" )
 
-@secured_router("/user-site",groups=["normaluser", "restricted"])
-def tops(req,args):
-    req.send_response( response="ok, buddy. you have permission" )
+@secured_router("/top-secret", groups=["admin"])
+def tops(req, args):
+    req.send_response(response="ok, admin. you have permission")
+
+
+@secured_router("/user-site", groups=["normaluser", "restricted"])
+def tops(req, args):
+    req.send_response(response="ok, buddy. you have permission")
 
 
 #
@@ -293,22 +295,23 @@ def tops(req,args):
 # __app__.py in their module path present
 #
 from modext.auto_config.core import Loader
-cfgload=Loader()
+
+cfgload = Loader()
 all_ext = cfgload.find_3rd()
 for ext in all_ext:
     print("loading", ext)
-    _app_ext = cfgload.do_import( ext, globals() )
-    print( _app_ext )
-    generators.extend( _app_ext.app_ext.generators )
+    _app_ext = cfgload.do_import(ext, globals())
+    print(_app_ext)
+    generators.extend(_app_ext.app_ext.generators)
 
 # above replaces this section, and generator extend below
 
-#import mod3rd
-#from mod3rd.admin_esp.wlan import router as router_wlan
-#from mod3rd.admin_user.login import router as router_login
-#from mod3rd.admin_windup.content import router as router_generators
-#from mod3rd.admin_windup.file_api import router as router_file_api
-#from mod3rd.admin_windup.editor import static_files as editor_files
+# import mod3rd
+# from mod3rd.admin_esp.wlan import router as router_wlan
+# from mod3rd.admin_user.login import router as router_login
+# from mod3rd.admin_windup.content import router as router_generators
+# from mod3rd.admin_windup.file_api import router as router_file_api
+# from mod3rd.admin_windup.editor import static_files as editor_files
 
 
 # add all modules to start automatically before this call
@@ -316,6 +319,7 @@ modc.startup(config=cfg)
 
 # just serving some static files
 from modext.windup import WindUp, Router
+
 serv = WindUp()
 
 
@@ -324,53 +328,58 @@ logger.info("config done. start windup.")
 run_not_in_sample_mode = True
 
 if run_not_in_sample_mode:
-    
-    generators.extend( [
-            #router_wlan,
-            #router_login,
-            #router_generators,
-            #router_file_api, editor_files,
+
+    generators.extend(
+        [
+            # router_wlan,
+            # router_login,
+            # router_generators,
+            # router_file_api, editor_files,
             status,
             secured_router,
-        ] )
+        ]
+    )
 
-    serv.start( generators = generators )
+    serv.start(generators=generators)
 
 
 import modext.misc.main as mod_main
 
 mod_main.debug_mode = True
 
+
 def loop():
     serv.run_outbound_loop = True
-    mod_main.loop( cfg, add_loop=serv.loop, ha_mode=False )
+    mod_main.loop(cfg, add_loop=serv.loop, ha_mode=False)
+
 
 def loop_ha():
     serv.run_outbound_loop = False
-    mod_main.loop( cfg, add_loop=[serv.loop,serv.run_outbound], ha_mode=True )
+    mod_main.loop(cfg, add_loop=[serv.loop, serv.run_outbound], ha_mode=True)
+
 
 def run_loop():
     import modext.misc.main_async as mod_main_async
-    
+
     # bring up windup as async task
     # serve outbound in a seperate async endless_loop
     serv.run_outbound_loop = False
-    mod_main_async.run_loop( cfg, add_loop=[serv.loop,serv.run_outbound], ha_mode=True )
+    mod_main_async.run_loop(cfg, add_loop=[serv.loop, serv.run_outbound], ha_mode=True)
 
 
 print()
 gc_print_stat()
 
-print( "softap ip ->", wlan_ap.ifconfig() )
-print( "current time ->", ntp_serv.localtime() )
+print("softap ip ->", wlan_ap.ifconfig())
+print("current time ->", ntp_serv.localtime())
 print()
 print("to start :-)")
-print( "call loop() - looping mode" )
-print( "call loop_ha() - high available mode where outbound is processed seperately" )
-print( "call run_loop() - run in async mode " )
+print("call loop() - looping mode")
+print("call loop_ha() - high available mode where outbound is processed seperately")
+print("call run_loop() - run in async mode ")
 print()
 
 
-#from samples.windup_fiber import serve
+# from samples.windup_fiber import serve
 
-#end 
+# end

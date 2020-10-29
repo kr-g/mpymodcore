@@ -1,11 +1,10 @@
-
 from modcore.log import logger
 
 from modext.windup import WindUp, Router
 
 from modext.windup_auth import security_store
 
-router = Router( )
+router = Router()
 
 #
 # example for session usage
@@ -15,15 +14,16 @@ router = Router( )
 #  this is _not_ a recommandation for handling user login/logout
 #
 
+
 @router.get("/login")
-def my_form( req, args ):
+def my_form(req, args):
 
     session = args.session
-    
-    logger.info( session )
 
-    # a not recommended scnario ... 
-    # get the last login name, or default 
+    logger.info(session)
+
+    # a not recommended scnario ...
+    # get the last login name, or default
     login = session.get("user", "")
 
     data = """
@@ -43,32 +43,34 @@ def my_form( req, args ):
 
             </body>
             </html>            
-            """ % ( login )
-    
+            """ % (
+        login
+    )
+
     logger.info(data)
-    req.send_response( response=data )
+    req.send_response(response=data)
 
 
 # post request
 
+
 @router.post("/login")
-def my_form( req, args ):
-    
+def my_form(req, args):
+
     # get the form data
     user = args.form.fname
 
     session = args.session
-    
+
     # get the login from the session
     login = session.get("user")
 
     # just set the name in the session
     # thats all
     session["user"] = user
-    
+
     # just load the user if available
-    session.update({ "auth_user" : security_store.find_user(user) } )
-    
+    session.update({"auth_user": security_store.find_user(user)})
 
     data = """
             <h2> Login result </h2>
@@ -76,39 +78,45 @@ def my_form( req, args ):
             <div> name %s </div>
             <div> <a href="/login">back to login page</a> </div>
             <div> <a href="/logout">click to logout</a> </div>
-            """ % ( login, user )
-    
+            """ % (
+        login,
+        user,
+    )
+
     logger.info(data)
-    req.send_response( response=data )
+    req.send_response(response=data)
 
 
-# get and post 
+# get and post
+
 
 @router("/logout")
-def my_form( req, args ):
+def my_form(req, args):
 
     session = args.session
-    
+
     # get the login from the session
     login_get = session.get("user")
 
     # or using namespace access
     login = session.user
-    
-    logger.info( "logging out", login, login_get )
-    
+
+    logger.info("logging out", login, login_get)
+
     # set the xsession to None will destory the session
     args.session = None
-    
-    req.send_redirect( url="/login" )
+
+    req.send_redirect(url="/login")
 
 
 def serve():
     serv = WindUp()
 
-    serv.start(generators=[
+    serv.start(
+        generators=[
             router,
-        ])
+        ]
+    )
 
     try:
         while True:
@@ -117,4 +125,3 @@ def serve():
         logger.info("cntrl+c")
     finally:
         serv.stop()
-

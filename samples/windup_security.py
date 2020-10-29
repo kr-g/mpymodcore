@@ -15,23 +15,25 @@ from samples.windup_session import router as login_router
 
 
 @login_router.get("/custom")
-def custom_page(req,args):
-    req.send_response( response="go back to <a href='/login'>login</a>" )
+def custom_page(req, args):
+    req.send_response(response="go back to <a href='/login'>login</a>")
 
 
 from modext.windup_auth import AuthRouter
 
 # this return redirect to a custom page
 # omit this to get plain 401
-secured_router = AuthRouter(status=302,location="/custom")
+secured_router = AuthRouter(status=302, location="/custom")
 
-@secured_router.get("/top-secret",groups=["admin"])
-def tops(req,args):
-    req.send_response( response="ok, admin. you have permission" )
 
-@secured_router.get("/user-site",groups=["normaluser"])
-def tops(req,args):
-    req.send_response( response="ok, buddy. you have permission" )
+@secured_router.get("/top-secret", groups=["admin"])
+def tops(req, args):
+    req.send_response(response="ok, admin. you have permission")
+
+
+@secured_router.get("/user-site", groups=["normaluser"])
+def tops(req, args):
+    req.send_response(response="ok, buddy. you have permission")
 
 
 """
@@ -47,25 +49,29 @@ curl http://your-ip/userdata/MyUserId -X POST -d '{"hello":"world"}' -H "Content
 
 """
 
-@secured_router.xget("/userid/:user",groups=["restricted"])
-def tops(req,args):
-    uid = args.rest.user
-    req.send_response( response="ok, received '"+uid+"'" )
 
-@secured_router.xpost("/userdata/:user",groups=["restricted"])
-def tops(req,args):
+@secured_router.xget("/userid/:user", groups=["restricted"])
+def tops(req, args):
+    uid = args.rest.user
+    req.send_response(response="ok, received '" + uid + "'")
+
+
+@secured_router.xpost("/userdata/:user", groups=["restricted"])
+def tops(req, args):
     uid = args.rest.user
     json = args.json
-    req.send_response( response="ok, received '"+repr(json)+"' for "+uid )
+    req.send_response(response="ok, received '" + repr(json) + "' for " + uid)
 
 
 def serve():
     serv = WindUp()
 
-    serv.start(generators=[
+    serv.start(
+        generators=[
             login_router,
             secured_router,
-        ])
+        ]
+    )
 
     try:
         while True:
@@ -77,4 +83,3 @@ def serve():
 
 
 # from samples.windup_security import serve
-

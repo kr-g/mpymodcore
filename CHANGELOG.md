@@ -8,7 +8,9 @@
  for modules having an `__app__.py` file. sample code refer to `boot.py`
 - fix file api 
 - `mod3rd.admin_esp.wlan` sorted list of available networks
-- 
+- PEP8
+-
+
 
 
 ## version v0.0.16
