@@ -26,13 +26,13 @@ def my_form( req, args ):
     req.send_response( response=data )
 
 
-def netw_data(debug=False):
-    networks = wlan_ap.scan()
-    wlan_info = wlan_ap.ifconfig()
+def scan_networks(debug=False):
     
     global netw
     netw = []
 
+    networks = wlan_ap.scan()
+    
     for nam, mac, channel, dbm, auth, hidden in networks:
         
         nam = nam.decode() 
@@ -45,6 +45,22 @@ def netw_data(debug=False):
         netw.append( obj )
         
         debug and print( mac, nam )
+        
+    sort_name()
+      
+
+def sort_name():
+    global netw
+    netw = sorted( netw, key=lambda x : x.nam.lower() )
+
+def sort_signal():      
+    global netw
+    netw = sorted( netw, key=lambda x : x.dbm )
+
+
+def netw_data(debug=False):
+    
+    scan_networks( debug=debug )
             
     t = """
             <!DOCTYPE html>
@@ -121,6 +137,8 @@ def netw_data(debug=False):
         if hid:
             return "yes"
         return "no"
+
+    wlan_info = wlan_ap.ifconfig()
 
     smpl = Simplicity( t, esc_func=simple_esc_html )
     ctx = Namespace()
