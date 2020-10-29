@@ -76,7 +76,9 @@ class SoftAP(Module):
             return
 
         try:
-            credits = list(filter( lambda x : len(x.strip()) > 0, content.split("\n") ))
+            lines = map( lambda x : x.strip(), content.split("\n") )
+            lines = filter( lambda x : len(x) > 0, lines )
+            credits = list(filter( lambda x : x.find("#")!=0, lines ))
             
             if active:
                 self.ap.active(active)
