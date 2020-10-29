@@ -336,31 +336,34 @@ if run_not_in_sample_mode:
 
     serv.start( generators = generators )
 
-import modext.misc.main as mod_main
 
 mod_main.debug_mode = True
 
 def loop():
+    import modext.misc.main as mod_main
+    
     serv.run_outbound_loop = True
     mod_main.loop( cfg, add_loop=serv.loop, ha_mode=False )
 
 def loop_ha():
+    import modext.misc.main as mod_main
+    
     serv.run_outbound_loop = False
     mod_main.loop( cfg, add_loop=[serv.loop,serv.run_outbound], ha_mode=True )
-    
-    
-import modext.misc.main_async as mod_main_async
 
 def run_loop():
+    import modext.misc.main_async as mod_main_async
+    
     # bring up windup as async task
     # serve outbound in a seperate async endless_loop
     serv.run_outbound_loop = False
     mod_main_async.run_loop( cfg, add_loop=[serv.loop,serv.run_outbound], ha_mode=True )
 
+
 print()
 gc_print_stat()
 
-print( "ip ->", wlan_ap.ifconfig() )
+print( "softap ip ->", wlan_ap.ifconfig() )
 print( "current time ->", ntp_serv.localtime() )
 print()
 print("to start :-)")
