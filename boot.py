@@ -221,14 +221,6 @@ import modext.windup.session_mod
 generators = []
 
 
-# add all modules to start automatically before this call
-modc.startup(config=cfg)
-
-# just serving some static files
-from modext.windup import WindUp, Router
-serv = WindUp()
-
-
 # replace standard executor with fiber executor
 #serv.exec_class = ProcessorFiber
 
@@ -317,6 +309,14 @@ for ext in all_ext:
 #from mod3rd.admin_windup.content import router as router_generators
 #from mod3rd.admin_windup.file_api import router as router_file_api
 #from mod3rd.admin_windup.editor import static_files as editor_files
+
+
+# add all modules to start automatically before this call
+modc.startup(config=cfg)
+
+# just serving some static files
+from modext.windup import WindUp, Router
+serv = WindUp()
 
 
 logger.info("config done. start windup.")

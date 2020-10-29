@@ -51,11 +51,11 @@ class Loader(LogSupport):
         self.info("importing", (path, name_spec, name_or_alias))
         imp = __import__(path)
         _mod = imp
+        nav = path.split(".")
+        nav.pop(0)
+        for s in nav:
+            _mod = getattr(_mod,s)
         if _globals!=None:
-            nav = path.split(".")
-            nav.pop(0)
-            for s in nav:
-                _mod = getattr(_mod,s)
             _globals[ name_or_alias ] = _mod
         self.imports.append(imp)
         return _mod

@@ -15,6 +15,13 @@ from modext.windup import Namespace
 router = Router( root="/admin" )
 
 
+def _is_file(mode):
+    return mode & 32768 > 0
+
+def _is_dir(mode):
+    return mode & 16384 > 0
+
+
 @router.xget("/file/:filename")
 def get_file( req, args ):
     rest = args.rest
@@ -22,7 +29,7 @@ def get_file( req, args ):
 
     try:
         fi = _get_file_info(fnam)
-        if fi["mode"]==16384:
+        if _is_dir(fi["mode"]):
             raise Exception("file is directory")
     except Exception as ex:
         logger.excep(ex,"bad file",fnam)
@@ -117,12 +124,7 @@ def get_remove( req, args ):
     path = _conv(rest.path)
     recur_level = int(rest.recur_level)
     
-    fi = _get_file_info(path)
-    folders = [fi]
-    if fi["mode"]==16384:
-        folders.extend( _get_folder_info(path,recur_level) )
-    
-    _remove(folders)
+    _remove_path(path,recur_level)
     
     req.send_response( )
 
@@ -206,9 +208,9 @@ def _browse_html(path,folder):
     ctx = Namespace()
     
     def _is_no_dir(fi):
-        return fi.mode!=16384
+        return _is_file(fi.mode)
     def _is_dir(fi):
-        return fi.mode==16384
+        return not _is_file(fi.mode)
     def _chop_path(fi):
         return fi.name[len(path):]
     
@@ -230,11 +232,20 @@ def _remove(folders):
     for fp in folders:
         if "children" in fp:
             _remove(fp["children"])
-        if fp["mode"]==16384:
-            os.rmdir(fp["name"])
-        else:
+        if _is_file(fp["mode"]):
             os.remove(fp["name"])
-    
+        else:
+            os.rmdir(fp["name"])
+  
+
+def _remove_path(path,recur_level):
+    fi = _get_file_info(path)
+    folders = [fi]
+    if _is_dir(fi["mode"]):
+        fi["children"] = _get_folder_info(path,recur_level)        
+    print(folders)    
+    _remove(folders)
+
 
 def _get_folder_info(path,recur_level):
     
@@ -248,7 +259,7 @@ def _get_folder_info(path,recur_level):
         if fnam[0:2]=="//":
             fnam = fnam[1:]
         fi = _get_file_info(fnam)
-        if recur_level>0 and fi["mode"]==16384:
+        if recur_level>0 and _is_dir(fi["mode"]):
             fi["children"] = _get_folder_info( fnam, recur_level-1 )
         info.append( fi )
         
