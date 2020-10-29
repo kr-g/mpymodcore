@@ -3,7 +3,8 @@
 
 ## next version v0.0.17
 
--
+- fix TZ_cet, timezone support
+- 
 
 
 ## version v0.0.16

@@ -41,8 +41,7 @@ class TZ_cet(TZ_Support):
             year_tm = self._get_year_tm(1)
             summer = self._patch( year_tm, self._summer_start_pad() )
             summer_tm = self._strategy( summer )
-            summer = time.mktime( self.summer_tm )
-            exp = summer - cur_time
+            self.summer = time.mktime( self.summer_tm )
         if cur_time < self.summer:
             exp = self.summer - cur_time
         if cur_time < self.winter:
@@ -92,7 +91,7 @@ class TZ_cet(TZ_Support):
         now = time.time()
         offset = self.get_current_tz()
         loctime = now+offset
-        expires = self.expires(loctime)
+        expires = self.expires()
         
         return {
             "now_utc" : now,
