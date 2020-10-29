@@ -337,17 +337,15 @@ if run_not_in_sample_mode:
     serv.start( generators = generators )
 
 
+import modext.misc.main as mod_main
+
 mod_main.debug_mode = True
 
 def loop():
-    import modext.misc.main as mod_main
-    
     serv.run_outbound_loop = True
     mod_main.loop( cfg, add_loop=serv.loop, ha_mode=False )
 
 def loop_ha():
-    import modext.misc.main as mod_main
-    
     serv.run_outbound_loop = False
     mod_main.loop( cfg, add_loop=[serv.loop,serv.run_outbound], ha_mode=True )
 
