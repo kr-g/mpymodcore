@@ -4,6 +4,8 @@
 ## next version v0.0.17
 
 - fix TZ_cet, timezone support
+- first draft of auto configuration and dynamic module loading
+ for modules having an `__app__.py` file. sample code refer to `boot.py`
 - 
 
 

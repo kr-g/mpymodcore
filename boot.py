@@ -296,13 +296,27 @@ def tops(req,args):
     req.send_response( response="ok, buddy. you have permission" )
 
 
+#
+# dynamic loading of all modules in mod3rd having
+# __app__.py in their module path present
+#
+from modext.auto_config.core import Loader
+cfgload=Loader()
+all_ext = cfgload.find_3rd()
+for ext in all_ext:
+    print("loading", ext)
+    _app_ext = cfgload.do_import( ext, globals() )
+    print( _app_ext )
+    generators.extend( _app_ext.app_ext.generators )
 
-import mod3rd
-from mod3rd.admin_esp.wlan import router as router_wlan
-from mod3rd.admin_user.login import router as router_login
-from mod3rd.admin_windup.content import router as router_generators
-from mod3rd.admin_windup.file_api import router as router_file_api
-from mod3rd.admin_windup.editor import static_files as editor_files
+# above replaces this section, and generator extend below
+
+#import mod3rd
+#from mod3rd.admin_esp.wlan import router as router_wlan
+#from mod3rd.admin_user.login import router as router_login
+#from mod3rd.admin_windup.content import router as router_generators
+#from mod3rd.admin_windup.file_api import router as router_file_api
+#from mod3rd.admin_windup.editor import static_files as editor_files
 
 
 logger.info("config done. start windup.")
@@ -312,10 +326,10 @@ run_not_in_sample_mode = True
 if run_not_in_sample_mode:
     
     generators.extend( [
-            router_wlan,
-            router_login,
-            router_generators,
-            router_file_api, editor_files,
+            #router_wlan,
+            #router_login,
+            #router_generators,
+            #router_file_api, editor_files,
             status,
             secured_router,
         ] )

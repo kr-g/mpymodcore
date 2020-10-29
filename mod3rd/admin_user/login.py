@@ -114,7 +114,10 @@ def my_form( req, args ):
 @router("/logout")
 def my_form( req, args ):
 
-    logger.info( "logging out", args.session.user, args.session.auth_user )
+    try:
+        logger.info( "logging out", args.session.user, args.session.auth_user )
+    except:
+        logger.info( "logging out from empty session" )
     
     # set the session to destory 
     args.session = None
