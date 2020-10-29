@@ -22,8 +22,8 @@ def my_form( req, args ):
 
     data = netw_data()
     
-    logger.info(data)
-    req.send_response( response=data )
+    #logger.info(data)
+    req.send_response( response=data, fibered=True )
 
 
 def scan_networks(debug=False):
