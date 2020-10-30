@@ -69,7 +69,7 @@ def auto_config():
     all_ext.extend(all_app)
 
     for ext in all_ext:
-        print("loading", ext)
+        logger.info("loading", ext)
         _app_ext = cfg_load.do_import(ext, globals())
         # print(_app_ext)
         global generators
@@ -113,10 +113,11 @@ def start_modcore(config):
 
     modc.startup(config=config)
 
+    print()
     print("softap ip ->", soft_ap.ifconfig())
     print("wlan ip ->", wlan_ap.ifconfig())
-
     print("current time ->", ntp_serv.localtime())
+    print()
 
 
 def start_windup():
