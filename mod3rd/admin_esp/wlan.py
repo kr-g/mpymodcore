@@ -70,8 +70,13 @@ def netw_data(debug=False):
     scan_networks(debug=debug)
 
     t = """
-            <!DOCTYPE html>
+            <!DOCTYPE html
+            <html lang="en">
             <html>
+            <head>
+                <meta charset="utf-8">
+                <title>WLAN configuration</title>
+            </head>
             <body>
 
             <h2>WLAN configuration</h2>

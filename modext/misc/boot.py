@@ -73,7 +73,12 @@ def auto_config():
         _app_ext = cfg_load.do_import(ext, globals())
         # print(_app_ext)
         global generators
-        generators.extend(_app_ext.app_ext.generators)
+        gen_spec = _app_ext.app_ext
+        if type(gen_spec) != list:
+            gen_spec = [gen_spec]
+        for gen in gen_spec:
+            print("config generators", gen.caption)
+            generators.extend(gen.generators)
 
 
 def set_cet_timezone():

@@ -3,7 +3,9 @@
 
 ## next version v0.0.18
 
--
+- `__app__.apt_ext` can be a single Plugin, or a list of Plugin
+- module `mod3rd.admin_esp.softap` for SoftAP configuration
+- 
 
 
 ## version v0.0.17
@@ -53,7 +55,7 @@
 - MQTT
 - `modext.config.namespace` rework
 - fiber and fiber call stack, fiber api change
-- fiber stream integration
+- fiber stream integration -> catch buffer overflow in windup incoming (long requests)
 - WindUp configuration rework
 - auto discovery and auto configuration for py and mpy files
 - ace editor remove limitation that save blocks the global loop until save completed

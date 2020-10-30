@@ -1,4 +1,5 @@
-from mod3rd.admin_esp.wlan import router
+from mod3rd.admin_esp.wlan import router as wlan_router
+from mod3rd.admin_esp.softap import router as softap_router
 
 from modext.auto_config.ext_spec import Plugin
 
@@ -8,8 +9,17 @@ class WLAN_chooser(Plugin):
         super().__init__()
         self.caption = "WLAN"
         self.path_spec = "mod3rd.admin_esp"
-        self.generators = [router]
-        self.url_caption_tuple_list = [(router.root + "/wlan", None)]
+        self.generators = [wlan_router]
+        self.url_caption_tuple_list = [(wlan_router.root + "/wlan", None)]
 
 
-app_ext = WLAN_chooser()
+class SoftAp_config(Plugin):
+    def __init__(self):
+        super().__init__()
+        self.caption = "SoftAP"
+        self.path_spec = "mod3rd.admin_esp"
+        self.generators = [softap_router]
+        self.url_caption_tuple_list = [(softap_router.root + "/softap", None)]
+
+
+app_ext = [WLAN_chooser(), SoftAp_config()]
