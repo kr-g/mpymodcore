@@ -3,7 +3,7 @@
 
 ## next version v0.0.18
 
-- `__app__.apt_ext` can be a single Plugin, or a list of Plugin
+- auto-discovery-configuration `__app__.apt_ext` can be a single Plugin, or a list of Plugin
 - module `mod3rd.admin_esp.softap` for SoftAP configuration
 - 
 
