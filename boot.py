@@ -1,75 +1,8 @@
 # This file is executed on every boot (including wake-boot from deepsleep)
-# import esp
-# esp.osdebug(None)
-import uos as os
-import machine
-import time
-
-# uos.dupterm(None, 1) # disable REPL on UART(0)
-
-import micropython
-
-interrupts_enabled = False
-
-if interrupts_enabled:
-    micropython.alloc_emergency_exception_buf(128)
-
-import gc
-
-gc.collect()
 
 
-def mem_info(verbose=True, auto_free=True):
-    if auto_free:
-        gc.collect()
-    if verbose:
-        micropython.mem_info(1)
-    else:
-        micropython.mem_info()
-    return gc.mem_free()
+from modext.misc.boot import *
 
-
-def hardreset():
-    machine.reset()
-
-
-def gc_print_stat():
-    before = gc.mem_free(), gc.mem_alloc()
-    gc.collect()
-    after = gc.mem_free(), gc.mem_alloc()
-    print("(free,alloc)", "before", before)
-    print("(free,alloc)", "after", after)
-
-
-from modcore import modc, Module, LifeCycle
-from modcore import DEBUG, INFO, NOTSET, logger
-
-from moddev.control import control_serv, BREAK
-
-from moddev import wlan
-from moddev.wlan import wlan_ap
-
-from moddev import ntp
-from moddev.ntp import ntp_serv, set_log_time
-
-# ntp can change timezone dynamically
-# press cntrl+c during loop and fire an event, then call loop() again
-# modc.fire_event("tz", 3600*2 ) # 2 hours offset
-# modc.fire_event("tz" ) # utc
-
-from moddev.ntp_tz import ntp_tz_serv
-from moddev.ntp_tz_cet import TZ_cet
-
-# do this after moddev.ntp was loaded
-# and before modc.run was called
-# pass class _not_ instance, will be created when needed on the fly
-ntp_tz_serv.set_tz_handler(TZ_cet)
-
-
-from moddev import softap
-
-from moddev import webrepl
-from moddev.webrepl import webrepl_serv
 
 # some sample test classes ...
 
@@ -193,32 +126,6 @@ cfg = {
     "alarm_counter:above": 10,  # alarm_count counts state changes 0->1, and 1->0
 }
 
-fancy_stuff_i_have_a_sd_card = True
-
-if fancy_stuff_i_have_a_sd_card:
-    from moddev.sdcard import SDCard
-
-    sdc = SDCard("sdc")
-    modc.add(sdc)
-
-    # try
-    #
-    # for securely removal
-    # sdc.change_level(LifeCycle.UMOUNT), or
-    # sdc.change_level(LifeCycle.EJECT)
-    #
-    # use again (no auto detection!)
-    # sdc.change_level(LifeCycle.MOUNT)
-
-
-# enable winup session manager module
-import modext.windup.session_mod
-
-generators = []
-
-
-# replace standard executor with fiber executor
-# serv.exec_class = ProcessorFiber
 
 status = Router()
 
@@ -291,95 +198,31 @@ def tops(req, args):
 
 
 #
-# dynamic loading of all modules in mod3rd having
-# __app__.py in their module path present
 #
-from modext.auto_config.core import Loader
+#
 
-cfgload = Loader()
-all_ext = cfgload.find_3rd()
-for ext in all_ext:
-    print("loading", ext)
-    _app_ext = cfgload.do_import(ext, globals())
-    print(_app_ext)
-    generators.extend(_app_ext.app_ext.generators)
-
-# above replaces this section, and generator extend below
-
-# import mod3rd
-# from mod3rd.admin_esp.wlan import router as router_wlan
-# from mod3rd.admin_user.login import router as router_login
-# from mod3rd.admin_windup.content import router as router_generators
-# from mod3rd.admin_windup.file_api import router as router_file_api
-# from mod3rd.admin_windup.editor import static_files as editor_files
-
+set_cet_timezone()
+enable_sd_card()
+with_interrupts()
+auto_config()
 
 # add all modules to start automatically before this call
-modc.startup(config=cfg)
+start_modcore(config=cfg)
 
-# just serving some static files
-from modext.windup import WindUp, Router
-
-serv = WindUp()
+logger.info("modcore config done. start windup.")
 
 
-logger.info("config done. start windup.")
+# this is located in modext.misc.boot
+generators.extend(
+    [
+        status,
+        secured_router,
+    ]
+)
 
-run_not_in_sample_mode = True
+start_windup()
 
-if run_not_in_sample_mode:
+print_main_info()
 
-    generators.extend(
-        [
-            # router_wlan,
-            # router_login,
-            # router_generators,
-            # router_file_api, editor_files,
-            status,
-            secured_router,
-        ]
-    )
-
-    serv.start(generators=generators)
-
-
-import modext.misc.main as mod_main
-
-mod_main.debug_mode = True
-
-
-def loop():
-    serv.run_outbound_loop = True
-    mod_main.loop(cfg, add_loop=serv.loop, ha_mode=False)
-
-
-def loop_ha():
-    serv.run_outbound_loop = False
-    mod_main.loop(cfg, add_loop=[serv.loop, serv.run_outbound], ha_mode=True)
-
-
-def run_loop():
-    import modext.misc.main_async as mod_main_async
-
-    # bring up windup as async task
-    # serve outbound in a seperate async endless_loop
-    serv.run_outbound_loop = False
-    mod_main_async.run_loop(cfg, add_loop=[serv.loop, serv.run_outbound], ha_mode=True)
-
-
+print("use cfg config settings, for proper startup")
 print()
-gc_print_stat()
-
-print("softap ip ->", wlan_ap.ifconfig())
-print("current time ->", ntp_serv.localtime())
-print()
-print("to start :-)")
-print("call loop() - looping mode")
-print("call loop_ha() - high available mode where outbound is processed seperately")
-print("call run_loop() - run in async mode ")
-print()
-
-
-# from samples.windup_fiber import serve
-
-# end

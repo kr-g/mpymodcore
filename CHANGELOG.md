@@ -4,11 +4,13 @@
 ## next version v0.0.17
 
 - fix TZ_cet, timezone support
-- first draft of auto configuration and dynamic module loading
+- first draft of auto discovery and auto configuration and dynamic module loading
  for modules having an `__app__.py` file. sample code refer to `boot.py`
 - fix file api 
 - `mod3rd.admin_esp.wlan` sorted list of available networks
 - PEP8
+- boot, and main loop redesign. `modext.misc.boot` ships generic boot code
+ which can be use in own code, or as template base 
 -
 
 

@@ -22,22 +22,18 @@ class Loader(LogSupport):
         return dirs
 
     def find(self, path):
+        self.info("search apps in", path)
         dirs = self._get_dir_filter(path)
         apps = filter(lambda x: _os_stat(x[0] + "/__app__.py"), dirs)
         app_paths = list(map(lambda x: x[0], apps))
+        self.info("found apps", app_paths, "in", path)
         return app_paths
 
     def find_3rd(self, path="mod3rd"):
         return self.find(path)
 
     def find_apps(self, path="modapp"):
-        all_apps = []
-        dirs = self._get_dir_filter(path)
-        for path, _ in dirs:
-            # print(path)
-            apps = self.find(path)
-            all_apps.extend(apps)
-        return all_apps
+        return self.find(path)
 
     def do_import(self, name_spec, _globals=None, name_or_alias=None):
         if name_or_alias == None:
