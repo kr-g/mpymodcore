@@ -268,4 +268,5 @@ start_windup()
 print_main_info()
 
 print("use cfg config settings, for proper startup")
+print("e.g. run_loop(cfg)")
 print()
