@@ -3,16 +3,17 @@
 
 ## next version v0.0.17
 
-- fix TZ_cet, timezone support
+- fix `TZ_cet`, timezone support
 - first draft of auto discovery and auto configuration and dynamic module loading
  for modules having an `__app__.py` file. sample code refer to `boot.py`
+- limitation of auto discovery and auto configuration. works only for py not mpy files
 - fix file api 
 - `mod3rd.admin_esp.wlan` sorted list of available networks
 - PEP8
 - boot, and main loop redesign. `modext.misc.boot` ships generic boot code
  which can be use in own code, or as template base 
--
-
+- sample code also in [`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py)
+- 
 
 
 ## version v0.0.16
@@ -64,6 +65,7 @@
 - fiber and fiber call stack, fiber api change
 - fiber stream integration
 - WindUp configuration rework
+- auto discovery and auto configuration for py and mpy files
 - ace editor remove limitation that save blocks the global loop until save completed
 - ace editor provide status and error information 
   use browser console to view log info

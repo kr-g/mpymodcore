@@ -197,20 +197,13 @@ def tops(req, args):
     req.send_response(response="ok, buddy. you have permission")
 
 
-#
-#
-#
+# configure
+start_auto_config()
 
-set_cet_timezone()
-enable_sd_card()
-with_interrupts()
-auto_config()
-
-# add all modules to start automatically before this call
+# add all modules before this call
 start_modcore(config=cfg)
 
 logger.info("modcore config done. start windup.")
-
 
 # this is located in modext.misc.boot
 generators.extend(
@@ -222,6 +215,7 @@ generators.extend(
 
 start_windup()
 
+# give some hints
 print_main_info()
 
 print("use cfg config settings, for proper startup")

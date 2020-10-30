@@ -95,6 +95,14 @@ def with_interrupts():
     micropython.alloc_emergency_exception_buf(128)
 
 
+def start_auto_config():
+    "call common config function"
+    set_cet_timezone()
+    enable_sd_card()
+    with_interrupts()
+    auto_config()
+
+
 def start_modcore(config):
     """add all modules to start automatically before this call"""
 
