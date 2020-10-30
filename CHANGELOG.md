@@ -1,7 +1,7 @@
 
 # Changelog
 
-## next version v0.0.17
+## version v0.0.17
 
 - fix `TZ_cet`, timezone support
 - first draft of auto discovery and auto configuration and dynamic module loading
@@ -13,30 +13,15 @@
 - boot, and main loop redesign. `modext.misc.boot` ships generic boot code
  which can be use in own code, or as template base 
 - sample code also in [`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py)
+- proper testing pending
 - 
 
-
-## version v0.0.16
-
-- [ace editor](https://ace.c9.io/) under `mod3rd.admin_windup.editor` can handle now
- also large files > 4 kb. limitation: save blocks the global loop until save completed, no status or error information provided
-  use browser console to view log info
-- fix `get_http_chunk` reading portions of data chunks from current socket stream
-- ace editor support for code beautify for html, css, js, json file types
-- fiber worker and fiber worker loop are callable, can be written now as next(fbr) or fbr()
-- [modext.misc.main_async](https://github.com/kr-g/mpymodcore/blob/master/modext/misc/main_async.py) 
- asyncio integration for (!!!)
-  - modcore / modc
-  - windup web server
-- sample async startup code in
- [`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py)
-- 
 
 
 ### known issues 
-- with latest update of chrome (sep. 2020) web server response might get shorten/cut
+- ~~with latest update of chrome (sep. 2020) web server response might get shorten/cut
  when connection is closed at the end of the request. seams to be an issue with chrom only.
- use firefox instead. here timing problem dont occur.
+ use firefox instead. here timing problem dont occur.~~
 - ~~with chrome it might happen that main loop freezes at accept new connection.
  this is not predictable, or reproducable. it seams that chrome opens a new connection
  to be used for the next upcoming request.
@@ -74,6 +59,23 @@
 - testing, automatic testing
 - documentation
 
+
+
+## version v0.0.16
+
+- [ace editor](https://ace.c9.io/) under `mod3rd.admin_windup.editor` can handle now
+ also large files > 4 kb. limitation: save blocks the global loop until save completed, no status or error information provided
+  use browser console to view log info
+- fix `get_http_chunk` reading portions of data chunks from current socket stream
+- ace editor support for code beautify for html, css, js, json file types
+- fiber worker and fiber worker loop are callable, can be written now as next(fbr) or fbr()
+- [modext.misc.main_async](https://github.com/kr-g/mpymodcore/blob/master/modext/misc/main_async.py) 
+ asyncio integration for (!!!)
+  - modcore / modc
+  - windup web server
+- sample async startup code in
+ [`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py)
+- 
 
 
 ## version v0.0.15
