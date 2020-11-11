@@ -246,7 +246,7 @@ def tops(req, args):
 
 
 # configure
-start_auto_config()
+cfg_loader = start_auto_config()
 
 # add all modules before this call
 start_modcore(config=cfg)

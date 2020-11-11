@@ -5,6 +5,8 @@
 
 - auto-discovery-configuration `__app__.apt_ext` can be a single Plugin, or a list of Plugin
 - module `mod3rd.admin_esp.softap` for SoftAP configuration
+- `start_auto_config` supports different timezone handler with `modext.misc.boot.set_timezone`
+- auto-discovery-configuration (`ADC`) and `auto_config` loader sets the plugin `path_spec`
 - 
 
 

@@ -1,10 +1,16 @@
 class Plugin(object):
     def __init__(self):
+        # the name of the plugin
         self.caption = None
+        # path_spec is set by the loader
         self.path_spec = None
+        # not used as of now
         self.global_var = "_"
+        # not used as of now
         self.modules = []
+        # the generators for windup
         self.generators = []
+        # a list of url entry-points provided by the plugin
         self.url_caption_tuple_list = []
         self.type = "user"
         self.licenses_url = []
@@ -16,7 +22,7 @@ class Plugin(object):
             + "caption :"
             + self.caption
             + ", "
-            + "spec :"
+            + "path spec :"
             + self.path_spec
             + ", "
             + "var :"

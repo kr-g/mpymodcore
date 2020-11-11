@@ -14,6 +14,7 @@ class Loader(LogSupport):
     def __init__(self):
         super().__init__()
         self.imports = []
+        self.plugins = []
 
     def _get_dir_filter(self, path):
         paths = map(lambda x: path + "/" + x, os.listdir(path))
@@ -51,5 +52,7 @@ class Loader(LogSupport):
             _mod = getattr(_mod, s)
         if _globals != None:
             _globals[name_or_alias] = _mod
+
         self.imports.append(imp)
+        self.plugins.append(_mod)
         return _mod

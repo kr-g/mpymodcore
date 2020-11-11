@@ -77,19 +77,29 @@ def auto_config():
         if type(gen_spec) != list:
             gen_spec = [gen_spec]
         for gen in gen_spec:
-            print("config generators", gen.caption)
+            # set the path_spec
+            gen.path_spec = ext
+            print("config generators", gen.caption, gen.path_spec)
             generators.extend(gen.generators)
+
+    return cfg_load
+
+
+def set_timezone(tz_handler=None):
+    from moddev.ntp import ntp_serv
+    from moddev.ntp_tz import ntp_tz_serv
+
+    ntp_tz_serv.set_tz_handler(tz_handler)
 
 
 def set_cet_timezone():
-    from moddev.ntp import ntp_serv
-    from moddev.ntp_tz import ntp_tz_serv
     from moddev.ntp_tz_cet import TZ_cet
 
-    ntp_tz_serv.set_tz_handler(TZ_cet)
+    set_timezone(TZ_cet)
 
 
 def enable_sd_card():
+    ## todo add slot parameter
     from moddev.sdcard import SDCard
 
     sdc = SDCard("sdc")
@@ -100,12 +110,16 @@ def with_interrupts():
     micropython.alloc_emergency_exception_buf(128)
 
 
-def start_auto_config():
-    "call common config function"
-    set_cet_timezone()
+def start_auto_config(tz_handler_cls=None):
+    "call common config function, enable cet tz handler as default"
+    if tz_handler_cls != None:
+        set_timezone(tz_handler_cls)
+    else:
+        set_cet_timezone()
     enable_sd_card()
     with_interrupts()
-    auto_config()
+    cfg_loader = auto_config()
+    return cfg_loader
 
 
 def start_modcore(config):
