@@ -22,11 +22,15 @@ def loop(cfg, add_loop=None, ha_mode=False):
     global control_serv
     control_serv.breaksignal = False
 
+    modc.run_loop_hooks(before=True)
+
     while True:
         try:
             loop_core(cfg, add_loop=add_loop, ha_mode=ha_mode)
         except KeyboardInterrupt:
             break
+
+    modc.run_loop_hooks(before=False)
 
 
 _modg = None

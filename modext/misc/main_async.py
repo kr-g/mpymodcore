@@ -5,7 +5,7 @@ try:
 except:
     import asyncio
 
-from .main import loop_core, conv_to_list, debug_mode, logger, control_serv
+from .main import modc, loop_core, conv_to_list, debug_mode, logger, control_serv, _modg
 
 
 async_loop_tout = 1
@@ -47,6 +47,8 @@ async def loop(cfg, add_loop=None, ha_mode=False):
 
 def run_loop(cfg, add_loop=None, ha_mode=False):
 
+    global _modg
+    _modg = None
     global keyboard_c
     keyboard_c.clear()
     global control_serv
@@ -58,6 +60,8 @@ def run_loop(cfg, add_loop=None, ha_mode=False):
             task = asyncio.create_task(endless_loop(aloop))
             logger.info("created async task for", aloop.__name__)
 
+    modc.run_loop_hooks(before=True)
+
     try:
         # ignores ha_mode setting, just for compatibilty
         logger.info("running async loop")
@@ -67,6 +71,9 @@ def run_loop(cfg, add_loop=None, ha_mode=False):
         # signal to stop others
         keyboard_c.set()
         logger.info("\ncntrl+c, auto shutdown=", not debug_mode)
+
+        modc.run_loop_hooks(before=False)
+
         if not debug_mode:
             modc.shutdown()
         if not debug_mode:

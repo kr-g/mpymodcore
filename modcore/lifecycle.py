@@ -17,13 +17,39 @@ _LIFECYCLE = [
 ]
 
 
-class LifeCycle(object):
+class HookSupport(object):
+    def __init__(self):
+        self._hooks = []
+
+    def hook(self, lifecycle, before=False, after=False):
+        def _wrapper(func):
+            def _func(self, *args, **kwargs):
+                return func(self, *args, **kwargs)
+
+            self._hooks.append((lifecycle, before, after, _func))
+            return _func
+
+        return _wrapper
+
+    def call_hooks(self, lifecycle, before_call=True):
+        for lc, b, a, func in self._hooks:
+            if lc == lifecycle:
+                if (before_call and b) or (before_call == False and a):
+                    try:
+                        func(self)
+                    except Exception as ex:
+                        self.excep(ex, "before_call", before_call)
+                    continue
+
+
+class LifeCycle(HookSupport):
 
     NEW = 0
     CONFIG = 1
     MOUNT = 2
     START = 3
     RUNNING = 4
+    LOOP = 4
     STOP = 5
     UMOUNT = 6
     EJECT = 7
@@ -31,6 +57,7 @@ class LifeCycle(object):
     __ERROR = -2
 
     def __init__(self):
+        HookSupport.__init__(self)
         self._lc_level = LifeCycle.__END
 
     # dont call the low level api directly
@@ -93,15 +120,23 @@ class LifeCycle(object):
         return state_tasks
 
     def _call_level(self, m, l, config=None):
-        if m[1] != None:
-            if m[0] != l:
+        l_func = m[1]
+        curlevel = m[0]
+        if l_func != None:
+            if curlevel != l:
                 raise Exception("internal error")
-            if m[0] == LifeCycle.CONFIG:
-                m[1](config=config)
+
+            self.call_hooks(curlevel, before_call=True)
+
+            if curlevel == LifeCycle.CONFIG:
+                l_func(config=config)
             else:
-                m[1]()
-        self.info("exe level", m[0], _LIFECYCLE[m[0]])
-        self._lc_level = m[0]
+                l_func()
+
+            self.call_hooks(curlevel, before_call=False)
+
+        self.info("exe level", curlevel, _LIFECYCLE[curlevel])
+        self._lc_level = curlevel
 
     # high level api
 

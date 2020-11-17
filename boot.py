@@ -115,6 +115,30 @@ cfg.update(
 )
 
 session_purge = Interval("session_purge")
+
+from modcore.lifecycle import LifeCycle
+
+
+@session_purge.hook(LifeCycle.CONFIG, before=True)
+def before_config(self):
+    self.info("before config hook called")
+
+
+@session_purge.hook(LifeCycle.CONFIG, after=True)
+def after_config(self):
+    self.info("after config hook called")
+
+
+@session_purge.hook(LifeCycle.LOOP, before=True)
+def before_loop(self):
+    self.info("before loop hook called")
+
+
+@session_purge.hook(LifeCycle.LOOP, after=True)
+def after_loop(self):
+    self.info("after loop hook called")
+
+
 modc.add(session_purge)
 
 from moddev.alarmclock import AlarmClock

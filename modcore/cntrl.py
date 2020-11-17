@@ -70,6 +70,14 @@ class ModuleController(LogSupport):
             ed = EventData(event, data, sender=src)
             m._add_event(ed)
 
+    def run_loop_hooks(self, before=True):
+        self.info("loop hooks", before)
+        for m in self._modules:
+            try:
+                m.call_hooks(LifeCycle.LOOP, before_call=before)
+            except Exception as ex:
+                self.excep(ex, "hook", m.id, before)
+
     def run_loop(self, config=None):
         aws = []
         for m in self._modules:

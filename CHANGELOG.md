@@ -7,6 +7,8 @@
 - module `mod3rd.admin_esp.softap` for SoftAP configuration
 - `start_auto_config` supports different timezone handler with `modext.misc.boot.set_timezone`
 - auto-discovery-configuration (`ADC`) and `auto_config` loader sets the plugin `path_spec`
+- modcore `lifecycle hooks` for more flexible enhanced integration (also with asyncio)
+ sample code in `boot.py`
 - 
 
 
