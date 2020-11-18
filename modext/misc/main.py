@@ -1,4 +1,5 @@
 from modcore import modc, Module, LifeCycle
+from modcore.cntrl import get_ha_g, reset_ha_g
 from modcore import DEBUG, INFO, NOTSET, logger
 
 from moddev.control import control_serv
@@ -33,14 +34,7 @@ def loop(cfg, add_loop=None, ha_mode=False):
     modc.run_loop_hooks(before=False)
 
 
-_modg = None
-
-
 def loop_core(cfg, add_loop=None, ha_mode=False):
-
-    global _modg
-    if ha_mode == True and _modg == None:
-        _modg = modc.run_loop_g(cfg)
 
     add_loop = conv_to_list(add_loop)
 
@@ -49,7 +43,7 @@ def loop_core(cfg, add_loop=None, ha_mode=False):
         if ha_mode == False:
             modc.run_loop(cfg)
         else:
-            rc = next(_modg)
+            rc = next(get_ha_g(cfg))
 
         if control_serv.breaksignal == True:
             logger.warn("soft break")
@@ -59,6 +53,10 @@ def loop_core(cfg, add_loop=None, ha_mode=False):
             # other loop eg webserv
             for aloop in add_loop:
                 aloop()
+
+    except StopIteration as ex:
+        logger.excep(ex, "internal error", "reseting ha")
+        reset_ha_g()
 
     except KeyboardInterrupt:
         logger.info("\ncntrl+c, auto shutdown=", not debug_mode)

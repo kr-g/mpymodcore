@@ -138,3 +138,17 @@ class ModuleController(LogSupport):
 
 
 modc = ModuleController()
+
+_modg = None
+
+
+def get_ha_g(cfg):
+    global _modg
+    if _modg == None:
+        _modg = modc.run_loop_g(cfg)
+    return _modg
+
+
+def reset_ha_g():
+    global _modg
+    _modg = None

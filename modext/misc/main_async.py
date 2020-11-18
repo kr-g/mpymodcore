@@ -5,7 +5,8 @@ try:
 except:
     import asyncio
 
-from .main import modc, loop_core, conv_to_list, debug_mode, logger, control_serv, _modg
+from .main import modc, loop_core, conv_to_list, debug_mode, logger, control_serv
+from modcore.cntrl import get_ha_g, reset_ha_g
 
 
 async_loop_tout = 1
@@ -31,6 +32,7 @@ async def endless_loop(func, tout=None):
             await asyncio.sleep_ms(tout)
 
         except KeyboardInterrupt:
+            keyboard_c.set()
             try:
                 logger.warn("stop endless_loop", func.__name__)
             except:
@@ -47,8 +49,11 @@ async def loop(cfg, add_loop=None, ha_mode=False):
 
 def run_loop(cfg, add_loop=None, ha_mode=False):
 
-    global _modg
-    _modg = None
+    #    global _modg
+    #    _modg = None
+
+    reset_ha_g()
+
     global keyboard_c
     keyboard_c.clear()
     global control_serv
@@ -71,15 +76,14 @@ def run_loop(cfg, add_loop=None, ha_mode=False):
         # signal to stop others
         keyboard_c.set()
         logger.info("\ncntrl+c, auto shutdown=", not debug_mode)
-
-        modc.run_loop_hooks(before=False)
-
-        if not debug_mode:
-            modc.shutdown()
-        if not debug_mode:
-            logger.info("call first")
-            logger.info("modc.startup(config=cfg)")
-        logger.info("call loop() to continue")
-        raise
     except Exception as ex:
         logger.excep(ex)
+
+    modc.run_loop_hooks(before=False)
+
+    if not debug_mode:
+        modc.shutdown()
+    if not debug_mode:
+        logger.info("call first")
+        logger.info("modc.startup(config=cfg)")
+    logger.info("call loop() to continue")

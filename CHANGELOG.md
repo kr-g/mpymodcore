@@ -9,7 +9,9 @@
 - auto-discovery-configuration (`ADC`) and `auto_config` loader sets the plugin `path_spec`
 - modcore [`lifecycle hooks`](https://github.com/kr-g/mpymodcore/blob/master/modcore/lifecycle.py)
  for more flexible enhanced integration (also with asyncio). sample code in `boot.py`
-- 
+- reworked `modext.misc.main_async` regarding dev mode. cntrl+c and continue
+ call to `run_loop(cfg)` now stable
+-
 
 
 ## version v0.0.17
