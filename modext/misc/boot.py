@@ -75,6 +75,8 @@ def auto_config():
 
         try:
             gen_spec = _app_ext.app_ext
+            if gen_spec == None:
+                continue
             if type(gen_spec) != list:
                 gen_spec = [gen_spec]
             for gen in gen_spec:

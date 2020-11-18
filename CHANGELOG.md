@@ -12,7 +12,11 @@
 - reworked
  [`modext.misc.main_async`](https://github.com/kr-g/mpymodcore/blob/master/modext/misc/main_async.py)
  regarding dev mode. cntrl+c and continue call to `run_loop(cfg)` now stable
--
+- added `modext.misc.async_mod.AsyncModule` as glue for modcore modules and asyncio
+- added sample module `mod3rd.skeleton` with auto-discovery-configuration for asyncio tasks
+ (dynamic adding additional asyncio modules during startup)
+- added cntrl+c (soft break) and continue looping support to `AsyncModule`
+- 
 
 
 ## version v0.0.17

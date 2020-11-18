@@ -47,7 +47,7 @@ async def loop(cfg, add_loop=None, ha_mode=False):
     await endless_loop(_call_func)
 
 
-def run_loop(cfg, add_loop=None, ha_mode=False):
+def run_loop(cfg, add_loop=None, ha_mode=False, reset_asyncio=True):
 
     reset_ha_g()
 
@@ -55,6 +55,10 @@ def run_loop(cfg, add_loop=None, ha_mode=False):
     keyboard_c.clear()
     global control_serv
     control_serv.breaksignal = False
+
+    if reset_asyncio == True:
+        # reset state
+        asyncio.new_event_loop()
 
     if add_loop:
         add_loop = conv_to_list(add_loop)
