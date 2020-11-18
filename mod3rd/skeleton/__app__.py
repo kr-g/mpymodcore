@@ -1,9 +1,9 @@
 from modcore import modc, LifeCycle
-from modext.misc.async_mod import asyncio, AsyncModule
+from modext.misc.async_mod import asyncio, AsyncModule, AsyncSkeletonModule
 from modext.auto_config.ext_spec import Plugin
 
 
-mod_async_sample = AsyncModule()
+mod_async_sample = AsyncSkeletonModule()
 
 
 async def the_sample_code(self):
@@ -36,6 +36,7 @@ def after_loop_run(self):
 modc.add(mod_async_sample)
 
 
+# this does nothing since the sample do not provide custom generators for WindUp
 class SampleAsync_plugin(Plugin):
     def __init__(self):
         super().__init__()
