@@ -65,7 +65,7 @@ def loop_core(cfg, add_loop=None, ha_mode=False):
         if not debug_mode:
             logger.info("call first")
             logger.info("modc.startup(config=cfg)")
-        logger.info("call loop() to continue")
+        logger.info("call one of the loop methods to continue")
         raise
     except Exception as ex:
         logger.excep(ex)
