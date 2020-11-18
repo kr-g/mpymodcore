@@ -49,9 +49,6 @@ async def loop(cfg, add_loop=None, ha_mode=False):
 
 def run_loop(cfg, add_loop=None, ha_mode=False):
 
-    #    global _modg
-    #    _modg = None
-
     reset_ha_g()
 
     global keyboard_c
