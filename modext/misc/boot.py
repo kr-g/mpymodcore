@@ -72,15 +72,19 @@ def auto_config():
         logger.info("loading", ext)
         _app_ext = cfg_load.do_import(ext, globals())
         # print(_app_ext)
-        global generators
-        gen_spec = _app_ext.app_ext
-        if type(gen_spec) != list:
-            gen_spec = [gen_spec]
-        for gen in gen_spec:
-            # set the path_spec
-            gen.path_spec = ext
-            print("config generators", gen.caption, gen.path_spec)
-            generators.extend(gen.generators)
+
+        try:
+            gen_spec = _app_ext.app_ext
+            if type(gen_spec) != list:
+                gen_spec = [gen_spec]
+            for gen in gen_spec:
+                # set the path_spec
+                gen.path_spec = ext
+                logger.info("config generators", gen.caption, gen.path_spec)
+                global generators
+                generators.extend(gen.generators)
+        except Exception as ex:
+            logger.excep(ex, "auto-discovery-configuration")
 
     return cfg_load
 
