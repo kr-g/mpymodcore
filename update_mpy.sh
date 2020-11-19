@@ -2,11 +2,11 @@
 
 cd ../micropython
 MPYHOME=$(pwd)
-MPYVER=${1:-v1.12}
+MPYVER=${1:-v1.13}
 
 echo $MPYHOME $MPYVER
 
-git checkout master
+git checkout -f master
 
 git pull
 
