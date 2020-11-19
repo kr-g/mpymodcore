@@ -15,13 +15,18 @@ NOTSET = 0
 
 #
 
+LOGLEVEL = "LOGLEVEL"
+LOGCFG = "etc/log.cfg.txt"
+
+#
+
 _logstr = {
     CRITICAL: "CRITICAL",
     ERROR: "ERROR",
     WARNING: "WARNING",
     INFO: "INFO",
     DEBUG: "DEBUG",
-    NOTSET: None,
+    NOTSET: "NOTSET",
 }
 
 
@@ -46,7 +51,12 @@ class LogSupport(object):
         self.showtime = LogSupport.showtime
 
     def log_level(self, level=None):
-        self._log_level = level if level != None else LogSupport.level
+        self._log_level = level  # if level != None else LogSupport.level
+
+    def get_level(self):
+        if self._log_level == None:
+            return LogSupport.level
+        return self._log_level
 
     @staticmethod
     def global_level(level):
@@ -60,7 +70,8 @@ class LogSupport(object):
         return ds + ls + ts
 
     def _loglevel(self, level):
-        return level >= self._log_level
+        cur = self.get_level()
+        return level >= cur and cur > 0
 
     def _log(self, level, *args):
         if len(args) == 0:
@@ -102,6 +113,48 @@ class LogSupport(object):
         self.critical(*args)
         sys.print_exception(ex)  ##todo print with  _print_fd
 
+
+def set_log_level(level):
+    logger.info("setting log level", _logstr[level], "=", level)
+    LogSupport.global_level(level)
+
+
+def set_log_level_from_config(cfg):
+    info_str = _logstr[INFO]
+    levelstr = cfg.get(LOGLEVEL, info_str)
+    r = list(filter(lambda x: x[1] == levelstr, _logstr.items()))
+    if len(r) != 1:
+        raise Exception("unknown log level", levelstr)
+    level = r[0][0]
+    set_log_level(level)
+
+
+def read_level():
+
+    try:
+        with open(LOGCFG) as f:
+            lines = f.readlines()
+    except:
+        return
+
+    lines = list(map(lambda x: x.strip(), lines))
+    lines = list(filter(lambda x: len(x) > 0, lines))
+    lines = list(filter(lambda x: x[0] != "#", lines))
+
+    if len(lines) == 0:
+        return
+
+    level = lines[0]
+    set_log_level_from_config({LOGLEVEL: level})
+
+
+def write_level():
+    with open(LOGCFG, "w") as f:
+        f.write(_logstr[LogSupport.level])
+        f.write("\n")
+
+
+read_level()
 
 logger = LogSupport()
 logger.logname = "main"

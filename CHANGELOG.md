@@ -3,7 +3,9 @@
 
 ## next version v0.0.19
 
--
+- global loglevel can preserved on flash
+- logging reads log-level from `etc/log.cfg.txt`
+- 
 
 
 ## version v0.0.18
