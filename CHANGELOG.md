@@ -1,6 +1,11 @@
 
 # Changelog
 
+## next version v0.0.19
+
+-
+
+
 ## version v0.0.18
 
 - auto-discovery-configuration `__app__.apt_ext` can be a single Plugin, or a list of Plugin
@@ -20,21 +25,6 @@
 - added cntrl+c (soft break) and continue looping support to `AsyncModule`
 - 
 
-
-## version v0.0.17
-
-- fix `TZ_cet`, timezone support
-- first draft of auto discovery and auto configuration and dynamic module loading
- for modules having an `__app__.py` file. sample code refer to `boot.py`
-- limitation of auto discovery and auto configuration. works only for py not mpy files
-- fix file api 
-- `mod3rd.admin_esp.wlan` sorted list of available networks
-- PEP8
-- boot, and main loop redesign. `modext.misc.boot` ships generic boot code
- which can be use in own code, or as template base 
-- sample code also in [`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py)
-- proper testing pending
-- 
 
 
 
@@ -79,6 +69,22 @@
 - testing, automatic testing
 - documentation
 
+
+
+## version v0.0.17
+
+- fix `TZ_cet`, timezone support
+- first draft of auto discovery and auto configuration and dynamic module loading
+ for modules having an `__app__.py` file. sample code refer to `boot.py`
+- limitation of auto discovery and auto configuration. works only for py not mpy files
+- fix file api 
+- `mod3rd.admin_esp.wlan` sorted list of available networks
+- PEP8
+- boot, and main loop redesign. `modext.misc.boot` ships generic boot code
+ which can be use in own code, or as template base 
+- sample code also in [`boot.py`](https://github.com/kr-g/mpymodcore/blob/master/boot.py)
+- proper testing pending
+- 
 
 
 ## version v0.0.16

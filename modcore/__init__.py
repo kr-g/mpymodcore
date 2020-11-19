@@ -13,7 +13,7 @@ from .mod import Module
 from .lifecycle import LifeCycle
 from .log import DEBUG, INFO, NOTSET, WARNING, ERROR, CRITICAL, logger
 
-VERSION = "v0.0.18"
+VERSION = "v0.0.19a"
 
 print("-" * 41)
 print("mpy modcore")
