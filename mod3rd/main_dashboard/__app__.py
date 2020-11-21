@@ -2,7 +2,7 @@ from modcore.log import logger
 from modext.windup import Router, StaticFiles
 
 from modext.auto_config.core import get_core_loader
-from modext.auto_config.ext_spec import Plugin
+from modext.auto_config.ext_spec import Plugin, PluginUrl
 
 from modext.config import ReprDict
 
@@ -15,22 +15,8 @@ rooter = Router(root="/rest/main")
 def get_plugins(req, args):
 
     plugins = _get_all_plugins()
-    meta = _extract_data(plugins)
 
-    req.send_json(meta)
-
-
-def _extract_data(plugins):
-    meta = []
-    for plugin in plugins:
-        meta.append(
-            {
-                "caption": plugin.caption,
-                "url_list": list(plugin.url_caption_tuple_list),
-                "license_info": list(plugin.licenses_url),
-            }
-        )
-    return meta
+    req.send_json(ReprDict().reprlist(plugins))
 
 
 def _get_all_plugins():
@@ -61,7 +47,7 @@ class MainDashBoard(Plugin):
         self.path_spec = ""
         self.generators = [static_files, rooter]
         self.url_caption_tuple_list = [
-            (static_files.root, None),
+            PluginUrl(static_files.root + "/#", "mpy-modecore dashboard"),
         ]
 
 

@@ -80,6 +80,7 @@ def auto_config():
             if type(gen_spec) != list:
                 gen_spec = [gen_spec]
             for gen in gen_spec:
+                gen.check()
                 # set the path_spec
                 gen.path_spec = ext
                 logger.info("config generators", gen.caption, gen.path_spec)
