@@ -7,6 +7,7 @@
 - logging reads log-level from `etc/log.cfg.txt`
 - plugin url class for auto-discovery-configuration
 - skeleton for `dashboard` module
+- dashboard under `http://your-ip/main/#`
 - 
 
 
