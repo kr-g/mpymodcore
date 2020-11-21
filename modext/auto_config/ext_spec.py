@@ -1,4 +1,7 @@
-class Plugin(object):
+from modext.config import ReprDict
+
+
+class Plugin(ReprDict):
     def __init__(self):
         # the name of the plugin
         self.caption = None
@@ -16,32 +19,13 @@ class Plugin(object):
         self.licenses_url = []
 
     def __repr__(self):
-        return (
-            self.__class__.__name__
-            + "( "
-            + "caption :"
-            + self.caption
-            + ", "
-            + "path spec :"
-            + self.path_spec
-            + ", "
-            + "var :"
-            + self.global_var
-            + ", "
-            + "modules :"
-            + str(self.modules)
-            + ", "
-            + "generators :"
-            + str(self.generators)
-            + ", "
-            + "url :"
-            + str(self.url_caption_tuple_list)
-            + ", "
-            + "type :"
-            + self.type
-            + ", "
-            + "licenses :"
-            + str(self.licenses_url)
-            + ", "
-            + " )"
-        )
+        return {
+            "caption": self.caption,
+            "path_spec": self.path_spec,
+            "var": self.global_var,
+            "modules": self.modules,
+            "generators": self.generators,
+            "url": self.url_caption_tuple_list,
+            "type": self.type,
+            "licenses": self.licenses_url,
+        }

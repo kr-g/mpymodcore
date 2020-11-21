@@ -58,9 +58,9 @@ def auto_config():
     # dynamic loading of all modules in mod3rd having
     # __app__.py in their module path present
     #
-    from modext.auto_config.core import Loader
+    from modext.auto_config.core import get_core_loader
 
-    cfg_load = Loader()
+    cfg_load = get_core_loader()
 
     all_ext = []
     all_3rd = cfg_load.find_3rd()

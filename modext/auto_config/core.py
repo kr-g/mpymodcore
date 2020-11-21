@@ -56,3 +56,13 @@ class Loader(LogSupport):
         self.imports.append(imp)
         self.plugins.append(_mod)
         return _mod
+
+
+_core_loader = None
+
+
+def get_core_loader():
+    global _core_loader
+    if _core_loader == None:
+        _core_loader = Loader()
+    return _core_loader
