@@ -27,7 +27,7 @@
 <script type="text/javascript">
     async function get(url) {
         console.log("get", url);
-        //app_busy.enter();
+        app_busy.enter();
         var response
         try {
             response = await fetch(url, {
@@ -40,7 +40,7 @@
             //app_statusbar.add("get " + url + " " + ex, "error", "failed")
             throw ex;
         } finally {
-            //app_busy.leave()
+            app_busy.leave()
         }
         console.log("get done", url, response.status);
         try {
@@ -54,11 +54,36 @@
         }
     }
 
-    // globals
+    // simple state management
 
-    var app_core_head = 0
-    var app_core_main = 0
-    var app_core_foot = 0
+    var app_registry = []
+    var app_dict = {}
+
+    function add_vue(props) {
+        el = props.el
+        nam = el.substr(1)
+        v = new Vue(props);
+        app_registry.push(v);
+        app_dict[nam] = v;
+        return v
+    }
+
+    function pushobj(name, obj, cb) {
+        apps = app_registry;
+        found = 0;
+        objstr = JSON.stringify(obj);
+        apps.forEach(app => {
+            if (name in app) {
+                app[name] = JSON.parse(objstr); // deep clone
+                app[name + '_org'] = JSON.parse(objstr); // deep clone
+                found++;
+            }
+        });
+        console.log("pushobj", name, found);
+        cb && cb();
+    }
+
+    // globals
 
     function init_core() {
         app_core_head = add_vue({
@@ -78,46 +103,40 @@
         app_core_foot = add_vue({
             el: '#app_core_foot',
             data: {
-                copy_note: "mpy- modcore dashboard",
+                copy_note: "k.r.goger",
+                user_url: "https://github.com/kr-g",
+                homepage_url: "https://github.com/kr-g/mpymodcore",
             },
             methods: {
                 copy_year: function() {
                     year = new Date().getYear() + 1900;
-                    return year;
+                    return year.toString();
                 },
 
             },
         });
-    }
-
-
-    // simple state management
-
-    var app_registry = []
-    var app_dict = {}
-
-    function add_vue(props) {
-        el = props.el
-        nam = el.substr(1)
-        v = new Vue(props);
-        app_registry.push(v);
-        app_dict[nam] = v;
-    }
-
-    function pushobj(name, obj, cb) {
-        apps = app_registry;
-        found = 0;
-        objstr = JSON.stringify(obj);
-        apps.forEach(app => {
-            if (name in app) {
-                app[name] = JSON.parse(objstr); // deep clone
-                app[name + '_org'] = JSON.parse(objstr); // deep clone
-                found++;
-            }
+        app_busy = add_vue({
+            el: '#app_busy',
+            data: {
+                refcount: 0,
+                busy: false,
+            },
+            methods: {
+                enter: function() {
+                    ++this.refcount;
+                    this.busy = true;
+                },
+                leave: function() {
+                    if (this.refcount > 0) {
+                        --this.refcount;
+                    }
+                    this.busy = this.refcount > 0;
+                },
+            },
         });
-        console.log("pushobj", name, found);
-        cb && cb();
     }
+
+    // start init the app
 
     $(document).ready(function() {
         console.log("page loaded");
@@ -136,14 +155,19 @@
     <main role="main" class="container">
         <div id="app_core_head">
             <h1>
-                {{caption }}
+                {{ caption }}
             </h1>
             <h2>available plugins</h2>
         </div>
+
+        <div id="app_busy">
+            pending request: {{ busy }}
+        </div>
+
         <div id="app_core_main">
             <div v-for="(plugin,ii) in plugins">
                 <div>
-                    {{ plugin.caption }}
+                    {{ plugin.caption }} (path: {{ plugin.path_spec }})
                     <ol>
                         <li v-for="(url,ii) in plugin.url_list">
                             <a :href="url.url" :target="url.ext_url?'_bank':''">{{url.caption}}</a>
@@ -155,6 +179,10 @@
         <div id="app_core_foot">
             <footer>
                 &copy; {{copy_year()}} {{ copy_note }}
+                <i class="fas fa-user"></i>
+                <a :href="user_url" target="_blank">{{user_url}}</a>
+                <i class="fas fa-home"></i>
+                <a :href="homepage_url" target="_blank">{{homepage_url}}</a>
             </footer>
 
         </div>
