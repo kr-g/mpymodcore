@@ -61,6 +61,10 @@ setuptools.setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Programming Language :: Python :: Implementation :: MicroPython",
         "Programming Language :: Python :: 3",
+        "License :: Free For Home Use",
+        "License :: Free for non-commercial use",
+        "License :: Free To Use But Restricted",
+        "License :: Other/Proprietary License",
         "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
     ],
 )
