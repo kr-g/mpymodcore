@@ -9,7 +9,7 @@
 - skeleton for `dashboard` module
 - dashboard under `http://your-ip/main/#`
 - added mime / media content-type header for WindUp
-- static content generator now sends Content-Type and Content-Length 
+- static content generator now sends `Content-Type` and `Content-Length` in http response header 
 - 
 
 
