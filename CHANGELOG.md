@@ -8,7 +8,8 @@
 - plugin url class for auto-discovery-configuration
 - skeleton for `dashboard` module
 - dashboard under `http://your-ip/main/#`
-- added mime / media content-type header lookup for WindUp
+- added mime / media content-type header for WindUp
+- static content generator now sends Content-Type and Content-Length 
 - 
 
 

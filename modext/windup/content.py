@@ -8,6 +8,7 @@ import os
 from modcore.log import LogSupport
 from modext.http.webserv import RequestHandler
 from modext.http.http_func import BadRequestException
+from .mime import get_file_content_type_header
 
 
 class ContentGenerator(LogSupport):
@@ -103,17 +104,42 @@ class StaticFiles(ContentGenerator):
             # self.excep( ex )
         return False
 
+    @staticmethod
+    def file_len(fnam):
+        try:
+            stat = os.stat(fnam)
+            if stat[0] != 0x8000:
+                return
+            return stat[6]
+        except Exception as ex:
+            pass
+
     def send_file(self, request, path):
+        header = None
+        try:
+            file_len = StaticFiles.file_len(path)
+            if file_len:
+                header = header or []
+                header.append(("Content-Length", file_len))
+            cont_type = get_file_content_type_header(path)
+            if cont_type:
+                header = header or []
+                header.append(cont_type)
+        except Exception as ex:
+            self.excep(ex, "send file")
         return StaticFiles._send_chunked_file(
             request,
             path,
             send_buffer=self.send_buffer,
             fibered=self.fibered,
             log_base=self,
+            header=header,
         )
 
     # class static scope
-    def _send_chunked_file(request, path, send_buffer=512, fibered=True, log_base=None):
+    def _send_chunked_file(
+        request, path, send_buffer=512, fibered=True, log_base=None, header=None
+    ):
         def _send_chunk():
             with open(path) as f:
                 while True:
@@ -124,4 +150,6 @@ class StaticFiles(ContentGenerator):
                         break
                     yield c
 
-        request.send_response(response_i=_send_chunk, fibered=fibered)
+        request.send_response(
+            response_i=_send_chunk, fibered=fibered, header=header, type_=None
+        )

@@ -161,4 +161,4 @@ Running on [`MicroPython`](http://micropython.org/), more about the MicroPython 
 [`github`](https://github.com/micropython/micropython) :+1:
 
 Developed with [`Thonny`](https://github.com/thonny/thonny) :+1:
-    
+

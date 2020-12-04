@@ -40,7 +40,6 @@ class Plugin(ReprDict, LogSupport):
 
     def _url_type(self, obj):
         if type(obj) == tuple:
-            self.warn("converting", self.__class__, "use PluginUrl", obj )
             return PluginUrl(*obj)
         return obj
 
