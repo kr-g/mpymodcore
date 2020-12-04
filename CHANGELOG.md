@@ -13,27 +13,6 @@
 - 
 
 
-## version v0.0.18
-
-- auto-discovery-configuration `__app__.apt_ext` can be a single Plugin, or a list of Plugin
-- module `mod3rd.admin_esp.softap` for SoftAP configuration
-- `start_auto_config` supports different timezone handler with `modext.misc.boot.set_timezone`
-- auto-discovery-configuration (`ADC`) and `auto_config` loader sets the plugin `path_spec`
-- modcore [`lifecycle hooks`](https://github.com/kr-g/mpymodcore/blob/master/modcore/lifecycle.py)
- for more flexible enhanced integration (also with asyncio). sample code in `boot.py`
-- reworked
- [`modext.misc.main_async`](https://github.com/kr-g/mpymodcore/blob/master/modext/misc/main_async.py)
- regarding dev mode. cntrl+c and continue call to `run_loop(cfg)` now stable
-- added [`modext.misc.async_mod.AsyncModule`](https://github.com/kr-g/mpymodcore/blob/master/modext/misc/async_mod.py)
- as glue for modcore modules and asyncio
-- added sample module [`mod3rd.skeleton`](https://github.com/kr-g/mpymodcore/tree/master/mod3rd/skeleton)
- with auto-discovery-configuration for asyncio tasks
- (dynamic adding additional asyncio modules during startup)
-- added cntrl+c (soft break) and continue looping support to `AsyncModule`
-- 
-
-
-
 
 ### known issues 
 - ~~with latest update of chrome (sep. 2020) web server response might get shorten/cut
@@ -76,6 +55,26 @@
 - testing, automatic testing
 - documentation
 
+
+
+## version v0.0.18
+
+- auto-discovery-configuration `__app__.apt_ext` can be a single Plugin, or a list of Plugin
+- module `mod3rd.admin_esp.softap` for SoftAP configuration
+- `start_auto_config` supports different timezone handler with `modext.misc.boot.set_timezone`
+- auto-discovery-configuration (`ADC`) and `auto_config` loader sets the plugin `path_spec`
+- modcore [`lifecycle hooks`](https://github.com/kr-g/mpymodcore/blob/master/modcore/lifecycle.py)
+ for more flexible enhanced integration (also with asyncio). sample code in `boot.py`
+- reworked
+ [`modext.misc.main_async`](https://github.com/kr-g/mpymodcore/blob/master/modext/misc/main_async.py)
+ regarding dev mode. cntrl+c and continue call to `run_loop(cfg)` now stable
+- added [`modext.misc.async_mod.AsyncModule`](https://github.com/kr-g/mpymodcore/blob/master/modext/misc/async_mod.py)
+ as glue for modcore modules and asyncio
+- added sample module [`mod3rd.skeleton`](https://github.com/kr-g/mpymodcore/tree/master/mod3rd/skeleton)
+ with auto-discovery-configuration for asyncio tasks
+ (dynamic adding additional asyncio modules during startup)
+- added cntrl+c (soft break) and continue looping support to `AsyncModule`
+- 
 
 
 ## version v0.0.17
