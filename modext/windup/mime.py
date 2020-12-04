@@ -35,4 +35,17 @@ for ext, media_type in _know_types:
 
 
 def get_content_type(ext, default=None):
-    return _look_up.get(ext.lower(), default or "")
+    return _look_up.get(ext.lower(), default)
+
+
+def get_content_type_header(ext):
+    mime = get_content_type(ext)
+    if mime:
+        return ("Content-Type", mime)
+
+
+def get_file_content_type_header(fnam):
+    pos = fnam.rfind(".")
+    if pos > 0:
+        ext = fnam[pos:]
+        return get_content_type_header(ext)
