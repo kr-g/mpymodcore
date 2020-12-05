@@ -15,14 +15,14 @@ git pull
 git checkout -f $MPYVER
 
 cd $MPYHOME
-git submodule update #--init
+git submodule update 
 
 cd $MPYHOME/ports/unix
-make V=1
-#make deplibs
+make submodules
+make
 
 cd $MPYHOME/mpy-cross
-make V=1
+make 
 
 popd 
 
