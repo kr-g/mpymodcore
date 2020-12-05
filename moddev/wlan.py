@@ -5,7 +5,7 @@
 
 import network
 
-from modcore import modc, Module, LifeCycle
+from modcore import modc, Module, LifeCycle, deprecated
 
 from .timeout import Timeout
 
@@ -23,6 +23,7 @@ class WLAN(Module):
     def init(self):
         self.last_status = False
         self.ssid = None
+        self.wlan = None
 
     def conf(self, config=None):
         super(Module, self).conf(config)
@@ -70,13 +71,8 @@ class WLAN(Module):
         self.wlan_stop()
         # self.update()
 
-    # custom
-
-    def scan(self):
-        return self.wlan.scan()
-
     ## deprecated
-
+    @deprecated
     def wlan_config(self, ssid, passwd):
         """set wlan ssid and password for automatic connection during startup"""
         wlan_cfg = "\n".join([ssid, passwd])
@@ -88,6 +84,10 @@ class WLAN(Module):
         except Exception as ex:
             self.excep(ex, "config")
 
+    ## end-of deprecated
+
+    # housekeeping
+
     def wlan_remove(self):
         """remove wlan info and disable automatic connection during startup"""
         import uos
@@ -97,11 +97,8 @@ class WLAN(Module):
 
     def wlan_start(self, active=True, setntp=True):
         """start wlan if configured before, otherwise do nothing"""
-        try:
-            self.wlan = network.WLAN(network.STA_IF)
-            self.wlan.active(False)
-        except Exception as ex:
-            self.excep(ex, "internal")
+
+        self.wlan_activate(False)
 
         try:
             with open(WLAN_CFG) as f:
@@ -110,24 +107,32 @@ class WLAN(Module):
             return
 
         try:
-            lines = map(lambda x: x.strip(), content.split("\n"))
-            lines = filter(lambda x: len(x) > 0, lines)
-            credits = list(filter(lambda x: x.find("#") != 0, lines))
-
-            self.ssid = credits[0].strip()
-
             if active:
+                credits = self._parse_config(content)
+                self.ssid, passwd = credits[0].strip(), credits[1].strip()
+
                 self.wlan.active(active)
-                self.wlan.connect(self.ssid, credits[1].strip())
+                self.wlan.connect(self.ssid, passwd)
                 self.info("wlan", self.wlan.ifconfig())
 
         except Exception as ex:
             self.excep(ex, "start")
 
+    def _parse_config(self, content):
+        try:
+            lines = map(lambda x: x.strip(), content.split("\n"))
+            lines = filter(lambda x: len(x) > 0, lines)
+            credits = list(filter(lambda x: x.find("#") != 0, lines))
+            return credits
+        except Exception as ex:
+            self.excep(ex, "_parse_config")
+
     def wlan_stop(self):
         """disabled wlan, no reconfiguration of prior configuration"""
         if self.wlan:
             self.wlan_start(active=False)
+
+    # custom
 
     def ifconfig(self):
         return self.wlan.ifconfig()
@@ -137,6 +142,19 @@ class WLAN(Module):
 
     def mac(self):
         return self.wlan.config("mac")
+
+    def wlan_activate(self, state=True):
+        try:
+            if self.wlan == None:
+                self.wlan = network.WLAN(network.STA_IF)
+            self.wlan.active(state)
+        except Exception as ex:
+            self.excep(ex, "wlan_activate")
+
+    def scan(self):
+        if self.active() == False:
+            self.wlan_activate()
+        return self.wlan.scan()
 
 
 wlan_ap = WLAN("wlan")

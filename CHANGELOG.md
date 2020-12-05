@@ -10,6 +10,8 @@
 - dashboard under `http://your-ip/main/#`
 - added mime / media content-type header for WindUp
 - `StaticFiles.send_file` now sends corresponding `Content-Type` and `Content-Length` in http response header 
+- fix `moddev.wlan` activates wlan before scanning networks
+- `send_json` response method sends `Content-Length` 
 - 
 
 

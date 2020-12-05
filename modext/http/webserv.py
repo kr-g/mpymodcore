@@ -87,11 +87,12 @@ class RequestHandler(LogSupport):
         type_="text/html",
         response_i=None,
         fibered=False,
+        length=None,
     ):
-        header = self._add_server_header(header)
-        self._add_session_cookie(header)
 
         if response_i != None:
+
+            header = self._add_basic_header(header, length)
 
             gfunc = send_http_response_g(
                 self.client_file, status, header, response, type_, response_i
@@ -123,6 +124,7 @@ class RequestHandler(LogSupport):
                     type_=type_,
                     response_i=_iter,
                     fibered=fibered,
+                    length=length,
                 )
 
             else:
@@ -162,6 +164,7 @@ class RequestHandler(LogSupport):
             send_buffer=send_buffer,
             response_i=None,
             fibered=fibered,
+            length=len(response),
         )
 
     # fiber, deprecated
@@ -190,6 +193,13 @@ class RequestHandler(LogSupport):
                 self.excep(ex, "send status failed")
         self.close()
 
+    def _add_basic_header(self, header, length):
+        header = self._add_server_header(header)
+        header = self._add_session_cookie(header)
+        if length != None:
+            header.append(("Content-Length", length))
+        return header
+
     def _add_server_header(self, header):
         if header == None:
             header = []
@@ -205,11 +215,12 @@ class RequestHandler(LogSupport):
         try:
             if self.request.xsession_is_new:
                 self.info("send session cookie")
-                self.set_cookie(
+                header = self.set_cookie(
                     header, self.request.xsession_cookie, self.request.xsession_id
                 )
         except:
             pass
+        return header
 
     def set_cookie(self, header, cookie, value=None, path="/", same_site="lax"):
         if header == None:

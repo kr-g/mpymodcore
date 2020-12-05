@@ -117,10 +117,6 @@ class StaticFiles(ContentGenerator):
     def send_file(self, request, path):
         header = None
         try:
-            file_len = StaticFiles.file_len(path)
-            if file_len:
-                header = header or []
-                header.append(("Content-Length", file_len))
             cont_type = get_file_content_type_header(path)
             if cont_type:
                 header = header or []
@@ -150,6 +146,12 @@ class StaticFiles(ContentGenerator):
                         break
                     yield c
 
+        file_len = StaticFiles.file_len(path)
+
         request.send_response(
-            response_i=_send_chunk, fibered=fibered, header=header, type_=None
+            response_i=_send_chunk,
+            fibered=fibered,
+            header=header,
+            type_=None,
+            length=file_len,
         )
