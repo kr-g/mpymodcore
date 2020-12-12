@@ -1,7 +1,8 @@
 
 # Changelog
 
-## next version v0.0.19
+
+## version v0.0.19
 
 - global loglevel can preserved on flash
 - logging reads log-level from `etc/log.cfg.txt`
@@ -11,9 +12,8 @@
 - added mime / media content-type header for WindUp
 - `StaticFiles.send_file` now sends corresponding `Content-Type` and `Content-Length` in http response header 
 - fix `moddev.wlan` activates wlan before scanning networks
-- `send_json` response method sends `Content-Length` 
+- `send_json` response method sends `Content-Length`
 - 
-
 
 
 ### known issues 
